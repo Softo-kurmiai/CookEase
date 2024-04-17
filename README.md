@@ -3,7 +3,7 @@
 - To launch the application locally you will need to have `Docker Desktop` installed and setup it to use `Linux containers`.
 - Open up the repository in Visual Studio.
 - At the top of it you will need to select `docker-compose` as a startup project.
-- Then click on the `Docker Compose` launch button and it will create a container containing the `Client`, `Server`, `Postgres` and `pdAdmin`.
+- Then click on the `Docker Compose` launch button and it will create a container containing the `Client`, `Server`, `Postgres` and `pgAdmin`.
 - For launching:
 	- **Frontend** use `http://localhost:5001`
 	- **Backend** use `http://localhost:5000/swagger/index.html`
