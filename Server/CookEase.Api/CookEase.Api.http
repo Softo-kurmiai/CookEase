@@ -1,0 +1,6 @@
+@CookEase.Server_HostAddress = http://localhost:5175
+
+GET {{CookEase.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
