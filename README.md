@@ -8,7 +8,7 @@
 	- **Frontend** use `http://localhost:5001`
 	- **Backend** use `http://localhost:5000/swagger/index.html`
 	- **pgAdmin** use `http://localhost:5050`
-## How to use pdAdmin
+## How to use pgAdmin
 - After launching `Docker Compose` go to `http://localhost:5050`.
 - Enter email `postgres@email.com` and password `password`.
 - *(Initial local setup)* In order to access the database you will need to connect to it:
