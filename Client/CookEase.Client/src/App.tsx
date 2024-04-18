@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
 interface Forecast {
     date: string;
@@ -39,17 +41,26 @@ function App() {
         </table>;
 
     return (
-        <div>
-            <h1 id="tabelLabel">Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server.</p>
-            {contents}
-        </div>
+        <>
+            <ToastContainer />
+            <div>
+                <h1 id="tabelLabel">Weather forecast</h1>
+                <p>This component demonstrates fetching data from the server.</p>
+                {contents}
+            </div>
+        </>
     );
 
+    // Example of how to do requests with toasts
     async function populateWeatherData() {
-        const response = await fetch('api/weatherforecast');
-        const data = await response.json();
-        setForecasts(data);
+        await axios.get('/api/weatherforecast')
+        .then(response => {
+            toast.success("Successfully got weather forecast");
+            setForecasts(response.data);
+        })
+        .catch(_ => {
+            toast.error("Something bad happened during the request!");
+        });
     }
 }
 
