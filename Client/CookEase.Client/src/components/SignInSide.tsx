@@ -5,8 +5,8 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import background from 'C:\\Users\\gabrc\\source\\repos\\CookEase\\Client\\CookEase.Client\\public\\images\\AuthorizationPhoto.png'
-import logo from 'C:\\Users\\gabrc\\source\\repos\\CookEase\\Client\\CookEase.Client\\public\\images\\blackLogo.png'
+import background from '../images/AuthorizationPhoto.png'
+import logo from '../images/BlackLogo.png'
 import Link from '@mui/material/Link';
 
 export default function SignInSide() {
@@ -93,7 +93,7 @@ export default function SignInSide() {
             <img
             src={background}
             alt="Background image"
-            style={{ width: 'auto', display: 'block', height: '100%',  objectFit:'contain'  }}
+            style={{ width: '80.2%' }} // Will need to find a way on how to fill the height
             />
             </Paper>
         </Grid>

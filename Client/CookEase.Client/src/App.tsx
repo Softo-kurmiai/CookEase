@@ -1,5 +1,5 @@
 import './App.css';
-import {ThemeProvider} from '@mui/material';
+import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
 import SignInSide from './components/SignInSide';
 import SignUpSide from './components/SignUpSide'
