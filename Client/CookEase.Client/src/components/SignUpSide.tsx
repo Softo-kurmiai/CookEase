@@ -42,11 +42,11 @@ export default function SignUpSide() {
                 style={{ width: '100%', display: 'block', objectFit: 'contain', textAlign:'left'}}
                 />
             </Paper>
-            <Typography component="h1" variant="h3">
-              Finding & posting recipes made easy!
-            </Typography>
             <Typography component="h1" variant="h4">
               Finding & posting recipes made easy!
+            </Typography>
+            <Typography component="h1" variant="h5">
+              Sign up here to get started:
             </Typography>
 
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -67,7 +67,15 @@ export default function SignUpSide() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="current-password"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="repeatPassword"
+                label="Repeat password once again"
+                type="password"
+                id="repeatPassword"
               />
               <Button
                 type="submit"
@@ -75,18 +83,15 @@ export default function SignUpSide() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign In
+                Sign up
               </Button>
-              <Grid container>
-                <Grid item xs={4}>
-                    Don't have an account?
-                </Grid>
-                <Grid item xs={2}>
-                  <Link href="#" variant="body2">
-                    {"Sign Up"}
+
+              <Typography component="h6" variant="caption">
+                  Already have an account?{' '}
+                  <Link href="/SignIn" variant="body2" sx={{ marginRigt: '20px' }}>
+                    Sign in here
                   </Link>
-                </Grid>
-              </Grid>
+              </Typography>
             </Box>
           </Box>
         </Grid>
@@ -96,7 +101,7 @@ export default function SignUpSide() {
             <img
             src={background}
             alt="Background image"
-            style={{ width: '80.2%' }}
+            style={{ width: '80%' }}
             />
             </Paper>
         </Grid>

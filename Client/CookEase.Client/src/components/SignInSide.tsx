@@ -43,7 +43,7 @@ export default function SignInSide() {
                 />
             </Paper>
             <Typography component="h1" variant="h4">
-              Log in
+              Sign in
             </Typography>
 
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
@@ -79,7 +79,7 @@ export default function SignInSide() {
                     Don't have an account?
                 </Grid>
                 <Grid item xs={2}>
-                  <Link href="#" variant="body2">
+                  <Link href={'/SignUp'} variant="body2">
                     {"Sign Up"}
                   </Link>
                 </Grid>
@@ -93,7 +93,7 @@ export default function SignInSide() {
             <img
             src={background}
             alt="Background image"
-            style={{ width: '80.2%' }} // Will need to find a way on how to fill the height
+            style={{ width: '80%' }} // Will need to find a way on how to fill the height
             />
             </Paper>
         </Grid>

@@ -1,8 +1,14 @@
 import './App.css';
 import { ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material/styles';
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
+import MainPage from './components/MainPage.tsx';
+import ErrorPage from './components/ErrorPage';
 import SignInSide from './components/SignInSide';
-import SignUpSide from './components/SignUpSide'
+import SignUpSide from './components/SignUpSide';
 
 const theme = createTheme({
     palette: {
@@ -15,11 +21,27 @@ const theme = createTheme({
     },
   });
 
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <MainPage/>,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path:"/SignUp",
+      element: <SignUpSide/>
+    },
+    {
+      path:"/SignIn",
+      element: <SignInSide/>
+    },
+  ]);
+
   function App() {
     return (
       <ThemeProvider theme={theme}>
         <div style={{ height: '100vh' }} className="root">
-        <SignInSide/>
+            <RouterProvider router={router} />
         </div>
       </ThemeProvider>
     );
