@@ -1,67 +1,69 @@
-import { useEffect, useState } from 'react';
 import './App.css';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { ThemeProvider } from '@mui/material';
+import { createTheme } from '@mui/material/styles';
+import {
+    createBrowserRouter,
+    RouterProvider,
+} from "react-router-dom";
+import MainPage from './components/MainPage.tsx';
+import ErrorPage from './components/ErrorPage';
+import SignInSide from './components/SignInSide';
+import SignUpSide from './components/SignUpSide';
 
-interface Forecast {
-    date: string;
-    temperatureC: number;
-    temperatureF: number;
-    summary: string;
-}
+const theme = createTheme({
+    palette: {
+      primary: {
+        main: '#9BCD6D',
+      },
+      secondary: {
+        main: '#CC1B00',
+      },
+    },
+  });
 
-function App() {
-    const [forecasts, setForecasts] = useState<Forecast[]>();
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <MainPage/>,
+      errorElement: <ErrorPage />,
+    },
+    {
+      path:"/SignUp",
+      element: <SignUpSide/>
+    },
+    {
+      path:"/SignIn",
+      element: <SignInSide/>
+    },
+  ]);
 
-    useEffect(() => {
-        populateWeatherData();
-    }, []);
-
-    const contents = forecasts === undefined
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <table className="table table-striped" aria-labelledby="tabelLabel">
-            <thead>
-                <tr>
-                    <th>Date</th>
-                    <th>Temp. (C)</th>
-                    <th>Temp. (F)</th>
-                    <th>Summary</th>
-                </tr>
-            </thead>
-            <tbody>
-                {forecasts.map(forecast =>
-                    <tr key={forecast.date}>
-                        <td>{forecast.date}</td>
-                        <td>{forecast.temperatureC}</td>
-                        <td>{forecast.temperatureF}</td>
-                        <td>{forecast.summary}</td>
-                    </tr>
-                )}
-            </tbody>
-        </table>;
-
+  function App() {
     return (
-        <>
-            <ToastContainer />
-            <div>
-                <h1 id="tabelLabel">Weather forecast</h1>
-                <p>This component demonstrates fetching data from the server.</p>
-                {contents}
-            </div>
-        </>
+      <ThemeProvider theme={theme}>
+        <div style={{ height: '100vh' }} className="root">
+            <RouterProvider router={router} />
+        </div>
+      </ThemeProvider>
     );
+  }
+  
+  /*
+  async function populateWeatherData() {
 
-    // Example of how to do requests with toasts
-    async function populateWeatherData() {
-        await axios.get('/api/weatherforecast')
-        .then(response => {
-            toast.success("Successfully got weather forecast");
-            setForecasts(response.data);
-        })
-        .catch(_ => {
-            toast.error("Something bad happened during the request!");
-        });
-    }
-}
+    await axios.get('/api/weatherforecast')
+
+    .then(_ => {
+
+        toast.success("Successfully got weather forecast");
+        //setForecasts(response.data);
+
+    })
+
+    .catch(_ => {
+
+        toast.error("Something bad happened during the request!");
+
+    });*/
+
 
 export default App;

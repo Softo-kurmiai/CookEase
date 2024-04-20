@@ -7,8 +7,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   // The React.StrictMode renders components twice which is not ideal in our scenario
   // but may be used later on
   //<React.StrictMode>
-  <>
-    <App />
-  </>
+  <App/>
   //</React.StrictMode>,
 )
