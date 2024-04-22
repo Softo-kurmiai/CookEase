@@ -1,3 +1,5 @@
+using Infrastructure;
+using Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CookEase.Api.Controllers
