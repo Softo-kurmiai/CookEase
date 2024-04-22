@@ -1,4 +1,6 @@
 # CookEase
+## Link to Figma design
+- You can view Figma design here: https://www.figma.com/file/OADDIUCHhVfEmb6IERJnwe/Recipe-website?type=design&node-id=54%3A1928&mode=design&t=SJ5fOUlabpOqK1bs-1
 ## How to launch the application
 - To launch the application locally you will need to have `Docker Desktop` installed and setup it to use `Linux containers`.
 - Open up the repository in Visual Studio.

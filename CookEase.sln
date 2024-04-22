@@ -21,6 +21,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Server", "Server", "{5800BC86-0656-41F1-AEAA-78C23E29D969}"
 	ProjectSection(SolutionItems) = preProject
 		Server\Dockerfile = Server\Dockerfile
+		Server\README.md = Server\README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DDA2602A-2A10-4EC4-989D-D55AA9AF5F8F}"
