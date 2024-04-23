@@ -2,6 +2,9 @@ import { fileURLToPath, URL } from 'node:url';
 
 import { defineConfig } from 'vite';
 import plugin from '@vitejs/plugin-react';
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,11 +17,11 @@ export default defineConfig({
     server: {
         proxy: {
             '^/api': {
-                target: 'http://cookease-server:80/',
+                target: process.env.REACT_APP_API_URL,
                 secure: false
             }
         },
-        port: 80,
+        port: Number(process.env.REACT_APP_CLIENT_PORT),
         strictPort: true,
         host: true
     }
