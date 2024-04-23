@@ -1,77 +1,80 @@
-﻿
-using Application.DTOs;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using Application.Interfaces;
+using CookEase.Api.Interfaces;
+using Application.DTOs.User;
 
-namespace CookEase.Api.Controllers {
+namespace CookEase.Api.Controllers;
 
-    [ApiController]
-    [Route("api/[controller]")]
-    public class UserController : ControllerBase {
+[ApiController]
+[Route("api/users")]
+public class UserController : ControllerBase
+{
+    private readonly IUserService _userService;
 
-        IUserService _userService;
+    public UserController(IUserService userService)
+    {
+        _userService = userService;
+    }
 
-        public UserController(IUserService userService) {
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<List<UserResponse>> GetAll(int countPerPage = 20, int page = 1)
+    {
+        var users = _userService.GetAll(countPerPage, page);
+        return Ok(users);
+    }
 
-            _userService = userService;
+    [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<UserResponse> Get(int id) {
+
+        var user = _userService.GetById(id);
+        if (user is null)
+        {
+            return NotFound("User not found");
         }
 
-        [HttpGet]
-        public ActionResult<List<UserDTO>> GetAll(int? countPerPage, int? page) {
+        return Ok(user);
+    }
 
-            List<UserDTO> users = _userService.GetAll(countPerPage, page);
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<UserResponse> Post(
+        [Required][FromBody] UserCreateRequest userRequest)
+    {
+        var createdUser = _userService.Create(userRequest);
+        return Created("/api/User", createdUser);
+    }
 
-            return Ok(users);
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<UserResponse> Update(
+        [Required][FromRoute] int id,
+        [Required][FromBody] UserUpdateRequest userRequest)
+    {
+        var updatedUser = _userService.Update(id, userRequest);
+        if (updatedUser is null)
+        {
+            return NotFound("User not found");
         }
 
-        [HttpGet("{userId}")]
-        public ActionResult<UserDTO> Get(int userId) {
+        return Ok(updatedUser);
+    }
 
-            UserDTO user = _userService.GetById(userId);
-            if (user == null) {
-
-                return NotFound("User not found");
-            }
-
-            return Ok(user);
+    [HttpDelete("{id}")]
+    public ActionResult<UserResponse> Delete(
+        [Required][FromRoute] int id)
+    {
+        var user = _userService.Delete(id);
+        if (user is null)
+        {
+            return NotFound("User not found");
         }
 
-        [HttpPost]
-        public ActionResult<UserDTO> Post([Required] [FromBody] UserDTO user) {
-
-            if(user.Id != null)
-            {
-                return BadRequest("Cannot POST a user with an ID. ID should be assigned by the server.");
-            }
-
-            var createdUser = _userService.Create(user);
-
-            return Created("/api/User", createdUser);
-        }
-
-        [HttpPut]
-        public ActionResult<UserDTO> Update([Required] [FromBody] UserDTO user) {
-
-            var updatedUser = _userService.Update(user);
-            if (updatedUser == null) {
-
-                return NotFound("User not found");
-            }
-
-            return Ok(updatedUser);
-        }
-
-        [HttpDelete("id")]
-        public ActionResult<UserDTO> Delete([Required] int id) {
-
-            var user = _userService.Delete(id);
-            if (user == null) {
-
-                return NotFound("User not found");
-            }
-
-            return Ok(user);
-        }
+        return Ok(user);
     }
 }

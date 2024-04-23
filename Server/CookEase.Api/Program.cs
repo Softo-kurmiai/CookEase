@@ -1,6 +1,5 @@
-
-using Application.Services;
-using Application.Interfaces;
+using CookEase.Api.Interfaces;
+using CookEase.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
