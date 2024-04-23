@@ -1,8 +1,8 @@
 ﻿
-namespace Application.Objects {
-    public class User {
+namespace Application.Objects;
 
-        public int Id { get; set; }
-        //TODO add other propertys
-    }
+public class User {
+
+    public int Id { get; set; }
+    //TODO add other propertys
 }

@@ -2,73 +2,72 @@
 using Application.DTOs;
 using Application.Interfaces;
 
-namespace Application.Services {
-    public class UserService : IUserService {
-        public List<UserDTO> GetAll(int? countPerPage, int? page) {
+namespace Application.Services;
 
-            // TODO actually implement geting from repository
-            List<UserDTO> users = new List<UserDTO>();
+public class UserService : IUserService {
+
+    public List<UserDTO> GetAll(int countPerPage, int page) {
+
+        // TODO actually implement geting from repository
+        List<UserDTO> users = new List<UserDTO>();
+        UserDTO user = new UserDTO();
+        user.Id = 69;
+        users.Add(user);
+
+        return users;
+    }
+
+    public UserDTO? GetById(int id) {
+
+        //TODO actually implement geting from repository
+        if (id == 69) {
+
             UserDTO user = new UserDTO();
             user.Id = 69;
-            users.Add(user);
 
-            return users;
+            return user;
+        } else {
+
+            return null;
         }
+    }
 
-        public UserDTO? GetById(int id) {
-            //TODO actually implement geting from repository
-            if (id == 69) {
+    public UserDTO Create(UserRequestDTO userRequestDTO) {
 
-                UserDTO user = new UserDTO();
-                user.Id = 69;
+        //TODO actually implement creating to repository
+            UserDTO user = new UserDTO();
+            user.Id = 69;
 
-                return user;
-            } else {
+            return user;
+    }
 
-                return null;
-            }
+    public UserDTO Update(int id, UserRequestDTO userRequestDTO) {
+
+        //TODO actually implement upadting to repository
+        if (id == 69) {
+
+            UserDTO user = new UserDTO();
+            user.Id = 69;
+
+            return user;
+        } else {
+
+            return null;
         }
+    }
 
-        public UserDTO Create(UserDTO userDTO) {
+    public UserDTO Delete(int id) {
 
-            //TODO actually implement creating to repository
-            if (userDTO.Id == null) {
+        //TODO actually implement deleting from repository
+        if(id == 69) {
 
-                UserDTO user = new UserDTO();
-                user.Id = 69;
+            UserDTO user = new UserDTO();
+            user.Id = 69;
 
-                return user;
-            } else {
+            return user;
+        } else {
 
-                return userDTO;
-            }
-        }
-
-        public UserDTO Update(UserDTO userDTO) {
-
-            //TODO actually implement upadting to repository
-            if (userDTO.Id == 69) {
-
-                return userDTO;
-            } else {
-
-                return null;
-            }
-        }
-
-        public UserDTO Delete(int id) {
-
-            //TODO actually implement deleting from repository
-            if(id == 69) {
-
-                UserDTO user = new UserDTO();
-                user.Id = 69;
-
-                return user;
-            } else {
-
-                return null;
-            }
+            return null;
         }
     }
 }
