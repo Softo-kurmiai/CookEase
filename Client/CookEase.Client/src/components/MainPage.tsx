@@ -1,5 +1,9 @@
-export default function(){
+import {RecipeCard} from "./MainComponents/RecipeCard"; './MainComponents/RecipeCard'
+
+export default function MainPage(){
     return (
-        <div>This is main page</div>
+        <>
+        <RecipeCard/>
+        </>
     );
 }
