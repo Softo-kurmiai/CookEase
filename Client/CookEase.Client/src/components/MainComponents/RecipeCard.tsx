@@ -39,7 +39,10 @@ export function RecipeCard() {
         }}
       />
       <CardContent sx={{ p: 3, position: "relative", zIndex: 2 }}> {/* Adjusted zIndex */}
-        <StyledRating/>
+        <StyledRating
+          readOnly={true}
+          value={3.5}
+          precision={0.5} />
         <Stack direction="row" spacing={0.7} sx={{pt:1}}>
             <InfoTypography>Gabubujlkjljl</InfoTypography>
             <Visibility sx={{ color: 'info.main' }}/>
