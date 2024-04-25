@@ -40,7 +40,7 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public ActionResult<UserResponse> Post(
         [Required][FromBody] UserCreateRequest userRequest)
