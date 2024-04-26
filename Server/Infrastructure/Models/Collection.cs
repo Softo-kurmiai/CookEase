@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -14,12 +15,11 @@ namespace Infrastructure.Models
         public long Id { get; set; }
         [ForeignKey(nameof(User))]
         public long UserId { get; set; }
+        [Required]
         public required string Name { get; set; }
+        [Required]
         public required string Description { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdatedAt { get; set; }
-        public required User User { get; set; }
-        public ICollection<Recipe> Recipes { get; } = new List<Recipe>();
-        public ICollection<CollectionRecipe> CollectionRecipes { get; } = new List<CollectionRecipe>();
     }
 }

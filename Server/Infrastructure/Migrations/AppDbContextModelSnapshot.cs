@@ -49,9 +49,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Collection", (string)null);
+                    b.ToTable("Collections");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.CollectionRecipe", b =>
@@ -63,15 +61,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("CollectionId", "RecipeId");
 
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("CollectionRecipe", (string)null);
+                    b.ToTable("CollectionRecipes");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Comment", b =>
@@ -100,11 +94,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RecipeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Comment", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.CommentLike", b =>
@@ -120,9 +110,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("CommentId", "UserId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CommentLike", (string)null);
+                    b.ToTable("CommentLikes");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.FavoriteCreator", b =>
@@ -134,13 +122,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("UserId", "CreatorId");
 
-                    b.ToTable("FavoriteCreator", (string)null);
+                    b.ToTable("FavoriteCreators");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.FavoriteRecipe", b =>
@@ -152,15 +138,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("UserId", "RecipeId");
 
-                    b.HasIndex("RecipeId");
-
-                    b.ToTable("FavoriteRecipe", (string)null);
+                    b.ToTable("FavoriteRecipes");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Label", b =>
@@ -175,8 +157,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ImageLocation")
-                        .HasColumnType("text");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("bytea");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -184,7 +166,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Label", (string)null);
+                    b.ToTable("Labels");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Recipe", b =>
@@ -209,8 +191,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ImageLocation")
-                        .HasColumnType("text");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("bytea");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -221,11 +203,20 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatorId");
+                    b.ToTable("Recipes");
+                });
 
-                    b.HasIndex("Name");
+            modelBuilder.Entity("Infrastructure.Models.RecipeLabels", b =>
+                {
+                    b.Property<long>("RecipeId")
+                        .HasColumnType("bigint");
 
-                    b.ToTable("Recipes", (string)null);
+                    b.Property<long>("LabelID")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("RecipeId", "LabelID");
+
+                    b.ToTable("RecipeLabels");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.User", b =>
@@ -254,171 +245,15 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<byte[]>("ProfilePicture")
+                        .HasColumnType("bytea");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email");
-
-                    b.HasIndex("Name");
-
-                    b.ToTable("User", (string)null);
-                });
-
-            modelBuilder.Entity("LabelRecipe", b =>
-                {
-                    b.Property<long>("LabelsId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("RecipesId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("LabelsId", "RecipesId");
-
-                    b.HasIndex("RecipesId");
-
-                    b.ToTable("LabelRecipe", (string)null);
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Collection", b =>
-                {
-                    b.HasOne("Infrastructure.Models.User", "User")
-                        .WithMany("Collections")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.CollectionRecipe", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Collection", null)
-                        .WithMany("CollectionRecipes")
-                        .HasForeignKey("CollectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Models.Recipe", null)
-                        .WithMany()
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Comment", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Recipe", "Recipe")
-                        .WithMany("Comments")
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Models.User", "User")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Recipe");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.CommentLike", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Comment", "Comment")
-                        .WithMany("CommentLikes")
-                        .HasForeignKey("CommentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Models.User", "User")
-                        .WithMany("CommentLikes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.FavoriteCreator", b =>
-                {
-                    b.HasOne("Infrastructure.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.FavoriteRecipe", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Recipe", null)
-                        .WithMany()
-                        .HasForeignKey("RecipeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Recipe", b =>
-                {
-                    b.HasOne("Infrastructure.Models.User", "Creator")
-                        .WithMany("Recipes")
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Creator");
-                });
-
-            modelBuilder.Entity("LabelRecipe", b =>
-                {
-                    b.HasOne("Infrastructure.Models.Label", null)
-                        .WithMany()
-                        .HasForeignKey("LabelsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Infrastructure.Models.Recipe", null)
-                        .WithMany()
-                        .HasForeignKey("RecipesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Collection", b =>
-                {
-                    b.Navigation("CollectionRecipes");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Comment", b =>
-                {
-                    b.Navigation("CommentLikes");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.Recipe", b =>
-                {
-                    b.Navigation("Comments");
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.User", b =>
-                {
-                    b.Navigation("Collections");
-
-                    b.Navigation("CommentLikes");
-
-                    b.Navigation("Comments");
-
-                    b.Navigation("Recipes");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

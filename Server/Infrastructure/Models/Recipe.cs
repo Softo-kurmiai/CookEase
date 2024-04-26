@@ -19,11 +19,6 @@ namespace Infrastructure.Models
         public required string Contents { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public string? ImageLocation { get; set; }
-        public required User Creator { get; set; }
-        public ICollection<Label>? Labels { get; } = new List<Label>();
-        public ICollection<Comment>? Comments { get; } = new List<Comment>();
-        public ICollection<User>? FollowerUsers {  get; } = new List<User>();
-        public ICollection<Collection>? AddedCollections { get; } = new List<Collection>();
+        public byte[]? Image { get; set; }
     }
 }

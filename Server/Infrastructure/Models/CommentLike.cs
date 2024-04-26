@@ -16,7 +16,5 @@ namespace Infrastructure.Models
         [ForeignKey(nameof(Comment))]
         public long CommentId { get; set; }
         public DateTime CreatedAt { get; set; }
-        public required Comment Comment { get; set; }
-        public required User User { get; set; }
     }
 }
