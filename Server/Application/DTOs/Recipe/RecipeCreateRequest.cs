@@ -1,15 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Application.DTOs.RecipeNutrition;
 using Application.Enums;
 
-namespace Infrastructure.Models;
+namespace Application.DTOs.Recipe;
 
-[PrimaryKey(nameof(Id))]
-public class Recipe
+public class RecipeCreateRequest
 {
-    public int Id { get; set; }
-
-    [ForeignKey(nameof(User))]
     public required int CreatorId { get; set; }
 
     public required string Name { get; set; }
@@ -38,7 +33,5 @@ public class Recipe
 
     public int? FavoriteCount { get; set; }
 
-    public DateTime CreatedDate { get; set; }
-
-    public DateTime? UpdatedDate { get; set; }
+    public required RecipeNutritionCreateRequest RecipeNutrition { get; set; }
 }

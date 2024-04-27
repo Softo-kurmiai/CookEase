@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdatedFromLongToIntIds : Migration
+    public partial class FullRecipeImplementation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -14,6 +15,11 @@ namespace Infrastructure.Migrations
             migrationBuilder.DropColumn(
                 name: "Image",
                 table: "Labels");
+
+            migrationBuilder.RenameColumn(
+                name: "Contents",
+                table: "Recipes",
+                newName: "Instructions");
 
             migrationBuilder.RenameColumn(
                 name: "LabelID",
@@ -30,6 +36,14 @@ namespace Infrastructure.Migrations
                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .OldAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            migrationBuilder.AlterColumn<DateTime>(
+                name: "UpdatedDate",
+                table: "Recipes",
+                type: "timestamp with time zone",
+                nullable: true,
+                oldClrType: typeof(DateTime),
+                oldType: "timestamp with time zone");
+
             migrationBuilder.AlterColumn<int>(
                 name: "CreatorId",
                 table: "Recipes",
@@ -37,6 +51,15 @@ namespace Infrastructure.Migrations
                 nullable: false,
                 oldClrType: typeof(long),
                 oldType: "bigint");
+
+            migrationBuilder.AlterColumn<DateTime>(
+                name: "CreatedDate",
+                table: "Recipes",
+                type: "timestamp with time zone",
+                nullable: false,
+                defaultValueSql: "CURRENT_TIMESTAMP",
+                oldClrType: typeof(DateTime),
+                oldType: "timestamp with time zone");
 
             migrationBuilder.AlterColumn<int>(
                 name: "Id",
@@ -47,6 +70,65 @@ namespace Infrastructure.Migrations
                 oldType: "bigint")
                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .OldAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            migrationBuilder.AddColumn<int>(
+                name: "CommentCount",
+                table: "Recipes",
+                type: "integer",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "CookTime",
+                table: "Recipes",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "Difficulty",
+                table: "Recipes",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "FavoriteCount",
+                table: "Recipes",
+                type: "integer",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "Ingredients",
+                table: "Recipes",
+                type: "text",
+                nullable: false,
+                defaultValue: "");
+
+            migrationBuilder.AddColumn<int>(
+                name: "PrepTime",
+                table: "Recipes",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<decimal>(
+                name: "Rating",
+                table: "Recipes",
+                type: "numeric",
+                nullable: true);
+
+            migrationBuilder.AddColumn<int>(
+                name: "Servings",
+                table: "Recipes",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "ViewCount",
+                table: "Recipes",
+                type: "integer",
+                nullable: true);
 
             migrationBuilder.AlterColumn<int>(
                 name: "LabelId",
@@ -181,11 +263,74 @@ namespace Infrastructure.Migrations
                 nullable: false,
                 oldClrType: typeof(long),
                 oldType: "bigint");
+
+            migrationBuilder.CreateTable(
+                name: "RecipeNutrition",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RecipeId = table.Column<int>(type: "integer", nullable: false),
+                    Calories = table.Column<int>(type: "integer", nullable: false),
+                    Fat = table.Column<decimal>(type: "numeric", nullable: false),
+                    Carbs = table.Column<decimal>(type: "numeric", nullable: false),
+                    Fiber = table.Column<decimal>(type: "numeric", nullable: false),
+                    Sugar = table.Column<decimal>(type: "numeric", nullable: false),
+                    Protein = table.Column<decimal>(type: "numeric", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeNutrition", x => x.Id);
+                });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "RecipeNutrition");
+
+            migrationBuilder.DropColumn(
+                name: "CommentCount",
+                table: "Recipes");
+
+            migrationBuilder.DropColumn(
+                name: "CookTime",
+                table: "Recipes");
+
+            migrationBuilder.DropColumn(
+                name: "Difficulty",
+                table: "Recipes");
+
+            migrationBuilder.DropColumn(
+                name: "FavoriteCount",
+                table: "Recipes");
+
+            migrationBuilder.DropColumn(
+                name: "Ingredients",
+                table: "Recipes");
+
+            migrationBuilder.DropColumn(
+                name: "PrepTime",
+                table: "Recipes");
+
+            migrationBuilder.DropColumn(
+                name: "Rating",
+                table: "Recipes");
+
+            migrationBuilder.DropColumn(
+                name: "Servings",
+                table: "Recipes");
+
+            migrationBuilder.DropColumn(
+                name: "ViewCount",
+                table: "Recipes");
+
+            migrationBuilder.RenameColumn(
+                name: "Instructions",
+                table: "Recipes",
+                newName: "Contents");
+
             migrationBuilder.RenameColumn(
                 name: "LabelId",
                 table: "RecipeLabels",
@@ -201,6 +346,16 @@ namespace Infrastructure.Migrations
                 .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .OldAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+            migrationBuilder.AlterColumn<DateTime>(
+                name: "UpdatedDate",
+                table: "Recipes",
+                type: "timestamp with time zone",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                oldClrType: typeof(DateTime),
+                oldType: "timestamp with time zone",
+                oldNullable: true);
+
             migrationBuilder.AlterColumn<long>(
                 name: "CreatorId",
                 table: "Recipes",
@@ -208,6 +363,15 @@ namespace Infrastructure.Migrations
                 nullable: false,
                 oldClrType: typeof(int),
                 oldType: "integer");
+
+            migrationBuilder.AlterColumn<DateTime>(
+                name: "CreatedDate",
+                table: "Recipes",
+                type: "timestamp with time zone",
+                nullable: false,
+                oldClrType: typeof(DateTime),
+                oldType: "timestamp with time zone",
+                oldDefaultValueSql: "CURRENT_TIMESTAMP");
 
             migrationBuilder.AlterColumn<long>(
                 name: "Id",

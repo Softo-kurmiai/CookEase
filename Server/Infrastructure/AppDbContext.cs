@@ -23,11 +23,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public required DbSet<Recipe> Recipes { get; set; }
 
+    public required DbSet<RecipeNutrition> RecipeNutrition { get; set; }
+
     public required DbSet<User> Users { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost,5432;Database=cookease-db;Port=5432;Username=postgres;Password=password;");
-        base.OnConfiguring(optionsBuilder);
+        var recipe = modelBuilder.Entity<Recipe>();
+        recipe.Property(x => x.CreatedDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
     }
 }
