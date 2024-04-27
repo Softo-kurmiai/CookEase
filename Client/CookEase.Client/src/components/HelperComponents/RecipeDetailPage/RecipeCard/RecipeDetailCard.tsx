@@ -1,7 +1,7 @@
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import RecipeDetailCardHeader from './RecipeDetailCardHeader';
-import Ratatouille from "../../../images/ratatouille.jpg";
+import Ratatouille from "../../../../images/ratatouille.jpg";
 import IngredientInfo from './IngredientInfo';
 import RecipeDetailInstructions from './RecipeDetailInstructions';
 

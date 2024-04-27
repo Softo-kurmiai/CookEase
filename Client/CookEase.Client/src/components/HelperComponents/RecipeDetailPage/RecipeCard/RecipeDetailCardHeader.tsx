@@ -1,11 +1,11 @@
 import React from 'react';
 import { Theme } from "@mui/material/styles";
 import { Typography,Stack, useMediaQuery } from "@mui/material";
-import CustomizedRating from "../RecipeCard/StyledRating";
+import CustomizedRating from "../../RecipeCard/StyledRating";
 import Grid from '@mui/material/Unstable_Grid2';
 import { Favorite, Share} from "@mui/icons-material";
 import CookTimeDetails from './CookTimeDetails';
-import InfoBar from '../RecipeCard/InfoBar';
+import InfoBar from '../../RecipeCard/InfoBar';
 import NutritionInfoPerServing from './NutritionInfoPerServing';
 
 export function RecipeDetailCardHeader(){
