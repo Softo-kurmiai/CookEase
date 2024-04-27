@@ -8,6 +8,7 @@ interface CustomizedRatingProps {
 }
 
 const StyledRating = styled(Rating)({
+  paddingTop: "8px",
   '& .MuiRating-iconFilled': {
     color: '#9BCD6D',
   },

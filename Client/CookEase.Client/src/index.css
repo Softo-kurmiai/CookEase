@@ -46,9 +46,20 @@ button {
   transition: border-color 0.25s;
 }
 button:hover {
-  border-color: #646cff;
+  border-color: #9BCD6D;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+.custom-button {
+  background-color: white;
+  border: 2px solid transparent; /* No outline initially */
+  transition: border-color 0.3s; /* Smooth transition on hover */
+  padding: 5px;
+  /* Primary color outline on hover */
+  &:hover {
+    border-color: #9BCD6D; /* Replace with your primary color */
+  }
 }
