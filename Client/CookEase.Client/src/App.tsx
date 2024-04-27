@@ -5,10 +5,10 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import MainPage from './components/MainPage.tsx';
-import ErrorPage from './components/ErrorPage';
-import SignInSide from './components/SignInSide';
-import SignUpSide from './components/SignUpSide';
+import MainPage from './pages/MainPage.tsx';
+import ErrorPage from './pages/ErrorPage.tsx';
+import SignInSide from './pages/SignInSide.tsx';
+import SignUpSide from './pages/SignUpSide.tsx';
 
 const theme = createTheme({
     palette: {
