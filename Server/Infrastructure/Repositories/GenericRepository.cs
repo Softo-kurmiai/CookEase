@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Infrastructure.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
-public class GenericRepository<T> where T : class
+public class GenericRepository<T> : IGenericRepository<T> where T : class
 {
     private readonly AppDbContext _context;
     private readonly DbSet<T> _table;
@@ -21,7 +22,7 @@ public class GenericRepository<T> where T : class
             .ToListAsync();
     }
 
-    public async Task<T?> GetById(Guid id)
+    public async Task<T?> GetById(int id)
     {
         return await _table.FindAsync(id);
     }
@@ -38,6 +39,12 @@ public class GenericRepository<T> where T : class
         return entity;
     }
 
+    public async Task AddRangeAsync(IEnumerable<T> entities)
+    {
+        await _table.AddRangeAsync(entities);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<T> Update(T entity)
     {
         _table.Update(entity);
@@ -45,7 +52,7 @@ public class GenericRepository<T> where T : class
         return entity;
     }
 
-    public async Task Delete(Guid? id)
+    public async Task Delete(int id)
     {
         var entity = await _table.FindAsync(id);
         if (entity is null)
@@ -57,14 +64,22 @@ public class GenericRepository<T> where T : class
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddRangeAsync(IEnumerable<T> entities)
+    public async Task<T?> DeleteByCombinedId(int id1, int id2)
     {
-        await _table.AddRangeAsync(entities);
+        var entity = await _table.FindAsync(id1, id2);
+        if (entity is null)
+        {
+            return null;
+        }
+
+        _table.Remove(entity);
         await _context.SaveChangesAsync();
+        return entity;
     }
 
-    public async Task SaveChangesAsync()
+    public async Task Detach(T entity)
     {
+        _context.Entry(entity).State = EntityState.Detached;
         await _context.SaveChangesAsync();
     }
 }

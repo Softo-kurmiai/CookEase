@@ -1,21 +1,15 @@
-﻿using Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Infrastructure.Interfaces;
+using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Repositories;
+
+public class UserRepository : GenericRepository<User>, IUserRepository
 {
-    public class UserRepository : GenericRepository<User>
+    private readonly DbSet<User> _users;
+
+    public UserRepository(AppDbContext context) : base(context) 
     {
-        private readonly AppDbContext _context;
-        private readonly DbSet<User> _users;
-        public UserRepository(AppDbContext context) : base(context) 
-        {
-            _context = context;
-            _users = _context.Set<User>();
-        }
+        _users = context.Set<User>();
     }
 }

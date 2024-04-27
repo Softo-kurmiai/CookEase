@@ -1,18 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.Models
+namespace Infrastructure.Models;
+
+[PrimaryKey(nameof(Id))]
+public class Label
 {
-    [PrimaryKey(nameof(Id))]
-    public class Label
-    {
-        public long Id { get; set; }
-        public required string Name { get; set; }
-        public required string Description { get; set; }
-        public byte[]? Image { get; set; }
-    }
+    public int Id { get; set; }
+
+    public required string Name { get; set; }
+
+    public required string Description { get; set; }
 }

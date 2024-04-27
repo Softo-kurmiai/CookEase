@@ -1,20 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Infrastructure.Models
+namespace Infrastructure.Models;
+
+[PrimaryKey(nameof(UserId), nameof(RecipeId))]
+public class FavoriteRecipe
 {
-    [PrimaryKey(nameof(UserId), nameof(RecipeId))]
-    public class FavoriteRecipe
-    {
-        [ForeignKey(nameof(User))]
-        public long UserId { get; set; }
-        [ForeignKey(nameof(Recipe))]
-        public long RecipeId { get; set; }
-        public DateTime CreatedAt { get; set; }
-    }
+    [ForeignKey(nameof(User))]
+    public int UserId { get; set; }
+
+    [ForeignKey(nameof(Recipe))]
+    public int RecipeId { get; set; }
+
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public DateTime CreatedAt { get; set; }
 }
