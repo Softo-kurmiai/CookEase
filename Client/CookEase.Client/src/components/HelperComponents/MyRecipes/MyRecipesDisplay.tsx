@@ -2,11 +2,9 @@ import * as React from 'react';
 import Pagination from '@mui/material/Pagination';
 import { RecipeCard } from '../../MainComponents/RecipeCard';
 import {Stack } from "@mui/material";
-import { Typography, useMediaQuery } from "@mui/material";
-import { Theme } from "@mui/material/styles";
 
-export function FollowedCreators(){
-    const isSmallScreen = useMediaQuery((theme : Theme) => theme.breakpoints.down('sm'));
+
+export function MyRecipesDisplay(){
     const [page, setPage] = React.useState(1);
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -18,13 +16,11 @@ export function FollowedCreators(){
             paddingTop: "0.5rem",
             paddingBottom: "0.5rem"
         }}>
-            <Typography variant={isSmallScreen ? "h6" : "h5"} align="left" sx={{ fontWeight: 600, pb:"0.8rem" }}>From creators you follow:</Typography>
             <Stack spacing={2} direction="row" alignItems="center" justifyContent="center">
-                <RecipeCard isFavorited={true}></RecipeCard>
-                <RecipeCard isFavorited={false}></RecipeCard>
-                <RecipeCard isFavorited={true}></RecipeCard>
-                <RecipeCard isFavorited={false}></RecipeCard>
-                <RecipeCard isFavorited={false}></RecipeCard>
+                <RecipeCard isFavorited={true} isEditable={true}></RecipeCard>
+                <RecipeCard isFavorited={false} isEditable={true}></RecipeCard>
+                <RecipeCard isFavorited={true} isEditable={true}></RecipeCard>
+                <RecipeCard isFavorited={false} isEditable={true}></RecipeCard>
             </Stack>
             <Pagination count={10} page={page} onChange={handleChange} color="primary" sx={{
                 padding:"0.5rem"
@@ -33,4 +29,4 @@ export function FollowedCreators(){
     )
 }
 
-export default FollowedCreators;
+export default MyRecipesDisplay;

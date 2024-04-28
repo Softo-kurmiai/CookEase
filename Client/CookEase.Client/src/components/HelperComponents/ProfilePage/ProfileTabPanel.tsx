@@ -5,6 +5,8 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import MyCollectionPage from "./MyCollectionPage";
+import FavoriteDisplay from "../MyFavorites/FavoriteDisplay";
+import MyRecipesDisplay from "../MyRecipes/MyRecipesDisplay";
 
 export default function ProfileTabPanel() {
   const [value, setValue] = React.useState("1");
@@ -15,8 +17,7 @@ export default function ProfileTabPanel() {
 
   return (
     <Box sx={{ width: "80%", margin: "0 auto" }}>
-      <TabContext value={value}>
-        <Box sx={{ width: "35%", margin: "0 auto", textAlign: "center" }}>
+      <TabContext value={value} >
           <TabList
             onChange={handleChange}
             aria-label="my profile tab list"
@@ -48,13 +49,11 @@ export default function ProfileTabPanel() {
               }}
             />
           </TabList>
-        </Box>
-
-        <TabPanel value="1">My recipes</TabPanel>
+        <TabPanel value="1"><MyRecipesDisplay/></TabPanel>
         <TabPanel value="2">
           <MyCollectionPage />
         </TabPanel>
-        <TabPanel value="3">Item Three</TabPanel>
+        <TabPanel value="3"><FavoriteDisplay/></TabPanel>
       </TabContext>
     </Box>
   );
