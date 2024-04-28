@@ -1,6 +1,7 @@
 import ResponsiveMenuBar from "../components/MainComponents/ResponsiveMenuBar";
 import ProfileDisplay from "../components/HelperComponents/ProfilePage/ProfileDisplay";
 import Gabubu from "./../images/Gabubu.jpg"
+import ProfileTabPanel from "../components/HelperComponents/ProfilePage/ProfileTabPanel";
 
 export function MyProfilePage(){
 
@@ -14,6 +15,7 @@ export function MyProfilePage(){
         <>
             <ResponsiveMenuBar isAuthenticated={true} />
             <ProfileDisplay profileDisplayProps={profileToDisplay} />
+            <ProfileTabPanel/>
         </>
     );
 }
