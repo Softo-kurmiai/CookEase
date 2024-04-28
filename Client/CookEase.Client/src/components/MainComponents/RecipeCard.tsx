@@ -9,7 +9,7 @@ import Stack from "@mui/material/Stack";
 import { Schedule, ThumbUp, Group } from "@mui/icons-material";
 import FavoriteButton from "../HelperComponents/RecipeCard/FavoriteButton";
 import InfoBar from "../HelperComponents/RecipeCard/InfoBar";
-import EditButton from "../HelperComponents/Collections/EditButton";
+import EditDialog from "../HelperComponents/MyRecipes/EditDialog"
 
 interface RecipeCardProps {
   isFavorited: boolean;
@@ -54,7 +54,7 @@ export function RecipeCard({
         {" "}
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <CustomizedRating readOnly={true} value={3.5} precision={0.5} />
-          {isEditable ? <EditButton /> : null}
+          {isEditable ? <EditDialog/> : null}
         </Stack>
         <InfoBar
           author="Gabubu"
