@@ -17,11 +17,6 @@ export default function ProfileTabPanel() {
 
   return (
     <Box sx={{ width: "80%", margin: "0 auto"}}>
-      <Tabs centered value={value} onChange={handleChange}>
-          <Tab label="Tab 1" />
-          <Tab label="Tab 2" />
-          {/* Add more tabs as needed */}
-        </Tabs>
       <TabContext value={value}>
           <TabList
             onChange={handleChange}
