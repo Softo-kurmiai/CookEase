@@ -5,10 +5,11 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 
 interface FavoriteButtonProps {
   sx?: React.CSSProperties;
+  isFavorited: boolean
 }
 
-function FavoriteButton({ sx }: FavoriteButtonProps) {
-  const [isFavorite, setIsFavorite] = useState(false);
+function FavoriteButton({ sx, isFavorited }: FavoriteButtonProps) {
+  const [isFavorite, setIsFavorite] = useState(isFavorited);
 
   const handleClick = () => {
     setIsFavorite((prev) => !prev);

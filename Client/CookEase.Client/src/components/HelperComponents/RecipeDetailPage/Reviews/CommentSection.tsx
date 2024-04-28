@@ -72,6 +72,7 @@ const initialComments = [
 ];
 
 export function CommentSection() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [comments, setComments] = useState(initialComments);
   const [visibleComments, setVisibleComments] = useState(4);
 
