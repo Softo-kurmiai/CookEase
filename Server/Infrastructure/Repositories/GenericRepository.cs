@@ -14,7 +14,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         _table = _context.Set<T>();
     }
 
-    public async Task<IEnumerable<T>> ListAsync(int offset, int limit)
+    public async Task<List<T>> ListAsync(int offset, int limit)
     {
         return await _table
             .Skip(offset)
@@ -52,16 +52,17 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         return entity;
     }
 
-    public async Task Delete(int id)
+    public async Task<T?> Delete(int id)
     {
         var entity = await _table.FindAsync(id);
         if (entity is null)
         {
-            return;
+            return null;
         }
 
         _table.Remove(entity);
         await _context.SaveChangesAsync();
+        return entity;
     }
 
     public async Task<T?> DeleteByCombinedId(int id1, int id2)
