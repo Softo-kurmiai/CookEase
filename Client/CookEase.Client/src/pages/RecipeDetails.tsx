@@ -10,7 +10,7 @@ import CommentSection from "../components/HelperComponents/RecipeDetailPage/Revi
 export default function RecipeDetails() {
   return (
     <>
-      <ResponsiveMenuBar />
+      <ResponsiveMenuBar isAuthenticated/>
       <Stack
         sx={{
           padding: "2rem",
