@@ -9,6 +9,8 @@ import MainPage from './pages/MainPage.tsx';
 import ErrorPage from './pages/ErrorPage.tsx';
 import SignInSide from './pages/SignInSide.tsx';
 import SignUpSide from './pages/SignUpSide.tsx';
+import RecipeDetails from './pages/RecipeDetails.tsx';
+import MyProfilePage from './pages/MyProfilePage.tsx';
 
 const theme = createTheme({
     palette: {
@@ -37,6 +39,14 @@ const theme = createTheme({
     {
       path:"/SignIn",
       element: <SignInSide/>
+    },
+    {
+      path:"/RecipeDetails",
+      element: <RecipeDetails/>
+    },
+    {
+      path:"/MyProfilePage",
+      element: <MyProfilePage/>
     },
   ]);
 

@@ -5,9 +5,12 @@ interface CustomizedRatingProps {
   readOnly: boolean;
   value: number;
   precision: number;
+  onChange?: (newValue: number) => void; // Add onChange prop
 }
 
+
 const StyledRating = styled(Rating)({
+  paddingTop: "8px",
   '& .MuiRating-iconFilled': {
     color: '#9BCD6D',
   },

@@ -13,7 +13,7 @@ export default function MainPage(){
     const isSmallScreen = useMediaQuery((theme : Theme) => theme.breakpoints.down('sm'));
     return (
         <>
-        <ResponsiveMenuBar></ResponsiveMenuBar>
+        <ResponsiveMenuBar isAuthenticated={false}></ResponsiveMenuBar>
         <MainSearch></MainSearch>
         <FindByCategorySection/>
         <Grid container spacing={2} paddingTop={5} paddingBottom={5}>

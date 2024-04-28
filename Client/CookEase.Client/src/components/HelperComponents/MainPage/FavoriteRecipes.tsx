@@ -20,11 +20,11 @@ export function FavoriteRecipes(){
         }}>
             <Typography variant={isSmallScreen ? "h6" : "h5"} align="left" sx={{ fontWeight: 600, pb:"0.8rem" }}>Your favorite recipes:</Typography>
             <Stack spacing={2} direction="row" alignItems="center" justifyContent="center">
-                <RecipeCard></RecipeCard>
-                <RecipeCard></RecipeCard>
-                <RecipeCard></RecipeCard>
-                <RecipeCard></RecipeCard>
-                <RecipeCard></RecipeCard>
+                <RecipeCard isFavorited={true}></RecipeCard>
+                <RecipeCard isFavorited={true}></RecipeCard>
+                <RecipeCard isFavorited={true}></RecipeCard>
+                <RecipeCard isFavorited={true}></RecipeCard>
+                <RecipeCard isFavorited={true}></RecipeCard>
             </Stack>
             <Pagination count={10} page={page} onChange={handleChange} color="primary" sx={{
                 padding:"0.5rem"
