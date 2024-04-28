@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -54,7 +54,9 @@ const ReviewCard = () => {
   return (
     <Card
       sx={{
-        maxWidth: "50%"
+        maxWidth: "70%",
+        mt: "5rem",
+        mb: "5rem"
       }}
     >
       <CardContent>

@@ -8,14 +8,27 @@ import Avatar from "@mui/material/Avatar";
 import { ThumbUp } from "@mui/icons-material";
 import Grid from "@mui/material/Unstable_Grid2";
 
-export function CommentCard() {
+interface Comment {
+  id: number;
+  author: string;
+  date: string;
+  rating: number;
+  content: string;
+  likes: number;
+}
+
+interface CommentCardProps {
+  comment: Comment;
+}
+
+export function CommentCard({comment} : CommentCardProps) {
   return (
     <Card
       sx={{
         display: "flex",
         padding: 2,
         borderRadius: "16px",
-        width: "45%",
+        width: "95%",
       }}
     >
       <CardContent sx={{ pr: 2, width:"100%" }}>
@@ -36,7 +49,7 @@ export function CommentCard() {
                   textDecoration: "underline",
                 }}
               >
-                Gabubu
+                {comment.author}
               </Typography>
             </Grid>
             <Grid xs={6}>
@@ -47,13 +60,13 @@ export function CommentCard() {
                     textAlign: "right"
                 }}
               >
-                2024-04-28
+                {comment.date}
               </Typography>
             </Grid>
           </Grid>
-          <CustomizedRating readOnly={true} value={3.5} precision={0.5} />
+          <CustomizedRating readOnly={true} value={comment.rating} precision={0.5} />
           <Typography variant="body1">
-            I made this and my mom was proud of me! 10/10 would recommended.
+            {comment.content}
           </Typography>
           <Stack
             direction="row"
@@ -72,7 +85,7 @@ export function CommentCard() {
                 color: "info.main",
               }}
             >
-              2 people found this helpful
+              {comment.likes} people found this helpful
             </Typography>
           </Stack>
         </Stack>

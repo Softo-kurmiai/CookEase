@@ -38,13 +38,13 @@ export function RecipeDetailCard() {
         Enjoy!`;
 
     return (
-        <Paper elevation={3} sx={{ maxWidth: "65%", padding:"1rem" }}>
+        <Paper elevation={3} sx={{ maxWidth: "95%", padding:"1rem" }}>
             <Grid container spacing={2}>
                 <Grid item xs={3}>
                     <Paper
                         style={{
                             position: 'relative',
-                            maxWidth: '85%',
+                            maxWidth: '100%',
                             height: 0,
                             paddingBottom: '100%', // Maintain aspect ratio
                             overflow: 'hidden', // Hide overflowing content
