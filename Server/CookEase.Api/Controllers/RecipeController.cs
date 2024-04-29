@@ -16,36 +16,6 @@ public class RecipeController : ControllerBase
         _recipeService = recipeService;
     }
 
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<RecipeResponse>> CreateRecipe(
-        [Required][FromBody] RecipeCreateRequest recipeRequest)
-    {
-        var (createdRecipe, error) = await _recipeService.CreateRecipe(recipeRequest);
-        if (error is not null)
-        {
-            return BadRequest(error.ErrorMessage);
-        }
-
-        return Created("/api/recipes", createdRecipe);
-    }
-
-    [HttpGet("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<RecipeResponse>> GetRecipeById(
-        [Required][FromRoute] int id)
-    {
-        var (recipe, error) = await _recipeService.GetRecipeById(id);
-        if (error is not null)
-        {
-            return NotFound(error.ErrorMessage);
-        }
-
-        return Ok(recipe);
-    }
-
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -63,19 +33,49 @@ public class RecipeController : ControllerBase
         return Ok(recipes);
     }
 
-    [HttpDelete("{id}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<RecipeResponse>> DeleteRecipe(
+    public async Task<ActionResult<RecipeResponse>> GetRecipeById(
         [Required][FromRoute] int id)
     {
-        var (deletedRecipe, error) = await _recipeService.DeleteRecipe(id);
+        var (recipe, error) = await _recipeService.GetRecipeById(id);
         if (error is not null)
         {
             return NotFound(error.ErrorMessage);
         }
 
-        return Ok(deletedRecipe);
+        return Ok(recipe);
+    }
+
+    [HttpGet("creator/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<RecipeResponse>>> GetRecipesByCreatorId(
+        [Required][FromRoute] int id)
+    {
+        var (recipes, error) = await _recipeService.GetRecipesByCreatorId(id);
+        if (error is not null)
+        {
+            return NotFound(error.ErrorMessage);
+        }
+
+        return Ok(recipes);
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<RecipeResponse>> CreateRecipe(
+        [Required][FromBody] RecipeCreateRequest recipeRequest)
+    {
+        var (createdRecipe, error) = await _recipeService.CreateRecipe(recipeRequest);
+        if (error is not null)
+        {
+            return BadRequest(error.ErrorMessage);
+        }
+
+        return Created("/api/recipes", createdRecipe);
     }
 
     [HttpPut("{id}")]
@@ -94,19 +94,19 @@ public class RecipeController : ControllerBase
         return Ok(updatedRecipe);
     }
 
-    [HttpGet("creator/{id}")]
+    [HttpDelete("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<RecipeResponse>>> GetRecipesByCreatorId(
+    public async Task<ActionResult<RecipeResponse>> DeleteRecipe(
         [Required][FromRoute] int id)
     {
-        var (recipes, error) = await _recipeService.GetRecipesByCreatorId(id);
+        var (deletedRecipe, error) = await _recipeService.DeleteRecipe(id);
         if (error is not null)
         {
             return NotFound(error.ErrorMessage);
         }
 
-        return Ok(recipes);
+        return Ok(deletedRecipe);
     }
 
     [HttpPut("{id}/updateMetric")]
