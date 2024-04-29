@@ -30,13 +30,11 @@ public class Recipe
 
     public byte[]? Image { get; set; }
 
-    public decimal? Rating { get; set; }
+    public int ViewCount { get; set; } = 0;
 
-    public int? ViewCount { get; set; }
+    public int CommentCount { get; set; } = 0;
 
-    public int? CommentCount { get; set; }
-
-    public int? FavoriteCount { get; set; }
+    public int FavoriteCount { get; set; } = 0;
 
     public DateTime CreatedDate { get; set; }
 

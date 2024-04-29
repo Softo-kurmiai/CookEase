@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240427225213_FullRecipeImplementation")]
+    [Migration("20240429192257_FullRecipeImplementation")]
     partial class FullRecipeImplementation
     {
         /// <inheritdoc />
@@ -185,7 +185,7 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CommentCount")
+                    b.Property<int>("CommentCount")
                         .HasColumnType("integer");
 
                     b.Property<int>("CookTime")
@@ -206,7 +206,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Difficulty")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("FavoriteCount")
+                    b.Property<int>("FavoriteCount")
                         .HasColumnType("integer");
 
                     b.Property<byte[]>("Image")
@@ -227,16 +227,13 @@ namespace Infrastructure.Migrations
                     b.Property<int>("PrepTime")
                         .HasColumnType("integer");
 
-                    b.Property<decimal?>("Rating")
-                        .HasColumnType("numeric");
-
                     b.Property<int>("Servings")
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("ViewCount")
+                    b.Property<int>("ViewCount")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -289,6 +286,22 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RecipeNutrition");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.RecipeRating", b =>
+                {
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("RecipeId", "UserId");
+
+                    b.ToTable("RecipeRatings");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.User", b =>

@@ -75,7 +75,8 @@ namespace Infrastructure.Migrations
                 name: "CommentCount",
                 table: "Recipes",
                 type: "integer",
-                nullable: true);
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AddColumn<int>(
                 name: "CookTime",
@@ -95,7 +96,8 @@ namespace Infrastructure.Migrations
                 name: "FavoriteCount",
                 table: "Recipes",
                 type: "integer",
-                nullable: true);
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AddColumn<string>(
                 name: "Ingredients",
@@ -111,12 +113,6 @@ namespace Infrastructure.Migrations
                 nullable: false,
                 defaultValue: 0);
 
-            migrationBuilder.AddColumn<decimal>(
-                name: "Rating",
-                table: "Recipes",
-                type: "numeric",
-                nullable: true);
-
             migrationBuilder.AddColumn<int>(
                 name: "Servings",
                 table: "Recipes",
@@ -128,7 +124,8 @@ namespace Infrastructure.Migrations
                 name: "ViewCount",
                 table: "Recipes",
                 type: "integer",
-                nullable: true);
+                nullable: false,
+                defaultValue: 0);
 
             migrationBuilder.AlterColumn<int>(
                 name: "LabelId",
@@ -282,6 +279,19 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_RecipeNutrition", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "RecipeRatings",
+                columns: table => new
+                {
+                    RecipeId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    Rating = table.Column<decimal>(type: "numeric", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RecipeRatings", x => new { x.RecipeId, x.UserId });
+                });
         }
 
         /// <inheritdoc />
@@ -289,6 +299,9 @@ namespace Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "RecipeNutrition");
+
+            migrationBuilder.DropTable(
+                name: "RecipeRatings");
 
             migrationBuilder.DropColumn(
                 name: "CommentCount",
@@ -312,10 +325,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.DropColumn(
                 name: "PrepTime",
-                table: "Recipes");
-
-            migrationBuilder.DropColumn(
-                name: "Rating",
                 table: "Recipes");
 
             migrationBuilder.DropColumn(

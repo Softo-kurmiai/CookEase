@@ -25,13 +25,5 @@ public class RecipeCreateRequest
 
     public byte[]? Image { get; set; }
 
-    public decimal? Rating { get; set; }
-
-    public int? ViewCount { get; set; }
-
-    public int? CommentCount { get; set; }
-
-    public int? FavoriteCount { get; set; }
-
     public required RecipeNutritionCreateRequest RecipeNutrition { get; set; }
 }

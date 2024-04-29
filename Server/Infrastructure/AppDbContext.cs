@@ -25,6 +25,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public required DbSet<RecipeNutrition> RecipeNutrition { get; set; }
 
+    public required DbSet<RecipeRating> RecipeRatings { get; set; }
+
     public required DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

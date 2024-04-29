@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Recipe;
 using Application.DTOs.RecipeNutrition;
+using Application.Enums;
 using AutoMapper;
 using CookEase.Api.Interfaces;
 using Infrastructure.Interfaces;
@@ -12,15 +13,18 @@ public class RecipeService : IRecipeService
 {
     private readonly IRecipeRepository _recipeRepository;
     private readonly IRecipeNutritionRepository _recipeNutritionRepository;
+    private readonly IRecipeRatingRepository _recipeRatingRepository;
     private readonly IMapper _mapper;
 
     public RecipeService(
         IRecipeRepository recipeRepository,
         IRecipeNutritionRepository recipeNutritionRepository,
+        IRecipeRatingRepository recipeRatingRepository,
         IMapper mapper)
     {
         _recipeRepository = recipeRepository;
         _recipeNutritionRepository = recipeNutritionRepository;
+        _recipeRatingRepository = recipeRatingRepository;
         _mapper = mapper;
     }
 
@@ -75,7 +79,7 @@ public class RecipeService : IRecipeService
     public async Task<(List<RecipeResponse>? recipeResponses, Error? error)> GetPaginatedRecipes(
         int recipesPerPage, int page)
     {
-        var offset = recipesPerPage * page;
+        var offset = recipesPerPage * (page - 1);
         var recipes = await _recipeRepository.ListAsync(offset, recipesPerPage);
         var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
         if (mappedRecipes is null)
@@ -167,34 +171,23 @@ public class RecipeService : IRecipeService
                         "Something went wrong when mapping Recipe or RecipeNutrition. Something was not found."
                 });
         }
-
-        mappedRecipeResponse.CommentCount = recipeRequest.CommentCount ?? mappedRecipeResponse.CommentCount;
-        mappedRecipeResponse.CookTime = recipeRequest.CookTime ?? mappedRecipeResponse.CookTime;
-        mappedRecipeResponse.CreatorId = recipeRequest.CreatorId ?? mappedRecipeResponse.CreatorId;
-        mappedRecipeResponse.Description = recipeRequest.Description ?? mappedRecipeResponse.Description;
-        mappedRecipeResponse.Difficulty = recipeRequest.Difficulty ?? mappedRecipeResponse.Difficulty;
-        mappedRecipeResponse.FavoriteCount = recipeRequest.FavoriteCount ?? mappedRecipeResponse.FavoriteCount;
-        mappedRecipeResponse.Image = recipeRequest.Image ?? mappedRecipeResponse.Image;
-        mappedRecipeResponse.Ingredients = recipeRequest.Ingredients ?? mappedRecipeResponse.Ingredients;
-        mappedRecipeResponse.Instructions = recipeRequest.Instructions ?? mappedRecipeResponse.Instructions;
-        mappedRecipeResponse.Name = recipeRequest.Name ?? mappedRecipeResponse.Name;
-        mappedRecipeResponse.PrepTime = recipeRequest.PrepTime ?? mappedRecipeResponse.PrepTime;
-        mappedRecipeResponse.Rating = recipeRequest.Rating ?? mappedRecipeResponse.Rating;
-        mappedRecipeResponse.Servings = recipeRequest.Servings ?? mappedRecipeResponse.Servings;
+        mappedRecipeResponse.CookTime = recipeRequest.CookTime;
+        mappedRecipeResponse.CreatorId = recipeRequest.CreatorId;
+        mappedRecipeResponse.Description = recipeRequest.Description;
+        mappedRecipeResponse.Difficulty = recipeRequest.Difficulty;
+        mappedRecipeResponse.Image = recipeRequest.Image;
+        mappedRecipeResponse.Ingredients = recipeRequest.Ingredients;
+        mappedRecipeResponse.Instructions = recipeRequest.Instructions;
+        mappedRecipeResponse.Name = recipeRequest.Name;
+        mappedRecipeResponse.PrepTime = recipeRequest.PrepTime;
+        mappedRecipeResponse.Servings = recipeRequest.Servings;
         mappedRecipeResponse.UpdatedDate = DateTime.UtcNow;
-        mappedRecipeResponse.ViewCount = recipeRequest.ViewCount ?? mappedRecipeResponse.ViewCount;
-        mappedRecipeNutritionResponse.Calories =
-            recipeRequest.RecipeNutrition?.Calories ?? mappedRecipeNutritionResponse.Calories;
-        mappedRecipeNutritionResponse.Carbs =
-            recipeRequest.RecipeNutrition?.Carbs ?? mappedRecipeNutritionResponse.Carbs;
-        mappedRecipeNutritionResponse.Fat =
-            recipeRequest.RecipeNutrition?.Fat ?? mappedRecipeNutritionResponse.Fat;
-        mappedRecipeNutritionResponse.Fiber =
-            recipeRequest.RecipeNutrition?.Fiber ?? mappedRecipeNutritionResponse.Fiber;
-        mappedRecipeNutritionResponse.Protein =
-            recipeRequest.RecipeNutrition?.Protein ?? mappedRecipeNutritionResponse.Protein;
-        mappedRecipeNutritionResponse.Sugar =
-            recipeRequest.RecipeNutrition?.Sugar ?? mappedRecipeNutritionResponse.Sugar;
+        mappedRecipeNutritionResponse.Calories = recipeRequest.RecipeNutrition.Calories;
+        mappedRecipeNutritionResponse.Carbs = recipeRequest.RecipeNutrition.Carbs;
+        mappedRecipeNutritionResponse.Fat = recipeRequest.RecipeNutrition.Fat;
+        mappedRecipeNutritionResponse.Fiber = recipeRequest.RecipeNutrition.Fiber;
+        mappedRecipeNutritionResponse.Protein = recipeRequest.RecipeNutrition.Protein;
+        mappedRecipeNutritionResponse.Sugar = recipeRequest.RecipeNutrition.Sugar;
 
         var recipeToUpdate = _mapper.Map<Recipe>(mappedRecipeResponse);
         var recipeDbResponse = await _recipeRepository.Update(recipeToUpdate);
@@ -208,10 +201,89 @@ public class RecipeService : IRecipeService
         return (mappedRecipeDbResponse, null);
     }
 
+    public async Task<(List<RecipeResponse>? creatorRecipes, Error? error)> GetRecipesByCreatorId(
+        int creatorId)
+    {
+        var recipes = await _recipeRepository.GetRecipesByCreatorId(creatorId);
+        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        if (mappedRecipes is null)
+        {
+            return (null,
+                new Error
+                { 
+                    ErrorMessage = $"Something went wrong when mapping Recipe list. " +
+                                   $"No recipes for given creatorId {creatorId} were found."
+                });
+        }
+
+        foreach (var mappedRecipe in mappedRecipes)
+        {
+            var mappedRecipeNutritionResponse =
+                await GetRecipeNutritionByRecipeIdFromDatabase(mappedRecipe.Id);
+            if (mappedRecipeNutritionResponse is null)
+            {
+                return (null,
+                    new Error
+                    {
+                        ErrorMessage = $"Something went wrong when mapping RecipeNutrition. " +
+                                       $"Recipe nutrition information was not found for recipe {mappedRecipe.Id}."
+                    });
+            }
+
+            mappedRecipe.RecipeNutrition = mappedRecipeNutritionResponse;
+        }
+
+        return (mappedRecipes, null);
+    }
+
+    public async Task<Error?> IncreaseRecipeMetric(
+        int recipeId,
+        RecipeMetricsUpdateRequest updateRequest)
+    {
+        var dbResponse = updateRequest.Metric switch
+        {
+            RecipeMetrics.IncreaseViewCount => await _recipeRepository.IncreaseRecipeViewCount(recipeId),
+            RecipeMetrics.IncreaseFavoriteCount => await _recipeRepository.IncreaseRecipeFavoriteCount(recipeId),
+            RecipeMetrics.DecreaseFavoriteCount => await _recipeRepository.DecreaseRecipeFavoriteCount(recipeId),
+            _ => throw new ArgumentOutOfRangeException($"The specified RecipeMetric {updateRequest.Metric} is not supported.")
+        };
+        if (dbResponse is null)
+        {
+            return new Error { ErrorMessage = $"Recipe with the specified id {recipeId} was not found." };
+        }
+
+        return null;
+    }
+
+    public async Task<decimal> GetRecipeRating(
+        int recipeId)
+    {
+        return await _recipeRatingRepository.GetRecipeRating(recipeId);
+    }
+
+    public async Task<decimal> GetUserRecipeRating(
+        int userId,
+        int recipeId)
+    {
+        return await _recipeRatingRepository.GetUserRecipeRating(userId, recipeId);
+    }
+
+    public async Task UpdateUserRecipeRating(
+        int userId,
+        int recipeId,
+        decimal newRatingValue)
+    {
+        await _recipeRatingRepository.UpdateUserRecipeRating(userId, recipeId, newRatingValue);
+    }
+
     private async Task<RecipeResponse?> GetRecipeByIdFromDatabase(
         int recipeId)
     {
         var recipe = await _recipeRepository.GetById(recipeId);
+        if (recipe is not null)
+        {
+            await _recipeRepository.Detach(recipe);
+        }
         var mappedRecipeResponse = _mapper.Map<RecipeResponse>(recipe);
 
         return mappedRecipeResponse;
@@ -221,6 +293,10 @@ public class RecipeService : IRecipeService
         int recipeId)
     {
         var recipeNutrition = await _recipeNutritionRepository.GetNutritionInfoByRecipeId(recipeId);
+        if (recipeNutrition is not null)
+        {
+            await _recipeNutritionRepository.Detach(recipeNutrition);
+        }
         var mappedRecipeNutritionResponse = _mapper.Map<RecipeNutritionResponse>(recipeNutrition);
 
         return mappedRecipeNutritionResponse;

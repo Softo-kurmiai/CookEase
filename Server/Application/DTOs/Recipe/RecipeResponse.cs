@@ -29,8 +29,6 @@ public class RecipeResponse
 
     public byte[]? Image { get; set; }
 
-    public decimal? Rating { get; set; }
-
     public int? ViewCount { get; set; }
 
     public int? CommentCount { get; set; }
