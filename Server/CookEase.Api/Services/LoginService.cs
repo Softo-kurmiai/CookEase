@@ -8,7 +8,6 @@ namespace CookEase.Api.Services
         //TODO actually implement authentication
         public LoginResponse? Authenticate(LoginRequest loginRequest)
         {
-
             if(loginRequest.Username == "username" || loginRequest.Password == "password")
             {
                 return new LoginResponse { UserId = 69 };
