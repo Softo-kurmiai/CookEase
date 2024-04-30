@@ -24,13 +24,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Collection", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -38,14 +39,15 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("LastUpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -54,13 +56,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.CollectionRecipe", b =>
                 {
-                    b.Property<long>("CollectionId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("CollectionId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("RecipeId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("CollectionId", "RecipeId");
@@ -70,27 +73,29 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Comment", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("RecipeId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -99,13 +104,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.CommentLike", b =>
                 {
-                    b.Property<long>("CommentId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("CommentId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("CommentId", "UserId");
@@ -115,13 +121,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.FavoriteCreator", b =>
                 {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("CreatorId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("UserId", "CreatorId");
@@ -131,13 +138,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.FavoriteRecipe", b =>
                 {
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("RecipeId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("UserId", "RecipeId");
@@ -147,18 +155,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Label", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<byte[]>("Image")
-                        .HasColumnType("bytea");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -171,21 +176,22 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.Recipe", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Contents")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<long>("CreatorId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("integer");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -199,6 +205,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -208,26 +215,27 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Models.RecipeLabels", b =>
                 {
-                    b.Property<long>("RecipeId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
 
-                    b.Property<long>("LabelID")
-                        .HasColumnType("bigint");
+                    b.Property<int>("LabelId")
+                        .HasColumnType("integer");
 
-                    b.HasKey("RecipeId", "LabelID");
+                    b.HasKey("RecipeId", "LabelId");
 
                     b.ToTable("RecipeLabels");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.User", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
@@ -249,6 +257,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bytea");
 
                     b.Property<DateTime>("UpdatedAt")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");

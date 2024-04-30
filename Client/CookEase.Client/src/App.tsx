@@ -5,10 +5,12 @@ import {
     createBrowserRouter,
     RouterProvider,
 } from "react-router-dom";
-import MainPage from './components/MainPage.tsx';
-import ErrorPage from './components/ErrorPage';
-import SignInSide from './components/SignInSide';
-import SignUpSide from './components/SignUpSide';
+import MainPage from './pages/MainPage.tsx';
+import ErrorPage from './pages/ErrorPage.tsx';
+import SignInSide from './pages/SignInSide.tsx';
+import SignUpSide from './pages/SignUpSide.tsx';
+import RecipeDetails from './pages/RecipeDetails.tsx';
+import MyProfilePage from './pages/MyProfilePage.tsx';
 
 const theme = createTheme({
     palette: {
@@ -18,6 +20,9 @@ const theme = createTheme({
       secondary: {
         main: '#CC1B00',
       },
+      info:{
+        main: '#94A3B8',
+      }
     },
   });
 
@@ -34,6 +39,14 @@ const theme = createTheme({
     {
       path:"/SignIn",
       element: <SignInSide/>
+    },
+    {
+      path:"/RecipeDetails",
+      element: <RecipeDetails/>
+    },
+    {
+      path:"/MyProfilePage",
+      element: <MyProfilePage/>
     },
   ]);
 

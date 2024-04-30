@@ -1,20 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks; 
 
-namespace Infrastructure.Models
+namespace Infrastructure.Models;
+
+[PrimaryKey(nameof(CollectionId), nameof(RecipeId))]
+public class CollectionRecipe
 {
-    [PrimaryKey(nameof(CollectionId), nameof(RecipeId))]
-    public class CollectionRecipe
-    {
-        [ForeignKey(nameof(Collection))]
-        public long CollectionId { get; set; }
-        [ForeignKey(nameof(Recipe))]
-        public long RecipeId { get; set; }
-        public DateTime CreatedAt { get; set; }
-    }
+    [ForeignKey(nameof(Collection))]
+    public int CollectionId { get; set; }
+
+    [ForeignKey(nameof(Recipe))]
+    public int RecipeId { get; set; }
+
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public DateTime CreatedAt { get; set; }
 }
