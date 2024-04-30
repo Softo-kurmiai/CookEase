@@ -15,6 +15,7 @@ public static class ServiceCollectionExtensions
 
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRecipeService, RecipeService>();
+        services.AddScoped<ICommentService, CommentService>();
 
         return services;
     }
@@ -25,6 +26,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRecipeRepository, RecipeRepository>();
         services.AddScoped<IRecipeNutritionRepository, RecipeNutritionRepository>();
         services.AddScoped<IRecipeRatingRepository, RecipeRatingRepository>();
+        services.AddScoped<ICommentRepository, CommentRepository>();
 
         return services;
     }
