@@ -2,7 +2,7 @@
 
 public interface IGenericRepository<T> where T : class
 {
-    Task<IEnumerable<T>> ListAsync(int offset, int limit);
+    Task<List<T>> ListAsync(int offset, int limit);
 
     Task<T?> GetById(int id);
 
@@ -12,7 +12,9 @@ public interface IGenericRepository<T> where T : class
 
     Task AddRangeAsync(IEnumerable<T> entities);
 
-    Task Delete(int id);
+    Task<T> Update(T entity);
+
+    Task<T?> Delete(int id);
 
     Task<T?> DeleteByCombinedId(int id1, int id2);
 

@@ -182,13 +182,16 @@ namespace Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Contents")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<int>("CommentCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("CookTime")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("CreatorId")
                         .HasColumnType("integer");
@@ -197,16 +200,38 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("Difficulty")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FavoriteCount")
+                        .HasColumnType("integer");
+
                     b.Property<byte[]>("Image")
                         .HasColumnType("bytea");
+
+                    b.Property<string>("Ingredients")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Instructions")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("UpdatedDate")
-                        .ValueGeneratedOnAddOrUpdate()
+                    b.Property<int>("PrepTime")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Servings")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ViewCount")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -224,6 +249,56 @@ namespace Infrastructure.Migrations
                     b.HasKey("RecipeId", "LabelId");
 
                     b.ToTable("RecipeLabels");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.RecipeNutrition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Calories")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Carbs")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("Fat")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("Fiber")
+                        .HasColumnType("numeric");
+
+                    b.Property<decimal>("Protein")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Sugar")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RecipeNutrition");
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.RecipeRating", b =>
+                {
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("RecipeId", "UserId");
+
+                    b.ToTable("RecipeRatings");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.User", b =>
