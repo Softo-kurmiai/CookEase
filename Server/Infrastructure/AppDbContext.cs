@@ -11,8 +11,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public required DbSet<Comment> Comments { get; set; }
 
-    public required DbSet<CommentLike> CommentLikes { get; set; }
-
     public required DbSet<FavoriteCreator> FavoriteCreators { get; set; }
 
     public required DbSet<FavoriteRecipe> FavoriteRecipes { get; set; }
@@ -28,10 +26,4 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public required DbSet<RecipeRating> RecipeRatings { get; set; }
 
     public required DbSet<User> Users { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        var recipe = modelBuilder.Entity<Recipe>();
-        recipe.Property(x => x.CreatedDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
-    }
 }

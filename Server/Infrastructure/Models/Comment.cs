@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Infrastructure.Models;
@@ -9,16 +10,17 @@ public class Comment
     public int Id { get; set; }
 
     [ForeignKey(nameof(Recipe))]
-    public int RecipeId { get; set; }
+    public required int RecipeId { get; set; }
 
     [ForeignKey(nameof(User))]
-    public int UserId { get; set; }
+    public required int UserId { get; set; }
 
+    [MaxLength(256)]
     public required string Content { get; set; }
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public DateTime CreatedAt { get; set; }
+    public int LikeCount { get; set; } = 0;
 
-    [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-    public DateTime UpdatedAt { get; set; }
+    public DateTime CreatedDate { get; set; }
+
+    public DateTime? UpdatedDate { get; set; }
 }
