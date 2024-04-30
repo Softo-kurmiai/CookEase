@@ -9,7 +9,7 @@ import EditButton from "./EditButton";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Unstable_Grid2";
-import DeleteButton from "./DeleteButton";
+import RedButton from "../../MainComponents/Miscellaneous/RedButton";
 
 export default function EditRecipeFormDialog() {
   const [open, setOpen] = React.useState(false);
@@ -20,6 +20,10 @@ export default function EditRecipeFormDialog() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const hadleDeleteButtonClick = () => {
+    console.log("Delete button clicked!");
   };
 
   const collectionVariables = {
@@ -108,7 +112,7 @@ export default function EditRecipeFormDialog() {
                 </Stack>
             </Grid>
             <Grid xs={2}>
-              <DeleteButton/>
+              <RedButton onClick={hadleDeleteButtonClick}>Delete</RedButton>
             </Grid>
           </Grid>
         </DialogContent>
