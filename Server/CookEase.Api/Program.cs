@@ -1,6 +1,4 @@
 using CookEase.Api.Extensions;
-using CookEase.Api.Interfaces;
-using CookEase.Api.Services;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -27,10 +25,13 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddControllers();
 builder.Services.AddRepositories();
+builder.Services.AddServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+
 
 var app = builder.Build();
 

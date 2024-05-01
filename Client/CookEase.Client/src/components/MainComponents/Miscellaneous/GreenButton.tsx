@@ -1,16 +1,19 @@
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import { Typography, Button } from '@mui/material';
+import { ReactNode, MouseEventHandler  } from 'react';
+import { SxProps } from '@mui/system';
 
-export function EditProfileButton() {
-    const label = "Edit profile";
-    const handleEdit = async () => {
-        console.log("Edit profile triggered");
-    };
+interface GreenButtonProps {
+    children: ReactNode;
+    onClick: MouseEventHandler<HTMLButtonElement>;
+    sx?: SxProps;
+  }
 
+const GreenButton: React.FC<GreenButtonProps> = ({ children, onClick, sx }) => {
+    
     return (
         <Button
-            onClick={handleEdit}
-            aria-label= {label}
+            onClick={onClick}
+            aria-label="Share Profile"
             sx={{
                 backgroundColor: "#9BCD6D",
                 boxShadow: "box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;",
@@ -21,6 +24,7 @@ export function EditProfileButton() {
                 },
                 textTransform: "none",
                 width: "120px",
+                ...sx
             }}
         >
             <Typography
@@ -32,10 +36,10 @@ export function EditProfileButton() {
                     fontWeight: 700,
                 }}
             >
-                {label}
+                {children}
             </Typography>
         </Button>
     );
 }
 
-export default EditProfileButton;
+export default GreenButton;

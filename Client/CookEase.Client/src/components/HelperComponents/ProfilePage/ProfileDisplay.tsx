@@ -2,7 +2,7 @@ import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import ShareButton from '../../HelperComponents/ProfilePage/ShareButton';
-import EditProfileButton from './EditProfileButton';
+import EditProfileDialog from './EditProfileDialog/EditProfileDialog';
 
 interface ProfileDisplayProps {
     Name: string;
@@ -32,7 +32,7 @@ export function ProfileDisplay({ profileDisplayProps }: { profileDisplayProps: P
             </Stack>
             <Stack direction="row" spacing={2}>
                 <ShareButton />
-                <EditProfileButton />
+                <EditProfileDialog/>
             </Stack>
         </Stack>
     );
