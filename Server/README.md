@@ -19,4 +19,4 @@ Here is a list of *recommended* coding conventions, design patterns and nuGet pa
 `dotnet ef --startup-project Server\CookEase.Api --project Server\Infrastructure migrations add <migration_name>`
 
 * Command for updating database locally:
-`dotnet ef --startup-project Server\CarServiceApi --project Server\Infrastructure database update`
+`dotnet ef --startup-project Server\CookEase.Api --project Server\Infrastructure database update`
