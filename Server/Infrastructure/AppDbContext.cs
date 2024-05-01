@@ -11,15 +11,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public required DbSet<Comment> Comments { get; set; }
 
-    public required DbSet<CommentLike> CommentLikes { get; set; }
-
     public required DbSet<FavoriteCreator> FavoriteCreators { get; set; }
 
     public required DbSet<FavoriteRecipe> FavoriteRecipes { get; set; }
 
-    public required DbSet<Label> Labels { get; set; }
+    public required DbSet<RecipeCategory> RecipeCategories { get; set; }
 
-    public required DbSet<RecipeCategory> RecipeLabels { get; set; }
+    public required DbSet<RecipeNutrition> RecipeNutrition { get; set; }
+
+    public required DbSet<RecipeRating> RecipeRatings { get; set; }
 
     public required DbSet<Recipe> Recipes { get; set; }
 

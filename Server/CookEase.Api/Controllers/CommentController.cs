@@ -43,7 +43,7 @@ public class CommentController : ControllerBase
             await _commentService.GetPaginatedCommentsByRecipeId(recipeId, commentsPerPage, page);
         if (error is not null)
         {
-            BadRequest(error.ErrorMessage);
+            return BadRequest(error.ErrorMessage);
         }
 
         return Ok(comments);

@@ -1,107 +1,48 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
-using Application.DTOs.Comment;
+using Application.DTOs.Category;
 using CookEase.Api.Interfaces;
 
 namespace CookEase.Api.Controllers;
 
 [ApiController]
-[Route("api/comments")]
+[Route("api/categories")]
 public class CategoryController : ControllerBase
 {
-    private readonly ICommentService _commentService;
+    private readonly ICategoryService _categoryService;
 
-    public CategoryController(ICommentService commentService)
+    public CategoryController(ICategoryService categoryService)
     {
-        _commentService = commentService;
+        _categoryService = categoryService;
     }
 
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [HttpPut("replace")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CommentResponse>> CreateComment(
-        [Required][FromBody] CommentCreateRequest commentRequest)
+    public async Task<ActionResult<CategoryResponse>> ReplaceRecipeCategories(
+        [Required][FromBody] CategoryRequest request)
     {
-        var (createdComment, error) = await _commentService.CreateComment(commentRequest);
+        var error = await _categoryService.ReplaceRecipeCategories(request);
         if (error is not null)
         {
             return BadRequest(error.ErrorMessage);
         }
 
-        return Created("/api/comments", createdComment);
+        return Ok();
     }
 
     [HttpGet("recipe/{recipeId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<List<CommentResponse>>> GetPaginatedCommentsByRecipeId(
-        [Required][FromRoute] int recipeId,
-        [Required][FromQuery] int commentsPerPage = 4,
-        [Required][FromQuery] int page = 1)
-    {
-        var (comments, error) =
-            await _commentService.GetPaginatedCommentsByRecipeId(recipeId, commentsPerPage, page);
-        if (error is not null)
-        {
-            BadRequest(error.ErrorMessage);
-        }
-
-        return Ok(comments);
-    }
-
-    [HttpGet("recipe/{recipeId}/count")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public ActionResult<List<CommentResponse>> GetRecipeCommentsCount(
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CategoryResponse>> GetCategoriesByRecipeId(
         [Required][FromRoute] int recipeId)
     {
-        var count = _commentService.GetRecipeCommentsCount(recipeId);
-        return Ok(count);
-    }
-
-    [HttpDelete("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CommentResponse>> DeleteComment(
-        [Required][FromRoute] int id)
-    {
-        var (deletedComment, error) = await _commentService.DeleteComment(id);
+        var (categories, error) = await _categoryService.GetCategoriesByRecipeId(recipeId);
         if (error is not null)
         {
             return NotFound(error.ErrorMessage);
         }
 
-        return Ok(deletedComment);
-    }
-
-    [HttpPut("{id}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CommentResponse>> UpdateComment(
-        [Required][FromRoute] int id,
-        [Required][FromBody] CommentUpdateRequest request)
-    {
-        var (updatedComment, error) = await _commentService.UpdateComment(id, request);
-        if (error is not null)
-        {
-            return BadRequest(error.ErrorMessage);
-        }
-
-        return Ok(updatedComment);
-    }
-
-    [HttpPut("{id}/updateLikeCount")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CommentResponse>> UpdateLikeCount(
-        [Required][FromRoute] int id,
-        [Required][FromBody] CommentLikeUpdateRequest request)
-    {
-        var error = await _commentService.UpdateLikeCount(id, request);
-        if (error is not null)
-        {
-            return NotFound(error.ErrorMessage);
-        }
-
-        return Ok();
+        return Ok(categories);
     }
 }
