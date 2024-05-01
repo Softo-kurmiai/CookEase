@@ -11,6 +11,7 @@ import SignInSide from './pages/SignInSide.tsx';
 import SignUpSide from './pages/SignUpSide.tsx';
 import RecipeDetails from './pages/RecipeDetails.tsx';
 import MyProfilePage from './pages/MyProfilePage.tsx';
+import CreateRecipePage from './pages/CreateRecipePage.tsx';
 
 const theme = createTheme({
     palette: {
@@ -22,7 +23,8 @@ const theme = createTheme({
       },
       info:{
         main: '#94A3B8',
-      }
+      },
+      divider:'#313D5A'
     },
   });
 
@@ -47,6 +49,10 @@ const theme = createTheme({
     {
       path:"/MyProfilePage",
       element: <MyProfilePage/>
+    },
+    {
+      path:"/CreateRecipe",
+      element: <CreateRecipePage/>
     },
   ]);
 
