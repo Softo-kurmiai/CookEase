@@ -61,4 +61,21 @@ public class RecipeRepository : GenericRepository<Recipe>, IRecipeRepository
         await _context.SaveChangesAsync();
         return recipe;
     }
+
+    public async Task<List<Recipe>> GetNumberOfTopLikedRecipes(int maxNumberOfRecipes)
+    {
+        return await _recipes
+            .OrderByDescending(x => x.FavoriteCount)
+            .ThenByDescending(x => x.CreatedDate)
+            .Take(maxNumberOfRecipes)
+            .ToListAsync() ?? [];
+    }
+
+    public async Task<List<Recipe>> GetNumberOfRandomRecipes(int maxNumberOfRecipes)
+    {
+        return await _recipes
+            .OrderBy(x => Guid.NewGuid())
+            .Take(maxNumberOfRecipes)
+            .ToListAsync() ?? [];
+    }
 }

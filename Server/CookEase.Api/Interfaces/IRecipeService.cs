@@ -14,6 +14,12 @@ public interface IRecipeService
     Task<(List<RecipeResponse>? recipeResponses, Error? error)> GetPaginatedRecipes(
         int recipesPerPage, int page);
 
+    Task<List<RecipeResponse>> GetNumberOfTopLikedRecipes(
+        int maxNumberOfRecipes);
+
+    Task<List<RecipeResponse>> GetNumberOfRandomRecipes(
+        int maxNumberOfRecipes);
+
     Task<(RecipeResponse? recipeResponse, Error? error)> DeleteRecipe(
         int recipeId);
 
