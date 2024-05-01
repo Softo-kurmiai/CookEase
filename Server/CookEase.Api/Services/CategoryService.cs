@@ -1,6 +1,6 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Category;
-using AutoMapper;
+using Application.Enums;
 using CookEase.Api.Interfaces;
 using Infrastructure.Interfaces;
 using Infrastructure.Models;
@@ -10,14 +10,10 @@ namespace CookEase.Api.Services;
 public class CategoryService : ICategoryService
 {
     private readonly IRecipeCategoryRepository _recipeCategoryRepository;
-    private readonly IMapper _mapper;
 
-    public CategoryService(
-        IRecipeCategoryRepository recipeCategoryRepository,
-        IMapper mapper)
+    public CategoryService(IRecipeCategoryRepository recipeCategoryRepository)
     {
         _recipeCategoryRepository = recipeCategoryRepository;
-        _mapper = mapper;
     }
 
     public async Task<Error?> ReplaceRecipeCategories(
@@ -60,5 +56,10 @@ public class CategoryService : ICategoryService
         };
 
         return (mappedCategoriesResponse, null);
+    }
+
+    public List<Category> GetAllCategories()
+    {
+        return Enum.GetValues<Category>().ToList();
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Application.DTOs.Category;
+using Application.Enums;
 using CookEase.Api.Interfaces;
 
 namespace CookEase.Api.Controllers;
@@ -16,19 +17,13 @@ public class CategoryController : ControllerBase
         _categoryService = categoryService;
     }
 
-    [HttpPut("replace")]
+    [HttpGet("getAll")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CategoryResponse>> ReplaceRecipeCategories(
-        [Required][FromBody] CategoryRequest request)
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public ActionResult<List<Category>> GetAllEnumCategories()
     {
-        var error = await _categoryService.ReplaceRecipeCategories(request);
-        if (error is not null)
-        {
-            return BadRequest(error.ErrorMessage);
-        }
-
-        return Ok();
+        var categories = _categoryService.GetAllCategories();
+        return Ok(categories);
     }
 
     [HttpGet("recipe/{recipeId}")]
@@ -44,5 +39,20 @@ public class CategoryController : ControllerBase
         }
 
         return Ok(categories);
+    }
+
+    [HttpPut("replace")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<CategoryResponse>> ReplaceRecipeCategories(
+        [Required][FromBody] CategoryRequest request)
+    {
+        var error = await _categoryService.ReplaceRecipeCategories(request);
+        if (error is not null)
+        {
+            return BadRequest(error.ErrorMessage);
+        }
+
+        return Ok();
     }
 }

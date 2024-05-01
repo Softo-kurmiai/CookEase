@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Category;
+using Application.Enums;
 
 namespace CookEase.Api.Interfaces;
 
@@ -10,4 +11,6 @@ public interface ICategoryService
 
     Task<(CategoryResponse? categoryResponse, Error? error)> GetCategoriesByRecipeId(
         int recipeId);
+
+    List<Category> GetAllCategories();
 }
