@@ -1,29 +1,49 @@
+using CookEase.Api.Extensions;
+using Infrastructure;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("PostgreSQL");
+    options.UseNpgsql(connectionString);
+});
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddRepositories();
+builder.Services.AddServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
+
+
 var app = builder.Build();
 
-//app.UseDefaultFiles();
-//app.UseStaticFiles();
-
-// Configure the HTTP request pipeline.
-// if (app.Environment.IsDevelopment())
 app.UseSwagger();
 app.UseSwaggerUI();
-
-//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-//app.MapFallbackToFile("/index.html");
+using var scope = app.Services.CreateScope();
+using var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+ctx.Database.Migrate();
 
 app.Run();
