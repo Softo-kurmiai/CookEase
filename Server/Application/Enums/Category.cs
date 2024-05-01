@@ -2,7 +2,7 @@
 
 public enum Category
 {
-    Pizza,
+    Pizza = 1,
     Pasta,
     Meat,
     Salads,

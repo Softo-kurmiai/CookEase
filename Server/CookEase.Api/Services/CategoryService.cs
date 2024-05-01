@@ -23,10 +23,18 @@ public class CategoryService : ICategoryService
     public async Task<Error?> ReplaceRecipeCategories(
         CategoryRequest request)
     {
-        var mappedRecipeCategories = _mapper.Map<List<RecipeCategory>>(request);
-        if (!mappedRecipeCategories.Any() || mappedRecipeCategories is null)
+        var mappedRecipeCategories = new List<RecipeCategory>();
+        foreach (var category in request.Categories)
         {
-            return new Error { ErrorMessage = "Mapping of RecipeCategories failed." };
+            mappedRecipeCategories.Add(new RecipeCategory
+            {
+                RecipeId = request.RecipeId,
+                Category = category,
+            });
+        }
+        if (!mappedRecipeCategories.Any())
+        {
+            return new Error { ErrorMessage = "No recipe categories given. The list should at least have one category." };
         }
 
         await _recipeCategoryRepository.ReplaceRecipeCategories(request.RecipeId, mappedRecipeCategories);
@@ -37,15 +45,19 @@ public class CategoryService : ICategoryService
         int recipeId)
     {
         var categoriesDbResponse = await _recipeCategoryRepository.GetCategoriesByRecipeId(recipeId);
-        var mappedCategoriesResponse = _mapper.Map<CategoryResponse>(categoriesDbResponse);
-        if (mappedCategoriesResponse is null)
+        if (categoriesDbResponse is null)
         {
             return (null,
                 new Error
                 {
-                    ErrorMessage = $"No recipe categories were found for id {recipeId} or mapping failed"
+                    ErrorMessage = $"No recipe categories were found for id {recipeId}"
                 });
         }
+        var mappedCategoriesResponse = new CategoryResponse
+        {
+            RecipeId = recipeId,
+            Categories = categoriesDbResponse.Select(x => x.Category).ToList(),
+        };
 
         return (mappedCategoriesResponse, null);
     }

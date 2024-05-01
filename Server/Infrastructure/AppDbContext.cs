@@ -24,10 +24,4 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public required DbSet<Recipe> Recipes { get; set; }
 
     public required DbSet<User> Users { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql("Host=localhost,5432;Database=cookease-db;Port=5432;Username=postgres;Password=password;");
-        base.OnConfiguring(optionsBuilder);
-    }
 }
