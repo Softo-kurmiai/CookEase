@@ -162,7 +162,6 @@ export function BasicInformationForm({
                 justifyContent="space-around"
                 alignItems="center"
               >
-                
                 <Button
                   onClick={onBack}
                   disabled={activeStep === 0}
@@ -178,6 +177,11 @@ export function BasicInformationForm({
                     backgroundColor: "primary.main",
                     color: "#FFFFFF",
                     width: "200px",
+                    "&:hover": {
+                      boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.25)",
+                      backgroundColor: "primary.main",
+                      color: "#FFFFFF",
+                    },
                   }}
                 >
                   Next

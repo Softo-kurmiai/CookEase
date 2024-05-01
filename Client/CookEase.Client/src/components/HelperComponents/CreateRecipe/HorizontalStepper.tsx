@@ -1,28 +1,62 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { BasicInformationForm } from './BasicInformationForm';
-import { UploadPhotoForm } from './UploadPhotoForm';
-import { AdditionalInformationForm } from './AdditionalInformationForm';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { BasicInformationForm } from "./BasicInformationForm";
+import { UploadPhotoForm } from "./UploadPhotoForm";
+import { AdditionalInformationForm } from "./AdditionalInformationForm";
 
-const steps = ['Basic information', 'Add a photo', 'Additional information'];
+const steps = ["Basic information", "Add a photo", "Additional information"];
 
 export function HorizontalStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [formData, setFormData] = React.useState({
-    recipeName: '',
-    servings: '',
-    ingredients: '',
-    directions: '',
+    recipeName: "",
+    servings: "",
+    ingredients: "",
+    directions: "",
   });
   const [photoData, setPhotoData] = React.useState({
-    photo: ''
+    photo: "",
   });
+
+  type AdditionalFormData = {
+    difficulty: string;
+    totalTime: number;
+    totalTimeMeasurement: string;
+    prepTime: number;
+    prepTimeMeasurement: string;
+    cookTime: number;
+    cookTimeMeasurement: string;
+    cal: number;
+    calMeasurement: string;
+    carbs: number;
+    protein: number;
+    fat: number;
+    fiber: number;
+    sugar: number;
+};
+
+const [additionalFormData, setAdditionalFormData] = React.useState<AdditionalFormData>({
+  difficulty: "",
+  totalTime: 0,
+  totalTimeMeasurement: "",
+  prepTime: 0,
+  prepTimeMeasurement: "",
+  cookTime: 0,
+  cookTimeMeasurement: "",
+  cal: 0,
+  calMeasurement: "",
+  carbs: 0,
+  protein: 0,
+  fat: 0,
+  fiber: 0,
+  sugar: 0
+});
 
   const isStepOptional = (step: number) => {
     return step === 1;
@@ -47,21 +81,6 @@ export function HorizontalStepper() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // We probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
-  };
-
   const handleReset = () => {
     setActiveStep(0);
   };
@@ -77,23 +96,66 @@ export function HorizontalStepper() {
     handleNext();
   };
 
-  const handlePhotoSubmit = (data: {
-    photo: string
-  }) => {
+  const handlePhotoSubmit = (data: { photo: string }) => {
     console.log("Photo Form Data received:", data);
     setPhotoData(data);
     handleNext();
   };
 
+  const handleAdditionalInformationSubmit = (data: {
+    difficulty: string;
+    totalTime: number;
+    totalTimeMeasurement: string;
+    prepTime: number;
+    prepTimeMeasurement: string;
+    cookTime: number;
+    cookTimeMeasurement: string;
+    cal: number;
+    calMeasurement: string;
+    carbs: number;
+    protein: number;
+    fat: number;
+    fiber: number;
+    sugar: number;
+}) => {
+
+    console.log("Additional information data received:", data);
+    setAdditionalFormData(data);
+    //TODO: insert axios post call to recipe api
+};
+
   const stepsComponents = [
-    <BasicInformationForm onNext={handleBasicInformationSubmit} onBack={handleBack} activeStep={activeStep} initialValues={formData} />,
-    <UploadPhotoForm onNext={handlePhotoSubmit} onBack={handleBack} activeStep={activeStep} initialValues={photoData}/>,
-    <AdditionalInformationForm />,
+    <BasicInformationForm
+      onNext={handleBasicInformationSubmit}
+      onBack={handleBack}
+      activeStep={activeStep}
+      initialValues={formData}
+    />,
+    <UploadPhotoForm
+      onNext={handlePhotoSubmit}
+      onBack={handleBack}
+      activeStep={activeStep}
+      initialValues={photoData}
+    />,
+    <AdditionalInformationForm
+      onNext={handleAdditionalInformationSubmit}
+      onBack={handleBack}
+      activeStep={activeStep}
+      initialValues={additionalFormData}
+    />,
   ];
 
   return (
-    <Box sx={{ width: '100%' }}>
-      <Stepper activeStep={activeStep}>
+    <Box
+      sx={{
+        width: "100%",
+        margin: "0 auto", // Center horizontally
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center", // Center vertically
+      }}
+    >
+      <Stepper activeStep={activeStep} sx={{width:"65%", pb:"2rem"}}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};
           const labelProps: {
@@ -119,36 +181,16 @@ export function HorizontalStepper() {
           <Typography sx={{ mt: 2, mb: 1 }}>
             All steps completed - you&apos;re finished
           </Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Box sx={{ flex: '1 1 auto' }} />
+          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+            <Box sx={{ flex: "1 1 auto" }} />
             <Button onClick={handleReset}>Reset</Button>
           </Box>
         </React.Fragment>
       ) : (
         // Render the component corresponding to the active step
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
-          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-            <Button
-              color="inherit"
-              disabled={activeStep === 0}
-              onClick={handleBack}
-              sx={{ mr: 1 }}
-            >
-              Back
-            </Button>
-            <Box sx={{ flex: '1 1 auto' }} />
-            {isStepOptional(activeStep) && (
-              <Button color="inherit" onClick={handleSkip} sx={{ mr: 1 }}>
-                Skip
-              </Button>
-            )}
-            <Button onClick={handleNext}>
-              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-            </Button>
-          </Box>
+        <Box sx={{width: "80%"}}>
           {stepsComponents[activeStep]}
-        </React.Fragment>
+        </Box>
       )}
     </Box>
   );

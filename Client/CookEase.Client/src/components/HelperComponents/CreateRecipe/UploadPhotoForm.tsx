@@ -36,7 +36,6 @@ export function UploadPhotoForm({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    alert("Handling form submit");
     onNext({ photo });
   };
 
@@ -90,7 +89,7 @@ export function UploadPhotoForm({
                 component="span"
                 sx={{
                   color: "secondary.main",
-                  borderColor: "secondary.main"
+                  borderColor: "secondary.main",
                 }}
               >
                 Upload Photo
@@ -109,7 +108,7 @@ export function UploadPhotoForm({
               justifyContent="space-around"
               alignItems="center"
               sx={{
-                pt: "2rem"
+                pt: "2rem",
               }}
             >
               <Button
@@ -127,6 +126,11 @@ export function UploadPhotoForm({
                   backgroundColor: "primary.main",
                   color: "#FFFFFF",
                   width: "200px",
+                  "&:hover": {
+                    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.25)",
+                    backgroundColor: "primary.main",
+                    color: "#FFFFFF",
+                  },
                 }}
               >
                 Next
