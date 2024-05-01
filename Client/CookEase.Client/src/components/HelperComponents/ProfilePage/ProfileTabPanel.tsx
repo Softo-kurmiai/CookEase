@@ -6,7 +6,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import MyCollectionPage from "./MyCollectionPage";
 import FavoriteDisplay from "../MyFavorites/FavoriteDisplay";
-import MyRecipesDisplay from "../MyRecipes/MyRecipesDisplay";
+import MyRecipesDisplay from "../MyRecipes/RecipesDisplay";
 
 export default function ProfileTabPanel() {
   const [value, setValue] = React.useState("1");
@@ -49,7 +49,7 @@ export default function ProfileTabPanel() {
               }}
             />
           </TabList>
-        <TabPanel value="1"><MyRecipesDisplay/></TabPanel>
+        <TabPanel value="1"><MyRecipesDisplay isEditable={true}/></TabPanel>
         <TabPanel value="2">
           <MyCollectionPage />
         </TabPanel>
