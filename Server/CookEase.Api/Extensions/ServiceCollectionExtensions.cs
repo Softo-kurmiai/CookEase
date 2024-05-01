@@ -14,8 +14,10 @@ public static class ServiceCollectionExtensions
         services.AddSingleton(mapper);
 
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<ILoginService, LoginService>();
         services.AddScoped<IRecipeService, RecipeService>();
         services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<ICategoryService, CategoryService>();
 
         return services;
     }
@@ -27,6 +29,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRecipeNutritionRepository, RecipeNutritionRepository>();
         services.AddScoped<IRecipeRatingRepository, RecipeRatingRepository>();
         services.AddScoped<ICommentRepository, CommentRepository>();
+        services.AddScoped<IRecipeCategoryRepository, RecipeCategoryRepository>();
 
         return services;
     }

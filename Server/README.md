@@ -13,3 +13,10 @@ Here is a list of *recommended* coding conventions, design patterns and nuGet pa
 - **nuGet packages**:
 	- AutoMapper - used for easily mapping `source` object to a `destination` object. (https://dotnettutorials.net/lesson/automapper-in-c-sharp/)
 	- *May be updated*
+
+## Database migrations
+* Command for adding a migration:
+`dotnet ef --startup-project Server\CookEase.Api --project Server\Infrastructure migrations add <migration_name>`
+
+* Command for updating database locally:
+`dotnet ef --startup-project Server\CookEase.Api --project Server\Infrastructure database update`
