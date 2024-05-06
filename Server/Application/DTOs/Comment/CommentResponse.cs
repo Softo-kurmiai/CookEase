@@ -10,6 +10,8 @@ public class CommentResponse
 
     public required string Content { get; set; }
 
+    public required decimal Rating { get; set; }
+
     public int? LikeCount { get; set; }
 
     public required DateTime CreatedDate { get; set; }

@@ -19,6 +19,10 @@ public class RecipeResponse
 
     public required Difficulty Difficulty { get; set; }
 
+    public required decimal Rating { get; set; }
+
+    public required List<Enums.Category> Categories { get; set; }
+
     public required RecipeNutritionResponse RecipeNutrition { get; set; }
 
     public required string Instructions { get; set; }

@@ -9,9 +9,11 @@ public interface ICommentRepository : IGenericRepository<Comment>
         int commentsPerPage,
         int page);
 
-    int GetCommentCountForRecipe(int recipeId);
-
+    // May be deprecated
     Task<Comment?> IncreaseCommentLikeCount(int commentId);
 
+    // May be deprecated
     Task<Comment?> DecreaseCommentLikeCount(int commentId);
+
+    Task<decimal> GetRecipeRating(int recipeId);
 }

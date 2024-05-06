@@ -143,31 +143,15 @@ public class RecipeController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{recipeId}/user/{userId}/rating")]
-    public async Task<ActionResult<decimal>> GetUserRecipeRating(
-        [Required][FromRoute] int recipeId,
-        [Required][FromRoute] int userId)
-    {
-        var rating = await _recipeService.GetUserRecipeRating(userId, recipeId);
-        return Ok(rating);
-    }
-
-    [HttpGet("{id}/rating")]
-    public async Task<ActionResult<decimal>> GetRecipeRating(
-        [Required][FromRoute] int id)
-    {
-        var rating = await _recipeService.GetRecipeRating(id);
-        return Ok(rating);
-    }
-
-    [HttpPut("{recipeId}/updateRating")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> AddRecipeRating(
-        [Required][FromRoute] int recipeId,
-        [Required][FromQuery] int userId,
-        [Required][FromQuery] decimal newRatingValue)
-    {
-        await _recipeService.UpdateUserRecipeRating(userId, recipeId, newRatingValue);
-        return Ok();
-    }
+    // Implementation should be changed
+    //[HttpPut("{recipeId}/updateRating")]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //public async Task<ActionResult> AddRecipeRating(
+    //    [Required][FromRoute] int recipeId,
+    //    [Required][FromQuery] int userId,
+    //    [Required][FromQuery] decimal newRatingValue)
+    //{
+    //    await _recipeService.UpdateUserRecipeRating(userId, recipeId, newRatingValue);
+    //    return Ok();
+    //}
 }

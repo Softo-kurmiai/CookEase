@@ -13,18 +13,21 @@ public class RecipeService : IRecipeService
 {
     private readonly IRecipeRepository _recipeRepository;
     private readonly IRecipeNutritionRepository _recipeNutritionRepository;
-    private readonly IRecipeRatingRepository _recipeRatingRepository;
+    private readonly IRecipeCategoryRepository _recipeCategoryRepository;
+    private readonly ICommentService _commentService;
     private readonly IMapper _mapper;
 
     public RecipeService(
         IRecipeRepository recipeRepository,
         IRecipeNutritionRepository recipeNutritionRepository,
-        IRecipeRatingRepository recipeRatingRepository,
+        IRecipeCategoryRepository recipeCategoryRepository,
+        ICommentService commentService,
         IMapper mapper)
     {
         _recipeRepository = recipeRepository;
         _recipeNutritionRepository = recipeNutritionRepository;
-        _recipeRatingRepository = recipeRatingRepository;
+        _recipeCategoryRepository = recipeCategoryRepository;
+        _commentService = commentService;
         _mapper = mapper;
     }
 
@@ -72,7 +75,19 @@ public class RecipeService : IRecipeService
                 });
         }
 
+        var categories = await _recipeCategoryRepository.GetCategoriesByRecipeId(recipeId);
+        if (categories is null || categories.Count == 0)
+        {
+            return (null,
+                new Error
+                {
+                    ErrorMessage = $"Something went wrong when getting categories for the recipe {recipeId}."
+                });
+        }
+
         mappedRecipeResponse.RecipeNutrition = mappedRecipeNutritionResponse;
+        mappedRecipeResponse.Rating = await _commentService.GetRecipeRating(recipeId);
+        mappedRecipeResponse.Categories = categories.Select(x => x.Category).ToList();
         return (mappedRecipeResponse, null);
     }
 
@@ -170,6 +185,7 @@ public class RecipeService : IRecipeService
         return (mappedRecipeResponse, null);
     }
 
+    // Need to add recipe category update handling here
     public async Task<(RecipeResponse? recipeResponse, Error? error)> UpdateRecipe(
         int recipeId,
         RecipeUpdateRequest recipeRequest)
@@ -271,26 +287,14 @@ public class RecipeService : IRecipeService
         return null;
     }
 
-    public async Task<decimal> GetRecipeRating(
-        int recipeId)
-    {
-        return await _recipeRatingRepository.GetRecipeRating(recipeId);
-    }
-
-    public async Task<decimal> GetUserRecipeRating(
-        int userId,
-        int recipeId)
-    {
-        return await _recipeRatingRepository.GetUserRecipeRating(userId, recipeId);
-    }
-
-    public async Task UpdateUserRecipeRating(
-        int userId,
-        int recipeId,
-        decimal newRatingValue)
-    {
-        await _recipeRatingRepository.UpdateUserRecipeRating(userId, recipeId, newRatingValue);
-    }
+    // Implementation should be changed
+    //public async Task UpdateUserRecipeRating(
+    //    int userId,
+    //    int recipeId,
+    //    decimal newRatingValue)
+    //{
+    //    await _recipeRatingRepository.UpdateUserRecipeRating(userId, recipeId, newRatingValue);
+    //}
 
     private async Task<RecipeResponse?> GetRecipeByIdFromDatabase(
         int recipeId)

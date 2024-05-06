@@ -34,15 +34,8 @@ public interface IRecipeService
         int recipeId,
         RecipeMetricsUpdateRequest recipeMetricToIncrease);
 
-    Task<decimal> GetRecipeRating(
-        int recipeId);
-
-    Task<decimal> GetUserRecipeRating(
-        int userId,
-        int recipeId);
-
-    Task UpdateUserRecipeRating(
-        int userId,
-        int recipeId,
-        decimal newRatingValue);
+    //Task UpdateUserRecipeRating(
+    //    int userId,
+    //    int recipeId,
+    //    decimal newRatingValue);
 }

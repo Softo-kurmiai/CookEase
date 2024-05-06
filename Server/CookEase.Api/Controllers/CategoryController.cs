@@ -26,20 +26,21 @@ public class CategoryController : ControllerBase
         return Ok(categories);
     }
 
-    [HttpGet("recipe/{recipeId}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CategoryResponse>> GetCategoriesByRecipeId(
-        [Required][FromRoute] int recipeId)
-    {
-        var (categories, error) = await _categoryService.GetCategoriesByRecipeId(recipeId);
-        if (error is not null)
-        {
-            return NotFound(error.ErrorMessage);
-        }
+    // Should be implemented in recipe service GetRecipeById
+    //[HttpGet("recipe/{recipeId}")]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //[ProducesResponseType(StatusCodes.Status404NotFound)]
+    //public async Task<ActionResult<CategoryResponse>> GetCategoriesByRecipeId(
+    //    [Required][FromRoute] int recipeId)
+    //{
+    //    var (categories, error) = await _categoryService.GetCategoriesByRecipeId(recipeId);
+    //    if (error is not null)
+    //    {
+    //        return NotFound(error.ErrorMessage);
+    //    }
 
-        return Ok(categories);
-    }
+    //    return Ok(categories);
+    //}
 
     [HttpPut("replace")]
     [ProducesResponseType(StatusCodes.Status200OK)]
