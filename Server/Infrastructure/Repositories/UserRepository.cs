@@ -12,4 +12,9 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
         _users = context.Set<User>();
     }
+
+    public async Task<User?> GetUserByUsername(string username)
+    {
+        return await _users.Where(x => x.Name == username).SingleOrDefaultAsync();
+    }
 }
