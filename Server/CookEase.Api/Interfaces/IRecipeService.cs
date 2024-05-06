@@ -11,13 +11,13 @@ public interface IRecipeService
     Task<(RecipeResponse? recipeResponse, Error? error)> GetRecipeById(
         int recipeId);
 
-    Task<(List<RecipeResponse>? recipeResponses, Error? error)> GetPaginatedRecipes(
+    Task<(List<RecipeCardResponse>? recipeResponses, Error? error)> GetPaginatedRecipeCards(
         int recipesPerPage, int page);
 
-    Task<List<RecipeResponse>> GetNumberOfTopLikedRecipes(
+    Task<List<RecipeCardResponse>> GetNumberOfTopLikedRecipeCards(
         int maxNumberOfRecipes);
 
-    Task<List<RecipeResponse>> GetNumberOfRandomRecipes(
+    Task<List<RecipeCardResponse>> GetNumberOfRandomRecipeCards(
         int maxNumberOfRecipes);
 
     Task<(RecipeResponse? recipeResponse, Error? error)> DeleteRecipe(
@@ -27,7 +27,7 @@ public interface IRecipeService
         int recipeId,
         RecipeUpdateRequest recipeRequest);
 
-    Task<(List<RecipeResponse>? creatorRecipes, Error? error)> GetRecipesByCreatorId(
+    Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCreatorId(
         int creatorId);
 
     Task<Error?> IncreaseRecipeMetric(

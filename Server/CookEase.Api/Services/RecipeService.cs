@@ -14,17 +14,20 @@ public class RecipeService : IRecipeService
     private readonly IRecipeRepository _recipeRepository;
     private readonly IRecipeNutritionRepository _recipeNutritionRepository;
     private readonly IRecipeRatingRepository _recipeRatingRepository;
+    private readonly ICommentService _commentService;
     private readonly IMapper _mapper;
 
     public RecipeService(
         IRecipeRepository recipeRepository,
         IRecipeNutritionRepository recipeNutritionRepository,
         IRecipeRatingRepository recipeRatingRepository,
+        ICommentService commentService,
         IMapper mapper)
     {
         _recipeRepository = recipeRepository;
         _recipeNutritionRepository = recipeNutritionRepository;
         _recipeRatingRepository = recipeRatingRepository;
+        _commentService = commentService;
         _mapper = mapper;
     }
 
@@ -73,15 +76,19 @@ public class RecipeService : IRecipeService
         }
 
         mappedRecipeResponse.RecipeNutrition = mappedRecipeNutritionResponse;
+        mappedRecipeResponse.CommentCount = _commentService.GetRecipeCommentsCount(recipeId);
+
+        await _recipeRepository.IncreaseRecipeViewCount(recipeId);
+
         return (mappedRecipeResponse, null);
     }
 
-    public async Task<(List<RecipeResponse>? recipeResponses, Error? error)> GetPaginatedRecipes(
+    public async Task<(List<RecipeCardResponse>? recipeResponses, Error? error)> GetPaginatedRecipeCards(
         int recipesPerPage, int page)
     {
         var offset = recipesPerPage * (page - 1);
         var recipes = await _recipeRepository.ListAsync(offset, recipesPerPage);
-        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        var mappedRecipes = _mapper.Map<List<RecipeCardResponse>>(recipes);
         if (mappedRecipes is null)
         {
             return (null,
@@ -92,39 +99,37 @@ public class RecipeService : IRecipeService
                 });
         }
 
-        foreach (var mappedRecipe in mappedRecipes)
+        foreach (var recipe in mappedRecipes)
         {
-            var mappedRecipeNutritionResponse =
-                await GetRecipeNutritionByRecipeIdFromDatabase(mappedRecipe.Id);
-            if (mappedRecipeNutritionResponse is null)
-            {
-                return (null,
-                    new Error
-                    {
-                        ErrorMessage =
-                            "Something went wrong when mapping RecipeNutrition."
-                    });
-            }
-
-            mappedRecipe.RecipeNutrition = mappedRecipeNutritionResponse;
+            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
         }
 
         return (mappedRecipes, null);
     }
 
-    public async Task<List<RecipeResponse>> GetNumberOfTopLikedRecipes(
+    public async Task<List<RecipeCardResponse>> GetNumberOfTopLikedRecipeCards(
         int maxNumberOfRecipes)
     {
         var recipes = await _recipeRepository.GetNumberOfTopLikedRecipes(maxNumberOfRecipes);
-        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        var mappedRecipes = _mapper.Map<List<RecipeCardResponse>>(recipes);
+        foreach (var recipe in mappedRecipes)
+        {
+            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
+        }
+
         return mappedRecipes ?? [];
     }
 
-    public async Task<List<RecipeResponse>> GetNumberOfRandomRecipes(
+    public async Task<List<RecipeCardResponse>> GetNumberOfRandomRecipeCards(
         int maxNumberOfRecipes)
     {
         var recipes = await _recipeRepository.GetNumberOfRandomRecipes(maxNumberOfRecipes);
-        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        var mappedRecipes = _mapper.Map<List<RecipeCardResponse>>(recipes);
+        foreach (var recipe in mappedRecipes)
+        {
+            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
+        }
+
         return mappedRecipes ?? [];
     }
 
@@ -217,11 +222,11 @@ public class RecipeService : IRecipeService
         return (mappedRecipeDbResponse, null);
     }
 
-    public async Task<(List<RecipeResponse>? creatorRecipes, Error? error)> GetRecipesByCreatorId(
+    public async Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCreatorId(
         int creatorId)
     {
         var recipes = await _recipeRepository.GetRecipesByCreatorId(creatorId);
-        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        var mappedRecipes = _mapper.Map<List<RecipeCardResponse>>(recipes);
         if (mappedRecipes is null)
         {
             return (null,
@@ -232,33 +237,22 @@ public class RecipeService : IRecipeService
                 });
         }
 
-        foreach (var mappedRecipe in mappedRecipes)
+        foreach (var recipe in mappedRecipes)
         {
-            var mappedRecipeNutritionResponse =
-                await GetRecipeNutritionByRecipeIdFromDatabase(mappedRecipe.Id);
-            if (mappedRecipeNutritionResponse is null)
-            {
-                return (null,
-                    new Error
-                    {
-                        ErrorMessage = $"Something went wrong when mapping RecipeNutrition. " +
-                                       $"Recipe nutrition information was not found for recipe {mappedRecipe.Id}."
-                    });
-            }
-
-            mappedRecipe.RecipeNutrition = mappedRecipeNutritionResponse;
+            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
         }
 
         return (mappedRecipes, null);
     }
-
+    
+    // May be deprecated later if patterns moved to other service methods
     public async Task<Error?> IncreaseRecipeMetric(
         int recipeId,
         RecipeMetricsUpdateRequest updateRequest)
     {
         var dbResponse = updateRequest.Metric switch
         {
-            RecipeMetrics.IncreaseViewCount => await _recipeRepository.IncreaseRecipeViewCount(recipeId),
+            RecipeMetrics.IncreaseViewCount => await _recipeRepository.IncreaseRecipeViewCount(recipeId), // already deprecated (used in GetRecipeById)
             RecipeMetrics.IncreaseFavoriteCount => await _recipeRepository.IncreaseRecipeFavoriteCount(recipeId),
             RecipeMetrics.DecreaseFavoriteCount => await _recipeRepository.DecreaseRecipeFavoriteCount(recipeId),
             _ => throw new ArgumentOutOfRangeException($"The specified RecipeMetric {updateRequest.Metric} is not supported.")
