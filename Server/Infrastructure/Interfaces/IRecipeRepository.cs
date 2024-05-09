@@ -11,4 +11,8 @@ public interface IRecipeRepository : IGenericRepository<Recipe>
     Task<Recipe?> IncreaseRecipeFavoriteCount(int recipeId);
 
     Task<Recipe?> DecreaseRecipeFavoriteCount(int recipeId);
+
+    Task<List<Recipe>> GetNumberOfTopLikedRecipes(int maxNumberOfRecipes);
+
+    Task<List<Recipe>> GetNumberOfRandomRecipes(int maxNumberOfRecipes);
 }

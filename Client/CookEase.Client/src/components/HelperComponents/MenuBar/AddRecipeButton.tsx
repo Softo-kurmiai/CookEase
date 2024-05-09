@@ -2,7 +2,11 @@ import IconButton from '@mui/material/IconButton';
 import Add from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
 
-function AddRecipeButton() {
+interface AddRecipeButton{
+  display: boolean;
+}
+
+function AddRecipeButton({display} : AddRecipeButton) {
   const handleClick = () => {
     console.log('Icon button clicked!');
   };
@@ -18,6 +22,10 @@ function AddRecipeButton() {
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.2)',
             backgroundColor: 'primary.main' 
         },
+        display: display ? 'flex' : 'none',
+        flexDirection: 'row', 
+        alignItems: 'center',
+        width: "200px"
       }}
     >
       <Add sx={{ color: '#FFFFFF' }} />

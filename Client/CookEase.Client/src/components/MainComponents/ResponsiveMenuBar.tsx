@@ -34,7 +34,7 @@ function ResponsiveMenuBar({isAuthenticated = false } : MenuBarProps) {
           <MenuBarCategories/>
           <SearchBar/>
           <Stack direction="row" spacing={1}>
-            <AddRecipeButton/>
+            <AddRecipeButton display={isAuthenticated}/>
             <SignUpButton display={!isAuthenticated}/>
             <LogInButton display={!isAuthenticated}/>
             <MenuBarProfile source={ProfilePicutre} display={isAuthenticated}/>

@@ -33,6 +33,24 @@ public class RecipeController : ControllerBase
         return Ok(recipes);
     }
 
+    [HttpGet("topLiked")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<RecipeResponse>>> GetTopLikedRecipes(
+        [Required][FromQuery] int maxNumberOfRecipes)
+    {
+        var recipes = await _recipeService.GetNumberOfTopLikedRecipes(maxNumberOfRecipes);
+        return Ok(recipes);
+    }
+
+    [HttpGet("random")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<RecipeResponse>>> GetRandomRecipes(
+        [Required][FromQuery] int maxNumberOfRecipes)
+    {
+        var recipes = await _recipeService.GetNumberOfRandomRecipes(maxNumberOfRecipes);
+        return Ok(recipes);
+    }
+
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

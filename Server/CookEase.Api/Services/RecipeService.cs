@@ -112,6 +112,22 @@ public class RecipeService : IRecipeService
         return (mappedRecipes, null);
     }
 
+    public async Task<List<RecipeResponse>> GetNumberOfTopLikedRecipes(
+        int maxNumberOfRecipes)
+    {
+        var recipes = await _recipeRepository.GetNumberOfTopLikedRecipes(maxNumberOfRecipes);
+        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        return mappedRecipes ?? [];
+    }
+
+    public async Task<List<RecipeResponse>> GetNumberOfRandomRecipes(
+        int maxNumberOfRecipes)
+    {
+        var recipes = await _recipeRepository.GetNumberOfRandomRecipes(maxNumberOfRecipes);
+        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        return mappedRecipes ?? [];
+    }
+
     public async Task<(RecipeResponse? recipeResponse, Error? error)> DeleteRecipe(
         int recipeId)
     {
