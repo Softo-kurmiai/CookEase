@@ -10,7 +10,7 @@ public class CollectionResponse
 
     public required string Description { get; set; }
 
-    public required List<int> recipeIds { get; set; }
+    public required List<int> RecipeIds { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
