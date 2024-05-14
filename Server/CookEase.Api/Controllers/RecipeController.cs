@@ -20,12 +20,12 @@ public class RecipeController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<RecipeResponse>>> GetPaginatedRecipes(
+    public async Task<ActionResult<List<RecipeCardResponse>>> GetPaginatedRecipeCards(
         [Required][FromQuery] int recipesPerPage = 5,
         [Required][FromQuery] int page = 1)
     {
         var (recipes, error) =
-            await _recipeService.GetPaginatedRecipes(recipesPerPage, page);
+            await _recipeService.GetPaginatedRecipeCards(recipesPerPage, page);
         if (error is not null)
         {
             return NotFound(error.ErrorMessage);
@@ -36,23 +36,23 @@ public class RecipeController : ControllerBase
 
     [HttpGet("topLiked")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<RecipeResponse>>> GetTopLikedRecipes(
+    public async Task<ActionResult<List<RecipeCardResponse>>> GetTopLikedRecipeCards(
         [Required][FromQuery] int maxNumberOfRecipes)
     {
-        var recipes = await _recipeService.GetNumberOfTopLikedRecipes(maxNumberOfRecipes);
+        var recipes = await _recipeService.GetNumberOfTopLikedRecipeCards(maxNumberOfRecipes);
         return Ok(recipes);
     }
 
     [HttpGet("random")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<RecipeResponse>>> GetRandomRecipes(
+    public async Task<ActionResult<List<RecipeCardResponse>>> GetRandomRecipeCards(
         [Required][FromQuery] int maxNumberOfRecipes)
     {
-        var recipes = await _recipeService.GetNumberOfRandomRecipes(maxNumberOfRecipes);
+        var recipes = await _recipeService.GetNumberOfRandomRecipeCards(maxNumberOfRecipes);
         return Ok(recipes);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}/full")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<RecipeResponse>> GetRecipeById(
@@ -70,10 +70,10 @@ public class RecipeController : ControllerBase
     [HttpGet("creator/{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<RecipeResponse>>> GetRecipesByCreatorId(
+    public async Task<ActionResult<List<RecipeCardResponse>>> GetRecipeCardsByCreatorId(
         [Required][FromRoute] int id)
     {
-        var (recipes, error) = await _recipeService.GetRecipesByCreatorId(id);
+        var (recipes, error) = await _recipeService.GetRecipeCardsByCreatorId(id);
         if (error is not null)
         {
             return NotFound(error.ErrorMessage);

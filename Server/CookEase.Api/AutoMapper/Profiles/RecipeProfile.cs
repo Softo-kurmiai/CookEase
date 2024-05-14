@@ -12,6 +12,7 @@ public class RecipeProfile : Profile
         CreateMap<RecipeCreateRequest, Recipe>();
         CreateMap<RecipeNutritionCreateRequest, RecipeNutrition>();
         CreateMap<Recipe, RecipeResponse>().ReverseMap();
+        CreateMap<Recipe, RecipeCardResponse>();
         CreateMap<RecipeNutrition, RecipeNutritionResponse>().ReverseMap();
     }
 }
