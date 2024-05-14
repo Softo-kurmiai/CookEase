@@ -1,8 +1,6 @@
 import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import ShareButton from '../../HelperComponents/ProfilePage/ShareButton';
-import EditProfileDialog from './EditProfileDialog/EditProfileDialog';
 
 interface ProfileDisplayProps {
     Name: string;
@@ -13,7 +11,9 @@ interface ProfileDisplayProps {
 
 export function ProfileDisplay({ profileDisplayProps }: { profileDisplayProps: ProfileDisplayProps }) {
     return (
-        <Stack spacing={2} justifyContent="center" alignItems="center">
+        <Stack spacing={2} justifyContent="center" alignItems="center" sx={{
+            pb:"1rem"
+        }}>
             <Avatar
                 alt="Your profile picture"
                 src={profileDisplayProps.Image}
@@ -29,10 +29,6 @@ export function ProfileDisplay({ profileDisplayProps }: { profileDisplayProps: P
                 <Typography variant="body1" sx={{ color: "#000000" }}>
                     {profileDisplayProps.Following} following
                 </Typography>
-            </Stack>
-            <Stack direction="row" spacing={2}>
-                <ShareButton />
-                <EditProfileDialog/>
             </Stack>
         </Stack>
     );

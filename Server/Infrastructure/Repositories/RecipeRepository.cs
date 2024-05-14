@@ -15,9 +15,19 @@ public class RecipeRepository : GenericRepository<Recipe>, IRecipeRepository
         _recipes = context.Set<Recipe>();
     }
 
+    public async Task<List<Recipe>?> GetRecipesByRecipeIds(List<int> recipeIds)
+    {
+        return await _recipes.Where(x => recipeIds.Contains(x.Id)).ToListAsync();
+    }
+
     public async Task<List<Recipe>?> GetRecipesByCreatorId(int id)
     {
         return await _recipes.Where(x => x.CreatorId == id).ToListAsync();
+    }
+
+    public async Task<List<Recipe>?> SearchRecipesByName(string searchTerm)
+    {
+        return await _recipes.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower())).ToListAsync();
     }
 
     public async Task<Recipe?> IncreaseRecipeViewCount(int recipeId)
