@@ -15,5 +15,7 @@ public interface ICommentRepository : IGenericRepository<Comment>
     // May be deprecated
     Task<Comment?> DecreaseCommentLikeCount(int commentId);
 
+    int GetCommentCountForRecipe(int recipeId);
+
     Task<decimal> GetRecipeRating(int recipeId);
 }

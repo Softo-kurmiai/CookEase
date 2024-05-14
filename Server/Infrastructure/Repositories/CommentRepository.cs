@@ -57,6 +57,11 @@ public class CommentRepository : GenericRepository<Comment>, ICommentRepository
         return comment;
     }
 
+    public int GetCommentCountForRecipe(int recipeId)
+    {
+        return _comments.Count(x => x.RecipeId == recipeId);
+    }
+
     public async Task<decimal> GetRecipeRating(int recipeId)
     {
         var recipeRatings = await _comments.Where(x => x.RecipeId == recipeId).ToListAsync();

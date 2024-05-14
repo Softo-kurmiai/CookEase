@@ -77,6 +77,11 @@ public class CommentService : ICommentService
         return await _commentRepository.GetRecipeRating(recipeId);
     }
 
+    public int GetRecipeCommentsCount(int recipeId)
+    {
+        return _commentRepository.GetCommentCountForRecipe(recipeId);
+    }
+
     // Implementation should be changed
     public async Task<Error?> UpdateLikeCount(
         int commentId,

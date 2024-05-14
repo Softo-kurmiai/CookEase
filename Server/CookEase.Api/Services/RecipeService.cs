@@ -13,7 +13,6 @@ public class RecipeService : IRecipeService
 {
     private readonly IRecipeRepository _recipeRepository;
     private readonly IRecipeNutritionRepository _recipeNutritionRepository;
-    private readonly IRecipeRatingRepository _recipeRatingRepository;
     private readonly ICommentService _commentService;
     private readonly IRecipeCategoryRepository _recipeCategoryRepository;
     private readonly IMapper _mapper;
@@ -21,14 +20,12 @@ public class RecipeService : IRecipeService
     public RecipeService(
         IRecipeRepository recipeRepository,
         IRecipeNutritionRepository recipeNutritionRepository,
-        IRecipeRatingRepository recipeRatingRepository,
         ICommentService commentService,
         IRecipeCategoryRepository recipeCategoryRepository,
         IMapper mapper)
     {
         _recipeRepository = recipeRepository;
         _recipeNutritionRepository = recipeNutritionRepository;
-        _recipeRatingRepository = recipeRatingRepository;
         _commentService = commentService;
         _recipeCategoryRepository = recipeCategoryRepository;
         _mapper = mapper;

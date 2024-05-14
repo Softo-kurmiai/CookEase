@@ -11,6 +11,8 @@ public interface ICommentService
     Task<(List<CommentResponse>? comments, Error? error)> GetPaginatedCommentsByRecipeId(
         int recipeId, int commentsPerPage, int page);
 
+    int GetRecipeCommentsCount(int recipeId);
+
     Task<decimal> GetRecipeRating(int recipeId);
 
     Task<Error?> UpdateLikeCount(
