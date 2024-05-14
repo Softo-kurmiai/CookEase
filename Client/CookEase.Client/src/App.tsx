@@ -12,6 +12,7 @@ import SignUpSide from './pages/SignUpSide.tsx';
 import RecipeDetails from './pages/RecipeDetails.tsx';
 import MyProfilePage from './pages/MyProfilePage.tsx';
 import CreateRecipePage from './pages/CreateRecipePage.tsx';
+import RecipePublisherPage from './pages/RecipePublisherPage.tsx';
 
 const theme = createTheme({
     palette: {
@@ -53,6 +54,10 @@ const theme = createTheme({
     {
       path:"/CreateRecipe",
       element: <CreateRecipePage/>
+    },
+    {
+      path:"/RecipePublisherPage",
+      element: <RecipePublisherPage/>
     },
   ]);
 

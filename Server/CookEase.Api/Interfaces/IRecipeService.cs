@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Recipe;
+using Application.Enums;
 
 namespace CookEase.Api.Interfaces;
 
@@ -29,6 +30,12 @@ public interface IRecipeService
 
     Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCreatorId(
         int creatorId);
+
+    Task<(List<RecipeResponse>? creatorRecipes, Error? error)> GetRecipesByCategoryName(
+        Category categoryName);
+
+    Task<(List<RecipeResponse>? recipesFound, Error? error)> SearchRecipesByName(
+        string searchTerm);
 
     Task<Error?> IncreaseRecipeMetric(
         int recipeId,

@@ -3,8 +3,12 @@ import Pagination from '@mui/material/Pagination';
 import { RecipeCard } from '../../MainComponents/RecipeCard';
 import {Stack } from "@mui/material";
 
+interface RecipesToDisplayProps
+{
+    isEditable : boolean
+}
 
-export function MyRecipesDisplay(){
+export function RecipesDisplay({isEditable} : RecipesToDisplayProps){
     const [page, setPage] = React.useState(1);
 
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -17,10 +21,10 @@ export function MyRecipesDisplay(){
             paddingBottom: "0.5rem"
         }}>
             <Stack spacing={2} direction="row" alignItems="center" justifyContent="center">
-                <RecipeCard isFavorited={true} isEditable={true}></RecipeCard>
-                <RecipeCard isFavorited={false} isEditable={true}></RecipeCard>
-                <RecipeCard isFavorited={true} isEditable={true}></RecipeCard>
-                <RecipeCard isFavorited={false} isEditable={true}></RecipeCard>
+                <RecipeCard isFavorited={true} isEditable={isEditable}></RecipeCard>
+                <RecipeCard isFavorited={false} isEditable={isEditable}></RecipeCard>
+                <RecipeCard isFavorited={true} isEditable={isEditable}></RecipeCard>
+                <RecipeCard isFavorited={false} isEditable={isEditable}></RecipeCard>
             </Stack>
             <Pagination count={10} page={page} onChange={handleChange} color="primary" sx={{
                 padding:"0.5rem"
@@ -29,4 +33,4 @@ export function MyRecipesDisplay(){
     )
 }
 
-export default MyRecipesDisplay;
+export default RecipesDisplay;
