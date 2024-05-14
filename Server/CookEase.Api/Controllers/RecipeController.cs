@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Application.DTOs.Recipe;
+using Application.Enums;
 using CookEase.Api.Interfaces;
 
 namespace CookEase.Api.Controllers;
@@ -73,6 +74,36 @@ public class RecipeController : ControllerBase
         [Required][FromRoute] int id)
     {
         var (recipes, error) = await _recipeService.GetRecipesByCreatorId(id);
+        if (error is not null)
+        {
+            return NotFound(error.ErrorMessage);
+        }
+
+        return Ok(recipes);
+    }
+
+    [HttpGet("category/{categoryName}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<RecipeResponse>>> GetRecipesByCategoryName(
+        [Required][FromRoute] Category categoryName)
+    {
+        var (recipes, error) = await _recipeService.GetRecipesByCategoryName(categoryName);
+        if (error is not null)
+        {
+            return NotFound(error.ErrorMessage);
+        }
+
+        return Ok(recipes);
+    }
+
+    [HttpGet("search")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<RecipeResponse>>> SearchRecipesByName(
+        [Required][FromQuery] string searchTerm)
+    {
+        var (recipes, error) = await _recipeService.SearchRecipesByName(searchTerm);
         if (error is not null)
         {
             return NotFound(error.ErrorMessage);

@@ -14,17 +14,20 @@ public class RecipeService : IRecipeService
     private readonly IRecipeRepository _recipeRepository;
     private readonly IRecipeNutritionRepository _recipeNutritionRepository;
     private readonly IRecipeRatingRepository _recipeRatingRepository;
+    private readonly IRecipeCategoryRepository _recipeCategoryRepository;
     private readonly IMapper _mapper;
 
     public RecipeService(
         IRecipeRepository recipeRepository,
         IRecipeNutritionRepository recipeNutritionRepository,
         IRecipeRatingRepository recipeRatingRepository,
+        IRecipeCategoryRepository recipeCategoryRepository,
         IMapper mapper)
     {
         _recipeRepository = recipeRepository;
         _recipeNutritionRepository = recipeNutritionRepository;
         _recipeRatingRepository = recipeRatingRepository;
+        _recipeCategoryRepository = recipeCategoryRepository;
         _mapper = mapper;
     }
 
@@ -229,6 +232,84 @@ public class RecipeService : IRecipeService
                 { 
                     ErrorMessage = $"Something went wrong when mapping Recipe list. " +
                                    $"No recipes for given creatorId {creatorId} were found."
+                });
+        }
+
+        foreach (var mappedRecipe in mappedRecipes)
+        {
+            var mappedRecipeNutritionResponse =
+                await GetRecipeNutritionByRecipeIdFromDatabase(mappedRecipe.Id);
+            if (mappedRecipeNutritionResponse is null)
+            {
+                return (null,
+                    new Error
+                    {
+                        ErrorMessage = $"Something went wrong when mapping RecipeNutrition. " +
+                                       $"Recipe nutrition information was not found for recipe {mappedRecipe.Id}."
+                    });
+            }
+
+            mappedRecipe.RecipeNutrition = mappedRecipeNutritionResponse;
+        }
+
+        return (mappedRecipes, null);
+    }
+
+    public async Task<(List<RecipeResponse>? creatorRecipes, Error? error)> GetRecipesByCategoryName(
+        Category categoryName)
+    {
+        var recipeIds = await _recipeCategoryRepository.GetRecipeIdsByCategory(categoryName);
+        if (recipeIds is null || recipeIds.Count == 0)
+        {
+            return (null,
+                new Error
+                {
+                    ErrorMessage = $"No recipes were found for the specified category {categoryName}."
+                });
+        }
+        var recipes = await _recipeRepository.GetRecipesByRecipeIds(recipeIds);
+        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        if (mappedRecipes is null)
+        {
+            return (null,
+                new Error
+                {
+                    ErrorMessage = "Something went wrong when mapping Recipe list."
+                });
+        }
+
+        foreach (var mappedRecipe in mappedRecipes)
+        {
+            var mappedRecipeNutritionResponse =
+                await GetRecipeNutritionByRecipeIdFromDatabase(mappedRecipe.Id);
+            if (mappedRecipeNutritionResponse is null)
+            {
+                return (null,
+                    new Error
+                    {
+                        ErrorMessage = $"Something went wrong when mapping RecipeNutrition. " +
+                                       $"Recipe nutrition information was not found for recipe {mappedRecipe.Id}."
+                    });
+            }
+
+            mappedRecipe.RecipeNutrition = mappedRecipeNutritionResponse;
+        }
+
+        return (mappedRecipes, null);
+    }
+
+    public async Task<(List<RecipeResponse>? recipesFound, Error? error)> SearchRecipesByName(
+        string searchTerm)
+    {
+        var recipes = await _recipeRepository.SearchRecipesByName(searchTerm);
+        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        if (mappedRecipes is null)
+        {
+            return (null,
+                new Error
+                {
+                    ErrorMessage = $"Something went wrong when mapping Recipe list. " +
+                                   $"No recipes for given search term ({searchTerm}) were found."
                 });
         }
 
