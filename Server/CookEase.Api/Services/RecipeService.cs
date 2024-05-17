@@ -236,9 +236,12 @@ public class RecipeService : IRecipeService
     }
 
     public async Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCreatorId(
-        int creatorId)
+        int creatorId,
+        int recipesPerPage,
+        int page)
     {
-        var recipes = await _recipeRepository.GetRecipesByCreatorId(creatorId);
+        var offset = recipesPerPage * (page - 1);
+        var recipes = await _recipeRepository.GetRecipesByCreatorId(creatorId, offset, recipesPerPage);
         var mappedRecipes = _mapper.Map<List<RecipeCardResponse>>(recipes);
         if (mappedRecipes is null)
         {
@@ -258,10 +261,14 @@ public class RecipeService : IRecipeService
         return (mappedRecipes, null);
     }
 
-    public async Task<(List<RecipeResponse>? creatorRecipes, Error? error)> GetRecipesByCategoryName(
-        Category categoryName)
+    public async Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCategoryName(
+        Category categoryName,
+        int recipesPerPage,
+        int page)
     {
-        var recipeIds = await _recipeCategoryRepository.GetRecipeIdsByCategory(categoryName);
+        var offset = recipesPerPage * (page - 1);
+        var recipeIds = await _recipeCategoryRepository
+            .GetRecipeIdsByCategory(categoryName, offset, recipesPerPage);
         if (recipeIds is null || recipeIds.Count == 0)
         {
             return (null,
@@ -271,7 +278,7 @@ public class RecipeService : IRecipeService
                 });
         }
         var recipes = await _recipeRepository.GetRecipesByRecipeIds(recipeIds);
-        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        var mappedRecipes = _mapper.Map<List<RecipeCardResponse>>(recipes);
         if (mappedRecipes is null)
         {
             return (null,
@@ -283,29 +290,21 @@ public class RecipeService : IRecipeService
 
         foreach (var mappedRecipe in mappedRecipes)
         {
-            var mappedRecipeNutritionResponse =
-                await GetRecipeNutritionByRecipeIdFromDatabase(mappedRecipe.Id);
-            if (mappedRecipeNutritionResponse is null)
-            {
-                return (null,
-                    new Error
-                    {
-                        ErrorMessage = $"Something went wrong when mapping RecipeNutrition. " +
-                                       $"Recipe nutrition information was not found for recipe {mappedRecipe.Id}."
-                    });
-            }
-
-            mappedRecipe.RecipeNutrition = mappedRecipeNutritionResponse;
+            mappedRecipe.CommentCount = _commentService.GetRecipeCommentsCount(mappedRecipe.Id);
         }
 
         return (mappedRecipes, null);
     }
 
-    public async Task<(List<RecipeResponse>? recipesFound, Error? error)> SearchRecipesByName(
-        string searchTerm)
+    public async Task<(List<RecipeCardResponse>? recipesFound, Error? error)> SearchRecipeCardsByName(
+        string searchTerm,
+        int recipesPerPage,
+        int page)
     {
-        var recipes = await _recipeRepository.SearchRecipesByName(searchTerm);
-        var mappedRecipes = _mapper.Map<List<RecipeResponse>>(recipes);
+        var offset = recipesPerPage * (page - 1);
+        var recipes = await _recipeRepository
+            .SearchRecipesByName(searchTerm, offset, recipesPerPage);
+        var mappedRecipes = _mapper.Map<List<RecipeCardResponse>>(recipes);
         if (mappedRecipes is null)
         {
             return (null,
@@ -318,19 +317,7 @@ public class RecipeService : IRecipeService
 
         foreach (var mappedRecipe in mappedRecipes)
         {
-            var mappedRecipeNutritionResponse =
-                await GetRecipeNutritionByRecipeIdFromDatabase(mappedRecipe.Id);
-            if (mappedRecipeNutritionResponse is null)
-            {
-                return (null,
-                    new Error
-                    {
-                        ErrorMessage = $"Something went wrong when mapping RecipeNutrition. " +
-                                       $"Recipe nutrition information was not found for recipe {mappedRecipe.Id}."
-                    });
-            }
-
-            mappedRecipe.RecipeNutrition = mappedRecipeNutritionResponse;
+            mappedRecipe.CommentCount = _commentService.GetRecipeCommentsCount(mappedRecipe.Id);
         }
 
         return (mappedRecipes, null);
