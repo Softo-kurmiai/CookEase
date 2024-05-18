@@ -16,7 +16,7 @@ public class RecipeCategoryRepository : GenericRepository<RecipeCategory>, IReci
         _context = context;
     }
 
-    public async Task ReplaceRecipeCategories(int recipeId, List<RecipeCategory> newCategories)
+    public async Task AddReplaceRecipeCategories(int recipeId, List<RecipeCategory> newCategories)
     {
         var previousCategories = await _recipeCategories
             .Where(x => x.RecipeId == recipeId)

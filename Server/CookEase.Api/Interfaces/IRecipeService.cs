@@ -46,9 +46,4 @@ public interface IRecipeService
     Task<Error?> IncreaseRecipeMetric(
         int recipeId,
         RecipeMetricsUpdateRequest recipeMetricToIncrease);
-
-    //Task UpdateUserRecipeRating(
-    //    int userId,
-    //    int recipeId,
-    //    decimal newRatingValue);
 }

@@ -15,7 +15,6 @@ public class RecipeRepository : GenericRepository<Recipe>, IRecipeRepository
         _recipes = context.Set<Recipe>();
     }
 
-    // Place to fix
     public async Task<List<Recipe>?> GetRecipesByRecipeIds(List<int> recipeIds)
     {
         return await _recipes.Where(x => recipeIds.Contains(x.Id)).ToListAsync();
