@@ -11,7 +11,12 @@ public class UserService : IUserService
         var users = new List<UserResponse> { new()
         {
             Id = 69,
-            Username = "Test",
+            Name = "Test",
+            Email = "Test",
+            Description = "Test",
+            ProfilePicture = null,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         }};
 
         return users;
@@ -28,7 +33,12 @@ public class UserService : IUserService
         var user = new UserResponse
         {
             Id = 69,
-            Username = "Test",
+            Name = "Test",
+            Email = "Test",
+            Description = "Test",
+            ProfilePicture = null,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         };
 
         return user;
@@ -39,8 +49,13 @@ public class UserService : IUserService
         //TODO actually implement creating to repository
         var userToAdd = new UserResponse
         {
-            Id = 0,
-            Username = "Test",
+            Id = 69,
+            Name = "Test",
+            Email = "Test",
+            Description = "Test",
+            ProfilePicture = null,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         };
         // var dbResponse = await _userRepository.Add(userToAdd);
         // return dbResponse;
@@ -71,7 +86,12 @@ public class UserService : IUserService
         var user = new UserResponse
         {
             Id = 69,
-            Username = "Test",
+            Name = "Test",
+            Email = "Test",
+            Description = "Test",
+            ProfilePicture = null,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
         };
 
         return user;

@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.DTOs.Recipe;
+using Application.Enums;
 
 namespace CookEase.Api.Interfaces;
 
@@ -11,13 +12,13 @@ public interface IRecipeService
     Task<(RecipeResponse? recipeResponse, Error? error)> GetRecipeById(
         int recipeId);
 
-    Task<(List<RecipeResponse>? recipeResponses, Error? error)> GetPaginatedRecipes(
+    Task<(List<RecipeCardResponse>? recipeResponses, Error? error)> GetPaginatedRecipeCards(
         int recipesPerPage, int page);
 
-    Task<List<RecipeResponse>> GetNumberOfTopLikedRecipes(
+    Task<List<RecipeCardResponse>> GetNumberOfTopLikedRecipeCards(
         int maxNumberOfRecipes);
 
-    Task<List<RecipeResponse>> GetNumberOfRandomRecipes(
+    Task<List<RecipeCardResponse>> GetNumberOfRandomRecipeCards(
         int maxNumberOfRecipes);
 
     Task<(RecipeResponse? recipeResponse, Error? error)> DeleteRecipe(
@@ -27,22 +28,22 @@ public interface IRecipeService
         int recipeId,
         RecipeUpdateRequest recipeRequest);
 
-    Task<(List<RecipeResponse>? creatorRecipes, Error? error)> GetRecipesByCreatorId(
-        int creatorId);
+    Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCreatorId(
+        int creatorId,
+        int recipesPerPage,
+        int page);
+
+    Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCategoryName(
+        Category categoryName,
+        int recipesPerPage,
+        int page);
+
+    Task<(List<RecipeCardResponse>? recipesFound, Error? error)> SearchRecipeCardsByName(
+        string searchTerm,
+        int recipesPerPage,
+        int page);
 
     Task<Error?> IncreaseRecipeMetric(
         int recipeId,
         RecipeMetricsUpdateRequest recipeMetricToIncrease);
-
-    Task<decimal> GetRecipeRating(
-        int recipeId);
-
-    Task<decimal> GetUserRecipeRating(
-        int userId,
-        int recipeId);
-
-    Task UpdateUserRecipeRating(
-        int userId,
-        int recipeId,
-        decimal newRatingValue);
 }

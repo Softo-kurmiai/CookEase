@@ -6,7 +6,7 @@ namespace CookEase.Api.Interfaces;
 
 public interface ICategoryService
 {
-    Task<Error?> ReplaceRecipeCategories(
+    Task<Error?> AddReplaceRecipeCategories(
         CategoryRequest request);
 
     Task<(CategoryResponse? categoryResponse, Error? error)> GetCategoriesByRecipeId(
