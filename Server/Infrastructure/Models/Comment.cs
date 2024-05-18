@@ -15,10 +15,11 @@ public class Comment
     [ForeignKey(nameof(User))]
     public required int UserId { get; set; }
 
+    [Range(0, 5)]
+    public required decimal Rating { get; set; }
+
     [MaxLength(256)]
     public required string Content { get; set; }
-
-    public int LikeCount { get; set; } = 0;
 
     public DateTime CreatedDate { get; set; }
 

@@ -8,6 +8,8 @@ public class CommentCreateRequest
 
     public required int UserId { get; set; }
 
+    public required decimal Rating { get; set; }
+
     [MaxLength(256)]
     public required string Content { get; set; }
 }

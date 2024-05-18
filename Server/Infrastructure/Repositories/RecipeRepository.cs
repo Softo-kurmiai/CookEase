@@ -20,14 +20,22 @@ public class RecipeRepository : GenericRepository<Recipe>, IRecipeRepository
         return await _recipes.Where(x => recipeIds.Contains(x.Id)).ToListAsync();
     }
 
-    public async Task<List<Recipe>?> GetRecipesByCreatorId(int id)
+    public async Task<List<Recipe>?> GetRecipesByCreatorId(int id, int offset, int limit)
     {
-        return await _recipes.Where(x => x.CreatorId == id).ToListAsync();
+        return await _recipes
+            .Where(x => x.CreatorId == id)
+            .Skip(offset)
+            .Take(limit)
+            .ToListAsync();
     }
 
-    public async Task<List<Recipe>?> SearchRecipesByName(string searchTerm)
+    public async Task<List<Recipe>?> SearchRecipesByName(string searchTerm, int offset, int limit)
     {
-        return await _recipes.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower())).ToListAsync();
+        return await _recipes
+            .Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()))
+            .Skip(offset)
+            .Take(limit)
+            .ToListAsync();
     }
 
     public async Task<Recipe?> IncreaseRecipeViewCount(int recipeId)

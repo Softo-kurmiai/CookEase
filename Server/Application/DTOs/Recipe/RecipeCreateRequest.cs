@@ -11,6 +11,8 @@ public class RecipeCreateRequest
 
     public required string Description { get; set; }
 
+    public required List<Enums.Category> Categories { get; set; }
+
     public required int PrepTime { get; set; }
 
     public required int CookTime { get; set; }

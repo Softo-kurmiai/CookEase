@@ -72,61 +72,17 @@ public class CommentService : ICommentService
         return (mappedComments, null);
     }
 
+    public async Task<decimal> GetRecipeRating(int recipeId)
+    {
+        return await _commentRepository.GetRecipeRating(recipeId);
+    }
+
     public int GetRecipeCommentsCount(int recipeId)
     {
         return _commentRepository.GetCommentCountForRecipe(recipeId);
     }
 
-    public async Task<(CommentResponse? commentResponse, Error? error)> DeleteComment(
-        int commentId)
-    {
-        var deletedComment = await _commentRepository.Delete(commentId);
-        var mappedComment = _mapper.Map<CommentResponse>(deletedComment);
-        if (mappedComment is null)
-        {
-            return (null,
-                new Error
-                {
-                    ErrorMessage = $"Mapping of comment failed. The comment with " +
-                                   $"id {commentId} was not found when trying to delete."
-                });
-        }
-
-        return (mappedComment, null);
-    }
-
-    public async Task<(CommentResponse? commentResponse, Error? error)> UpdateComment(
-        int commentId,
-        CommentUpdateRequest request)
-    {
-        var commentToUpdate = await _commentRepository.GetById(commentId);
-        if (commentToUpdate is null)
-        {
-            return (null,
-                new Error
-                {
-                    ErrorMessage = $"Comment with id {commentId} was not found."
-                });
-        }
-
-        await _commentRepository.Detach(commentToUpdate);
-        commentToUpdate.Content = request.Content;
-        commentToUpdate.UpdatedDate = DateTime.UtcNow;
-
-        var dbResponse = await _commentRepository.Update(commentToUpdate);
-        var mappedDbResponse = _mapper.Map<CommentResponse>(dbResponse);
-        if (mappedDbResponse is null)
-        {
-            return (null,
-                new Error
-                {
-                    ErrorMessage = "Mapping of comment update failed."
-                });
-        }
-
-        return (mappedDbResponse, null);
-    }
-
+    // Implementation should be changed
     public async Task<Error?> UpdateLikeCount(
         int commentId,
         CommentLikeUpdateRequest request)
