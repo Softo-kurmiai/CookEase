@@ -20,16 +20,23 @@ public class LoginController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public ActionResult<LoginResponse> Post(
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<LoginResponse>> Post(
     [Required][FromBody] LoginRequest loginRequest)
     {
-        LoginResponse? loginResponce = _loginService.Authenticate(loginRequest);
-        if (loginResponce != null)
+        try
         {
+            var loginResponce = await _loginService.Authenticate(loginRequest);
+
             return Ok(loginResponce);
+        } 
+        catch (NullReferenceException) 
+        {
+            return NotFound();
         }
-
-        return Unauthorized();
+        catch (ArgumentException)
+        {
+            return Unauthorized();
+        }
     }
-
 }

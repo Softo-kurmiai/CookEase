@@ -10,5 +10,6 @@ public static class MapperConfigurationSetup
         {
             mapper.AddProfile(new RecipeProfile());
             mapper.AddProfile(new CommentProfile());
+            mapper.AddProfile(new UserProfile());
         });
 }
