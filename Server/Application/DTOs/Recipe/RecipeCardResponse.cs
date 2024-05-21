@@ -12,6 +12,8 @@ public class RecipeCardResponse
 
     public required string Description { get; set; }
 
+    public required decimal Rating { get; set; }
+
     public required int PrepTime { get; set; }
 
     public required int CookTime { get; set; }

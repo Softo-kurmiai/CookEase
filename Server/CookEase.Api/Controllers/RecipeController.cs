@@ -71,9 +71,12 @@ public class RecipeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<RecipeCardResponse>>> GetRecipeCardsByCreatorId(
-        [Required][FromRoute] int id)
+        [Required][FromRoute] int id,
+        [Required][FromQuery] int recipesPerPage = 5,
+        [Required][FromQuery] int page = 1)
     {
-        var (recipes, error) = await _recipeService.GetRecipeCardsByCreatorId(id);
+        var (recipes, error) =
+            await _recipeService.GetRecipeCardsByCreatorId(id, recipesPerPage, page);
         if (error is not null)
         {
             return NotFound(error.ErrorMessage);
@@ -85,10 +88,13 @@ public class RecipeController : ControllerBase
     [HttpGet("category/{categoryName}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<RecipeResponse>>> GetRecipesByCategoryName(
-        [Required][FromRoute] Category categoryName)
+    public async Task<ActionResult<List<RecipeCardResponse>>> GetRecipeCardsByCategoryName(
+        [Required][FromRoute] Category categoryName,
+        [Required][FromQuery] int recipesPerPage = 5,
+        [Required][FromQuery] int page = 1)
     {
-        var (recipes, error) = await _recipeService.GetRecipesByCategoryName(categoryName);
+        var (recipes, error) =
+            await _recipeService.GetRecipeCardsByCategoryName(categoryName, recipesPerPage, page);
         if (error is not null)
         {
             return NotFound(error.ErrorMessage);
@@ -100,10 +106,13 @@ public class RecipeController : ControllerBase
     [HttpGet("search")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<List<RecipeResponse>>> SearchRecipesByName(
-        [Required][FromQuery] string searchTerm)
+    public async Task<ActionResult<List<RecipeCardResponse>>> SearchRecipeCardsByName(
+        [Required][FromQuery] string searchTerm,
+        [Required][FromQuery] int recipesPerPage = 5,
+        [Required][FromQuery] int page = 1)
     {
-        var (recipes, error) = await _recipeService.SearchRecipesByName(searchTerm);
+        var (recipes, error) =
+            await _recipeService.SearchRecipeCardsByName(searchTerm, recipesPerPage, page);
         if (error is not null)
         {
             return NotFound(error.ErrorMessage);
@@ -158,47 +167,31 @@ public class RecipeController : ControllerBase
         return Ok(deletedRecipe);
     }
 
-    [HttpPut("{id}/updateMetric")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> IncreaseRecipeMetric(
-        [Required][FromRoute] int id,
-        [Required][FromBody] RecipeMetricsUpdateRequest updateRequest)
-    {
-        var error = await _recipeService.IncreaseRecipeMetric(id, updateRequest);
-        if (error is not null)
-        {
-            return NotFound(error.ErrorMessage);
-        }
+    //[HttpPut("{id}/updateMetric")]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //[ProducesResponseType(StatusCodes.Status404NotFound)]
+    //public async Task<ActionResult> IncreaseRecipeMetric(
+    //    [Required][FromRoute] int id,
+    //    [Required][FromBody] RecipeMetricsUpdateRequest updateRequest)
+    //{
+    //    var error = await _recipeService.IncreaseRecipeMetric(id, updateRequest);
+    //    if (error is not null)
+    //    {
+    //        return NotFound(error.ErrorMessage);
+    //    }
 
-        return Ok();
-    }
+    //    return Ok();
+    //}
 
-    [HttpGet("{recipeId}/user/{userId}/rating")]
-    public async Task<ActionResult<decimal>> GetUserRecipeRating(
-        [Required][FromRoute] int recipeId,
-        [Required][FromRoute] int userId)
-    {
-        var rating = await _recipeService.GetUserRecipeRating(userId, recipeId);
-        return Ok(rating);
-    }
-
-    [HttpGet("{id}/rating")]
-    public async Task<ActionResult<decimal>> GetRecipeRating(
-        [Required][FromRoute] int id)
-    {
-        var rating = await _recipeService.GetRecipeRating(id);
-        return Ok(rating);
-    }
-
-    [HttpPut("{recipeId}/updateRating")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult> AddRecipeRating(
-        [Required][FromRoute] int recipeId,
-        [Required][FromQuery] int userId,
-        [Required][FromQuery] decimal newRatingValue)
-    {
-        await _recipeService.UpdateUserRecipeRating(userId, recipeId, newRatingValue);
-        return Ok();
-    }
+    // Implementation should be changed
+    //[HttpPut("{recipeId}/updateRating")]
+    //[ProducesResponseType(StatusCodes.Status200OK)]
+    //public async Task<ActionResult> AddRecipeRating(
+    //    [Required][FromRoute] int recipeId,
+    //    [Required][FromQuery] int userId,
+    //    [Required][FromQuery] decimal newRatingValue)
+    //{
+    //    await _recipeService.UpdateUserRecipeRating(userId, recipeId, newRatingValue);
+    //    return Ok();
+    //}
 }

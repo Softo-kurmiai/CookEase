@@ -16,7 +16,7 @@ public class CategoryService : ICategoryService
         _recipeCategoryRepository = recipeCategoryRepository;
     }
 
-    public async Task<Error?> ReplaceRecipeCategories(
+    public async Task<Error?> AddReplaceRecipeCategories(
         CategoryRequest request)
     {
         var mappedRecipeCategories = new List<RecipeCategory>();
@@ -33,7 +33,7 @@ public class CategoryService : ICategoryService
             return new Error { ErrorMessage = "No recipe categories given. The list should at least have one category." };
         }
 
-        await _recipeCategoryRepository.ReplaceRecipeCategories(request.RecipeId, mappedRecipeCategories);
+        await _recipeCategoryRepository.AddReplaceRecipeCategories(request.RecipeId, mappedRecipeCategories);
         return null;
     }
 

@@ -29,27 +29,21 @@ public interface IRecipeService
         RecipeUpdateRequest recipeRequest);
 
     Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCreatorId(
-        int creatorId);
+        int creatorId,
+        int recipesPerPage,
+        int page);
 
-    Task<(List<RecipeResponse>? creatorRecipes, Error? error)> GetRecipesByCategoryName(
-        Category categoryName);
+    Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCategoryName(
+        Category categoryName,
+        int recipesPerPage,
+        int page);
 
-    Task<(List<RecipeResponse>? recipesFound, Error? error)> SearchRecipesByName(
-        string searchTerm);
+    Task<(List<RecipeCardResponse>? recipesFound, Error? error)> SearchRecipeCardsByName(
+        string searchTerm,
+        int recipesPerPage,
+        int page);
 
     Task<Error?> IncreaseRecipeMetric(
         int recipeId,
         RecipeMetricsUpdateRequest recipeMetricToIncrease);
-
-    Task<decimal> GetRecipeRating(
-        int recipeId);
-
-    Task<decimal> GetUserRecipeRating(
-        int userId,
-        int recipeId);
-
-    Task UpdateUserRecipeRating(
-        int userId,
-        int recipeId,
-        decimal newRatingValue);
 }
