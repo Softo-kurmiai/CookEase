@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using CookEase.Api.Interfaces;
 using Application.DTOs.User;
+using AutoMapper;
 
 namespace CookEase.Api.Controllers;
 
@@ -19,18 +20,18 @@ public class UserController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<List<UserResponse>> GetAll(int countPerPage = 20, int page = 1)
+    public async Task<ActionResult<List<UserResponse>>> GetAll(int countPerPage = 20, int page = 1)
     {
-        var users = _userService.GetAll(countPerPage, page);
+        var users = await _userService.GetAll(countPerPage, page);
         return Ok(users);
     }
 
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<UserResponse> Get(int id) {
+    public async Task<ActionResult<UserResponse>> Get(int id) {
 
-        var user = _userService.GetById(id);
+        var user = await _userService.GetById(id);
         if (user is null)
         {
             return NotFound("User not found");
@@ -42,21 +43,21 @@ public class UserController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public ActionResult<UserResponse> Post(
+    public async Task<ActionResult<UserResponse>> Post(
         [Required][FromBody] UserCreateRequest userRequest)
     {
-        var createdUser = _userService.Create(userRequest);
+        var createdUser = await _userService.Create(userRequest);
         return Created("/api/User", createdUser);
     }
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<UserResponse> Update(
+    public async Task<ActionResult<UserResponse>> Update(
         [Required][FromRoute] int id,
         [Required][FromBody] UserUpdateRequest userRequest)
     {
-        var updatedUser = _userService.Update(id, userRequest);
+        var updatedUser = await _userService.Update(id, userRequest);
         if (updatedUser is null)
         {
             return NotFound("User not found");
@@ -66,10 +67,10 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public ActionResult<UserResponse> Delete(
+    public async Task<ActionResult<UserResponse>> Delete(
         [Required][FromRoute] int id)
     {
-        var user = _userService.Delete(id);
+        var user = await _userService.Delete(id);
         if (user is null)
         {
             return NotFound("User not found");
