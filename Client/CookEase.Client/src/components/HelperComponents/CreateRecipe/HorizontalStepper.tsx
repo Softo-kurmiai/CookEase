@@ -8,6 +8,8 @@ import Typography from "@mui/material/Typography";
 import { BasicInformationForm } from "./BasicInformationForm";
 import { UploadPhotoForm } from "./UploadPhotoForm";
 import { AdditionalInformationForm } from "./AdditionalInformationForm";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 const steps = ["Basic information", "Add a photo", "Additional information"];
 
@@ -102,7 +104,7 @@ const [additionalFormData, setAdditionalFormData] = React.useState<AdditionalFor
     handleNext();
   };
 
-  const handleAdditionalInformationSubmit = (data: {
+  const handleAdditionalInformationSubmit = async (data: {
     difficulty: string;
     totalTime: number;
     totalTimeMeasurement: string;
@@ -118,10 +120,26 @@ const [additionalFormData, setAdditionalFormData] = React.useState<AdditionalFor
     fiber: number;
     sugar: number;
 }) => {
-
     console.log("Additional information data received:", data);
     setAdditionalFormData(data);
-    //TODO: insert axios post call to recipe api
+
+    // Combine all form data into a single object
+    const combinedData = {
+      ...formData,
+      ...photoData,
+      ...additionalFormData,
+    };
+
+    try {
+      const response = await axios.post('/api/recipes', combinedData);
+      toast.success("Recipe created successfully");
+      console.log('Response:', response.data);
+      // Optionally, reset or navigate to another page
+      handleReset();
+    } catch (error) {
+      toast.error("Something bad happened during the request!");
+      console.error('Error creating recipe:', error);
+    }
 };
 
   const stepsComponents = [
@@ -155,6 +173,7 @@ const [additionalFormData, setAdditionalFormData] = React.useState<AdditionalFor
         alignItems: "center", // Center vertically
       }}
     >
+      <ToastContainer />
       <Stepper activeStep={activeStep} sx={{width:"65%", pb:"2rem"}}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};
