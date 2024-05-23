@@ -1,49 +1,51 @@
-﻿using Infrastructure.Models;
-using Infrastructure.Repositories;
+﻿using Infrastructure.Interfaces;
+using Infrastructure.Models;
 
-namespace CookEase.Api.Middleware
+namespace CookEase.Api.Middleware;
+
+public class LoggingMiddleware
 {
-    public class LoggingMiddleware
+    private readonly RequestDelegate _next;
+    private readonly ILogger<LoggingMiddleware> _logger;
+
+    public LoggingMiddleware(
+        RequestDelegate next,
+        ILogger<LoggingMiddleware> logger)
     {
-        private readonly RequestDelegate _next;
-        private readonly ILogger<LoggingMiddleware> _logger;
-        private readonly LogRepository _logRepository;
+        _next = next;
+        _logger = logger;
+    }
 
-        public LoggingMiddleware(RequestDelegate next, ILogger<LoggingMiddleware> logger, LogRepository logRepository)
+    public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var logRepository = scope.ServiceProvider.GetRequiredService<ILogRepository>();
+
+        try
         {
-            _next = next;
-            _logger = logger;
-            _logRepository = logRepository;
+            await _next(context);
+
+            var logEntry = new Log
+            {
+                Timestamp = DateTime.UtcNow,
+                Message = $"Request: {context.Request.Method} {context.Request.Path}",
+            };
+
+            await logRepository.Add(logEntry);
         }
-
-        public async Task InvokeAsync(HttpContext context)
+        catch (Exception ex)
         {
-            try
+            _logger.LogError(ex, ex.Message, ex.StackTrace);
+
+            var logEntry = new Log
             {
-                await _next(context);
+                Timestamp = DateTime.UtcNow,
+                Message = ex.Message,
+            };
 
-                var logEntry = new Log
-                {
-                    Timestamp = DateTime.UtcNow,
-                    Message = $"Request: {context.Request.Method} {context.Request.Path}",
-                };
+            await logRepository.Add(logEntry);
 
-                await _logRepository.Add(logEntry);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.Message, ex.StackTrace);
-
-                var logEntry = new Log
-                {
-                    Timestamp = DateTime.UtcNow,
-                    Message = ex.Message,
-                };
-
-                await _logRepository.Add(logEntry);
-
-                throw;
-            }
+            throw;
         }
     }
 }
