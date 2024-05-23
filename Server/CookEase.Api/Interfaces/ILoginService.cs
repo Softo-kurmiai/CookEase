@@ -4,5 +4,5 @@ namespace CookEase.Api.Interfaces;
 
 public interface ILoginService
 {
-    public LoginResponse? Authenticate(LoginRequest loginRequest);
+    public Task<LoginResponse> Authenticate(LoginRequest loginRequest);
 }

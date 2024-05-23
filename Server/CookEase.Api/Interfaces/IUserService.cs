@@ -4,13 +4,13 @@ namespace CookEase.Api.Interfaces;
 
 public interface IUserService
 {
-    List<UserResponse> GetAll(int countPerPage = 20, int page = 1);
+    Task<List<UserResponse>> GetAll(int countPerPage = 20, int page = 1);
 
-    UserResponse? GetById(int id);
+    Task<UserResponse?> GetById(int id);
 
-    UserResponse Create(UserCreateRequest request);
+    Task<UserResponse> Create(UserCreateRequest request);
 
-    UserResponse? Update(int id, UserUpdateRequest request);
+    Task<UserResponse?> Update(int id, UserUpdateRequest request);
 
-    UserResponse? Delete(int id);
+    Task<UserResponse?> Delete(int id);
 }

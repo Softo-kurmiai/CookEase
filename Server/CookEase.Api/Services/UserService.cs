@@ -1,79 +1,92 @@
-﻿using Application.DTOs.User;
+﻿using Application.DTOs.Recipe;
+using Application.DTOs.User;
+using AutoMapper;
 using CookEase.Api.Interfaces;
+using Infrastructure.Interfaces;
+using Infrastructure.Models;
+using Infrastructure.Repositories;
 
 namespace CookEase.Api.Services;
 
 public class UserService : IUserService
 {
-    public List<UserResponse> GetAll(int countPerPage = 20, int page = 1)
-    {
-        // TODO actually implement getting from repository
-        var users = new List<UserResponse> { new()
-        {
-            Id = 69,
-            Username = "Test",
-        }};
+    private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-        return users;
+    public UserService(IUserRepository userRepository, IMapper mapper)
+    {
+        _userRepository = userRepository;
+        _mapper = mapper;
     }
 
-    public UserResponse? GetById(int id)
+    public async Task<List<UserResponse>> GetAll(int countPerPage = 20, int page = 1)
     {
-        //TODO actually implement getting from repository
-        if (id != 69)
+        var offset = countPerPage * (page - 1);
+
+        var users = await _userRepository.ListAsync(offset, countPerPage);
+
+        var mappedUsers = _mapper.Map<List<UserResponse>>(users);
+
+        return mappedUsers;
+    }
+
+    public async Task<UserResponse?> GetById(int id)
+    {
+
+        var user = await _userRepository.GetById(id);
+
+        var mappedUser = _mapper.Map<UserResponse>(user);
+
+        return mappedUser;
+    }
+
+    public async Task<UserResponse> Create(UserCreateRequest userCreateRequest)
+    {
+        var user = _mapper.Map<User>(userCreateRequest);
+
+        user.CreatedAt = DateTime.UtcNow;
+        user.UpdatedAt = null;
+
+        var userDbResponse = await _userRepository.Add(user);
+
+        var mappedUser = _mapper.Map<UserResponse>(userDbResponse);
+
+        return mappedUser;
+    }
+
+    public async Task<UserResponse?> Update(int id, UserUpdateRequest request)
+    {
+
+        var user = await _userRepository.GetById(id);
+        if (user is null)
         {
             return null;
         }
 
-        var user = new UserResponse
-        {
-            Id = 69,
-            Username = "Test",
-        };
+        user.Name = request.Name;
+        user.Email = request.Email;
+        user.Password = request.Password;
+        user.Description = request.Description;
+        user.ProfilePicture = request.ProfilePicture;
+        user.UpdatedAt = DateTime.UtcNow;
 
-        return user;
+        var userDBResponce = await _userRepository.Update(user);
+
+        var mappedUser = _mapper.Map<UserResponse>(userDBResponce);
+
+        return mappedUser;
     }
 
-    public UserResponse Create(UserCreateRequest userCreateRequest)
+    public async Task<UserResponse?> Delete(int id)
     {
-        //TODO actually implement creating to repository
-        var userToAdd = new UserResponse
-        {
-            Id = 0,
-            Username = "Test",
-        };
-        // var dbResponse = await _userRepository.Add(userToAdd);
-        // return dbResponse;
-        return userToAdd;
-    }
-
-    public UserResponse? Update(int id, UserUpdateRequest request)
-    {
-        //TODO actually implement updating to repository
-
-        // firstly get the latest information of the user inside the DB
-        // then try to change the gotten values from DB with values gotten from endpoint body (don't forget to check for nullability)
-        // then call userRepository update method
-        // return the DB response
-
-        return null;
-    }
-
-    public UserResponse? Delete(int id)
-    {
-        //TODO actually implement deleting from repository
-        if (id != 69)
+        var userDbResponce = await _userRepository.Delete(id);
+        if (userDbResponce is null)
         {
             return null;
-            
         }
 
-        var user = new UserResponse
-        {
-            Id = 69,
-            Username = "Test",
-        };
+        var mappedUser = _mapper.Map<UserResponse>(userDbResponce);
 
-        return user;
+        return mappedUser;
     }
 }

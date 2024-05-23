@@ -1,4 +1,5 @@
-﻿using Infrastructure.Interfaces;
+﻿using Application.Enums;
+using Infrastructure.Interfaces;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,7 +16,7 @@ public class RecipeCategoryRepository : GenericRepository<RecipeCategory>, IReci
         _context = context;
     }
 
-    public async Task ReplaceRecipeCategories(int recipeId, List<RecipeCategory> newCategories)
+    public async Task AddReplaceRecipeCategories(int recipeId, List<RecipeCategory> newCategories)
     {
         var previousCategories = await _recipeCategories
             .Where(x => x.RecipeId == recipeId)
@@ -34,6 +35,16 @@ public class RecipeCategoryRepository : GenericRepository<RecipeCategory>, IReci
     {
         return await _recipeCategories
             .Where(x => x.RecipeId == recipeId)
+            .ToListAsync();
+    }
+
+    public async Task<List<int>?> GetRecipeIdsByCategory(Category category, int offset, int limit)
+    {
+        return await _recipeCategories
+            .Where(x => x.Category == category)
+            .Select(x => x.RecipeId)
+            .Skip(offset)
+            .Take(limit)
             .ToListAsync();
     }
 }
