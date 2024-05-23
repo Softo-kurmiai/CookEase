@@ -7,20 +7,20 @@ public class LoggingMiddleware
 {
     private readonly RequestDelegate _next;
     private readonly ILogger<LoggingMiddleware> _logger;
-    private readonly ILogRepository _logRepository;
 
     public LoggingMiddleware(
         RequestDelegate next,
-        ILogger<LoggingMiddleware> logger,
-        ILogRepository logRepository)
+        ILogger<LoggingMiddleware> logger)
     {
         _next = next;
         _logger = logger;
-        _logRepository = logRepository;
     }
 
-    public async Task InvokeAsync(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, IServiceProvider serviceProvider)
     {
+        using var scope = serviceProvider.CreateScope();
+        var logRepository = scope.ServiceProvider.GetRequiredService<ILogRepository>();
+
         try
         {
             await _next(context);
@@ -31,7 +31,7 @@ public class LoggingMiddleware
                 Message = $"Request: {context.Request.Method} {context.Request.Path}",
             };
 
-            await _logRepository.Add(logEntry);
+            await logRepository.Add(logEntry);
         }
         catch (Exception ex)
         {
@@ -43,7 +43,7 @@ public class LoggingMiddleware
                 Message = ex.Message,
             };
 
-            await _logRepository.Add(logEntry);
+            await logRepository.Add(logEntry);
 
             throw;
         }
