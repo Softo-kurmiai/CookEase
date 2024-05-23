@@ -11,19 +11,13 @@ import MenuItem from "@mui/material/MenuItem";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import CustomInputField from "./CustomInput";
 
 interface BasicInformationFormProps {
   onNext: (data: {
     difficulty: string;
-    totalTime: number;
-    totalTimeMeasurement: string;
     prepTime: number;
-    prepTimeMeasurement: string;
     cookTime: number;
-    cookTimeMeasurement: string;
-    cal: number;
-    calMeasurement: string;
+    calories: number;
     carbs: number;
     protein: number;
     fat: number;
@@ -34,19 +28,14 @@ interface BasicInformationFormProps {
   activeStep: number;
   initialValues?: {
     difficulty: string;
-    totalTime: number;
-    totalTimeMeasurement: string;
-    prepTime?: number;
-    prepTimeMeasurement?: string;
-    cookTime?: number;
-    cookTimeMeasurement?: string;
-    cal?: number;
-    calMeasurement?: string;
-    carbs?: number;
-    protein?: number;
-    fat?: number;
-    fiber?: number;
-    sugar?: number;
+    prepTime: number;
+    cookTime: number;
+    calories: number;
+    carbs: number;
+    protein: number;
+    fat: number;
+    fiber: number;
+    sugar: number;
   };
 }
 
@@ -57,114 +46,48 @@ export function AdditionalInformationForm({
   initialValues,
 }: BasicInformationFormProps) {
   const [difficulty, setDifficulty] = React.useState("");
-  const [totalTime, setTotalTime] = React.useState("");
-  const [totalTimeMeasurement, setTotalTimeMeasurement] = React.useState("");
-  const [prepTime, setPrepTime] = React.useState("");
-  const [prepTimeMeasurement, setPrepTimeMeasurement] = React.useState("");
-  const [cookTime, setCookTime] = React.useState("");
-  const [cookTimeMeasurement, setCookTimeMeasurement] = React.useState("");
-  const [cal, setCal] = React.useState("");
-  const [calMeasurement, setCalMeasurement] = React.useState("");
-  const [carbs, setCarbs] = React.useState("");
-  const [protein, setProtein] = React.useState("");
-  const [fat, setFat] = React.useState("");
-  const [fiber, setFiber] = React.useState("");
-  const [sugar, setSugar] = React.useState("");
+  const [prepTime, setPrepTime] = React.useState(0);
+  const [cookTime, setCookTime] = React.useState(0);
+  const [calories, setCalories] = React.useState(0);
+  const [carbs, setCarbs] = React.useState(0);
+  const [protein, setProtein] = React.useState(0);
+  const [fat, setFat] = React.useState(0);
+  const [fiber, setFiber] = React.useState(0);
+  const [sugar, setSugar] = React.useState(0);
 
   useEffect(() => {
     if (initialValues) {
       setDifficulty(initialValues.difficulty || "");
-      setTotalTime(initialValues.totalTime?.toString() || "");
-      setTotalTimeMeasurement(initialValues.totalTimeMeasurement || "");
-      setPrepTime(initialValues.prepTime?.toString() || "");
-      setPrepTimeMeasurement(initialValues.prepTimeMeasurement || "");
-      setCookTime(initialValues.cookTime?.toString() || "");
-      setCookTimeMeasurement(initialValues.cookTimeMeasurement || "");
-      setCal(initialValues.cal?.toString() || "");
-      setCalMeasurement(initialValues.calMeasurement || "");
-      setCarbs(initialValues.carbs?.toString() || "");
-      setProtein(initialValues.protein?.toString() || "");
-      setFat(initialValues.fat?.toString() || "");
-      setFiber(initialValues.fiber?.toString() || "");
-      setSugar(initialValues.sugar?.toString() || "");
+      setPrepTime(initialValues.prepTime || 0);
+      setCookTime(initialValues.cookTime || 0);
+      setCalories(initialValues.calories || 0);
+      setCarbs(initialValues.carbs || 0);
+      setProtein(initialValues.protein || 0);
+      setFat(initialValues.fat || 0);
+      setFiber(initialValues.fiber || 0);
+      setSugar(initialValues.sugar || 0);
     }
   }, [initialValues]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!difficulty) {
-      toast.error("Field difficulty is required!");
-      return;
-    }
-    if (!totalTime || Number(totalTime) == 0) {
-      toast.error("Field total time is required!");
-      return;
-    }
-    if (!totalTimeMeasurement) {
-      toast.error("Field total time measurement is required!");
+    if (!difficulty || !calories || !cookTime || !prepTime || !carbs || !protein || !sugar || !fiber || !fat) {
+      toast.error("Please fill in all mandatory fields.");
       return;
     }
     // Send form data to parent component
     onNext({
       difficulty,
-      totalTime: Number(totalTime),
-      totalTimeMeasurement,
-      prepTime: Number(prepTime),
-      prepTimeMeasurement,
-      cookTime: Number(cookTime),
-      cookTimeMeasurement,
-      cal: Number(cal),
-      calMeasurement,
-      carbs: Number(carbs),
-      protein: Number(protein),
-      fat: Number(fat),
-      fiber: Number(fiber),
-      sugar: Number(sugar),
+      prepTime,
+      cookTime,
+      calories,
+      carbs,
+      protein,
+      fat,
+      fiber,
+      sugar,
     });
   };
-
-  const handleTotalTimeValueChange = (value: string) => {
-    setTotalTime(value);
-    console.log(value);
-  };
-
-  const handleTotalTimeMeasurementChange = (measurement: string) => {
-    setTotalTimeMeasurement(measurement);
-    console.log(measurement);
-  };
-
-  const handlePrepTimeValueChange = (value: string) => {
-    setPrepTime(value);
-    console.log(value);
-  };
-
-  const handlePrepTimeMeasurementChange = (measurement: string) => {
-    setPrepTimeMeasurement(measurement);
-    console.log(measurement);
-  };
-
-  const handleCookTimeValueChange = (value: string) => {
-    setCookTime(value);
-    console.log(value);
-  };
-
-  const handleCookTimeMeasurementChange = (measurement: string) => {
-    setCookTimeMeasurement(measurement);
-    console.log(measurement);
-  };
-
-  const handleCalValueChange = (value: string) => {
-    setCal(value);
-    console.log(value);
-  };
-
-  const handleCalMeasurementChange = (measurement: string) => {
-    setCalMeasurement(measurement);
-    console.log(measurement);
-  };
-
-  const timeMeasurementOptions = ["min", "h", "days"];
-  const calorieMeasumentOptions = ["kj", "cal"];
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
@@ -206,9 +129,6 @@ export function AdditionalInformationForm({
                   value={difficulty}
                   onChange={(e) => setDifficulty(e.target.value)}
                   fullWidth
-                  sx={{
-                    width: "40%",
-                  }}
                 >
                   <MenuItem value="Easy">Easy</MenuItem>
                   <MenuItem value="Medium">Medium</MenuItem>
@@ -216,88 +136,72 @@ export function AdditionalInformationForm({
                 </TextField>
               </FormControl>
 
-              <Stack></Stack>
-              <CustomInputField
-                labelName="Total Time to Prepare*"
-                value={totalTime}
-                measurement={totalTimeMeasurement}
-                onChangeValue={handleTotalTimeValueChange}
-                onChangeMeasurement={handleTotalTimeMeasurementChange}
-                measurementOptions={timeMeasurementOptions}
-              />
-
-              <Typography
-                variant="h6"
-                component="h2"
-                sx={{
-                  fontWeight: "600",
-                  textAlign: "left",
-                }}
-              >
-                Optional information
-              </Typography>
-
-              <Stack direction="row" spacing={1}>
-                <CustomInputField
-                  labelName="Total prep time"
-                  value={prepTime}
-                  measurement={prepTimeMeasurement}
-                  onChangeValue={handlePrepTimeValueChange}
-                  onChangeMeasurement={handlePrepTimeMeasurementChange}
-                  measurementOptions={timeMeasurementOptions}
-                />
-                <CustomInputField
-                  labelName="Total cook time"
+              <Stack direction="row" spacing={2}>
+                <TextField
+                  label="Cook time (minutes)*"
                   value={cookTime}
-                  measurement={cookTimeMeasurement}
-                  onChangeValue={handleCookTimeValueChange}
-                  onChangeMeasurement={handleCookTimeMeasurementChange}
-                  measurementOptions={timeMeasurementOptions}
+                  onChange={(e) => setCookTime(Number(e.target.value))}
+                  fullWidth
+                />
+
+                <TextField
+                  label="Preparation time (minutes)*"
+                  value={prepTime}
+                  onChange={(e) => setPrepTime(Number(e.target.value))}
+                  fullWidth
                 />
               </Stack>
-
-              <CustomInputField
-                labelName="Calories"
-                value={cal}
-                measurement={calMeasurement}
-                onChangeValue={handleCalValueChange}
-                onChangeMeasurement={handleCalMeasurementChange}
-                measurementOptions={calorieMeasumentOptions}
-              />
+              <Typography
+                variant="h5"
+                component="h5"
+                sx={{
+                  fontWeight: "600",
+                  textAlign: "center",
+                }}
+              >
+                Recipe nutrition
+              </Typography>
 
               <Stack direction="row" spacing={2}>
                 <TextField
-                  label="Carbs"
+                  label="Calories (g)*"
+                  value={calories}
+                  onChange={(e) => setCalories(Number(e.target.value))}
+                  fullWidth
+                />
+
+                <TextField
+                  label="Carbs (g)*"
                   value={carbs}
-                  onChange={(e) => setCarbs(e.target.value)}
+                  onChange={(e) => setCarbs(Number(e.target.value))}
                   fullWidth
                 />
 
                 <TextField
-                  label="Protein"
+                  label="Protein (g)*"
                   value={protein}
-                  onChange={(e) => setProtein(e.target.value)}
+                  onChange={(e) => setProtein(Number(e.target.value))}
                   fullWidth
                 />
 
                 <TextField
-                  label="Fat"
+                  label="Fat (g)*"
                   value={fat}
-                  onChange={(e) => setFat(e.target.value)}
+                  onChange={(e) => setFat(Number(e.target.value))}
                   fullWidth
                 />
 
                 <TextField
-                  label="Fiber"
+                  label="Fiber (g)*"
                   value={fiber}
-                  onChange={(e) => setFiber(e.target.value)}
+                  onChange={(e) => setFiber(Number(e.target.value))}
                   fullWidth
                 />
 
                 <TextField
-                  label="Sugar"
+                  label="Sugar (g)*"
                   value={sugar}
-                  onChange={(e) => setSugar(e.target.value)}
+                  onChange={(e) => setSugar(Number(e.target.value))}
                   fullWidth
                 />
               </Stack>

@@ -38,5 +38,9 @@ public class LoginController : ControllerBase
         {
             return Unauthorized();
         }
+        catch (InvalidOperationException)
+        {
+            return Unauthorized("Too many login attempts");
+        }
     }
 }
