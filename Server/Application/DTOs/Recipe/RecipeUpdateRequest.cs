@@ -25,7 +25,7 @@ public class RecipeUpdateRequest
 
     public required string Ingredients { get; set; }
 
-    public byte[]? Image { get; set; }
+    public string? Image { get; set; }
 
     public required RecipeNutritionUpdateRequest RecipeNutrition { get; set; }
 }

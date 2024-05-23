@@ -18,7 +18,7 @@ export const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => 
       return;
     }
 
-    toast.success('Image uploaded successfully!');
+    //toast.success('Image uploaded successfully!');
     console.log('Selected file:', file);
     // TODO: Handle the selected file here
   }

@@ -10,6 +10,7 @@ import { UploadPhotoForm } from "./UploadPhotoForm";
 import { AdditionalInformationForm } from "./AdditionalInformationForm";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const steps = ["Basic information", "Add a photo", "Additional information"];
 
@@ -17,25 +18,22 @@ export function HorizontalStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
   const [formData, setFormData] = React.useState({
-    recipeName: "",
-    servings: "",
+    name: "",
+    description: "",
+    categories: "",
+    servings: 0,
     ingredients: "",
-    directions: "",
+    instructions: "",
   });
   const [photoData, setPhotoData] = React.useState({
-    photo: "",
+    image: "",
   });
 
   type AdditionalFormData = {
     difficulty: string;
-    totalTime: number;
-    totalTimeMeasurement: string;
     prepTime: number;
-    prepTimeMeasurement: string;
     cookTime: number;
-    cookTimeMeasurement: string;
-    cal: number;
-    calMeasurement: string;
+    calories: number;
     carbs: number;
     protein: number;
     fat: number;
@@ -45,20 +43,17 @@ export function HorizontalStepper() {
 
 const [additionalFormData, setAdditionalFormData] = React.useState<AdditionalFormData>({
   difficulty: "",
-  totalTime: 0,
-  totalTimeMeasurement: "",
   prepTime: 0,
-  prepTimeMeasurement: "",
   cookTime: 0,
-  cookTimeMeasurement: "",
-  cal: 0,
-  calMeasurement: "",
+  calories: 0,
   carbs: 0,
   protein: 0,
   fat: 0,
   fiber: 0,
   sugar: 0
 });
+
+const navigate = useNavigate();
 
   const isStepOptional = (step: number) => {
     return step === 1;
@@ -88,59 +83,67 @@ const [additionalFormData, setAdditionalFormData] = React.useState<AdditionalFor
   };
 
   const handleBasicInformationSubmit = (data: {
-    recipeName: string;
-    servings: string;
+    name: string;
+    description: string;
+    categories: string,
+    servings: number;
     ingredients: string;
-    directions: string;
+    instructions: string;
   }) => {
     console.log("Basic Information Form Data received:", data);
     setFormData(data);
     handleNext();
   };
 
-  const handlePhotoSubmit = (data: { photo: string }) => {
+  const handlePhotoSubmit = (data: { image: string }) => {
     console.log("Photo Form Data received:", data);
     setPhotoData(data);
     handleNext();
   };
 
-  const handleAdditionalInformationSubmit = async (data: {
-    difficulty: string;
-    totalTime: number;
-    totalTimeMeasurement: string;
-    prepTime: number;
-    prepTimeMeasurement: string;
-    cookTime: number;
-    cookTimeMeasurement: string;
-    cal: number;
-    calMeasurement: string;
-    carbs: number;
-    protein: number;
-    fat: number;
-    fiber: number;
-    sugar: number;
-}) => {
+  const handleAdditionalInformationSubmit = async (data: AdditionalFormData) => {
     console.log("Additional information data received:", data);
     setAdditionalFormData(data);
-
+  
     // Combine all form data into a single object
     const combinedData = {
       ...formData,
       ...photoData,
-      ...additionalFormData,
+      categories: formData.categories.split(',').map(category => category.trim()),
+      recipeNutrition: {
+        calories: data.calories,
+        carbs: data.carbs,
+        fat: data.fat,
+        fiber: data.fiber,
+        protein: data.protein,
+        sugar: data.sugar,
+      },
+      cookTime: data.cookTime,
+      difficulty: data.difficulty,
+      prepTime: data.prepTime,
+      servings: formData.servings,
+      ingredients: formData.ingredients,
+      instructions: formData.instructions,
+      name: formData.name,
+      description: formData.description,
+      image: photoData.image,
+      creatorId: 0 // TO-DO implement with user login session
     };
-
+  
+    console.log(combinedData);
+  
     try {
       const response = await axios.post('/api/recipes', combinedData);
       toast.success("Recipe created successfully");
       console.log('Response:', response.data);
-      // Optionally, reset or navigate to another page
       handleReset();
+      toast.success("Recipe successfully created!"); // TODO: Need to somehow transfer toast to another screen
+      navigate('/');
     } catch (error) {
       toast.error("Something bad happened during the request!");
       console.error('Error creating recipe:', error);
     }
-};
+  };
 
   const stepsComponents = [
     <BasicInformationForm

@@ -12,11 +12,11 @@ import { ToastContainer } from "react-toastify";
 import { base64ToImage } from "../../../utils/ImageUtils";
 
 interface UploadPhotoFormProps {
-  onNext: (data: { photo: string }) => void;
+  onNext: (data: { image: string }) => void;
   onBack: () => void;
   activeStep: number;
   initialValues?: {
-    photo: string;
+    image: string;
   };
 }
 
@@ -26,18 +26,18 @@ export function UploadPhotoForm({
   activeStep,
   initialValues,
 }: UploadPhotoFormProps) {
-  const [photo, setPhoto] = React.useState("");
+  const [image, setImage] = React.useState("");
 
   React.useEffect(() => {
     // Set initial values when initialValues change
     if (initialValues) {
-      setPhoto(initialValues.photo);
+      setImage(initialValues.image);
     }
   }, [initialValues]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onNext({ photo });
+    onNext({ image });
   };
 
   const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +46,7 @@ export function UploadPhotoForm({
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPhoto(reader.result as string);
+        setImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -106,9 +106,9 @@ export function UploadPhotoForm({
             </label>
           </div>
 
-          {photo && (
+          {image && (
             <div style={{ marginTop: "1rem", textAlign: "center" }}>
-              {base64ToImage(photo)}
+              {base64ToImage(image)}
             </div>
           )}
 
