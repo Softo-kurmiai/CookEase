@@ -13,4 +13,6 @@ public class UserUpdateRequest
     public string? Description { get; set; }
 
     public byte[]? ProfilePicture { get; set; }
+
+    public uint Version { get; set; }
 }

@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using CookEase.Api.Interfaces;
 using Application.DTOs.User;
 using AutoMapper;
+using System.Data;
 
 namespace CookEase.Api.Controllers;
 
@@ -53,17 +54,26 @@ public class UserController : ControllerBase
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<UserResponse>> Update(
         [Required][FromRoute] int id,
         [Required][FromBody] UserUpdateRequest userRequest)
     {
-        var updatedUser = await _userService.Update(id, userRequest);
-        if (updatedUser is null)
+        try
         {
-            return NotFound("User not found");
-        }
+            var updatedUser = await _userService.Update(id, userRequest);
+            if (updatedUser is null)
+            {
+                return NotFound("User not found");
+            }
 
-        return Ok(updatedUser);
+            return Ok(updatedUser);
+        }
+        catch(DBConcurrencyException ex)
+        {
+            return Conflict();
+        }
+        
     }
 
     [HttpDelete("{id}")]

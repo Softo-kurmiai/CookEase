@@ -56,7 +56,6 @@ public class UserService : IUserService
 
     public async Task<UserResponse?> Update(int id, UserUpdateRequest request)
     {
-
         var user = await _userRepository.GetById(id);
         if (user is null)
         {
@@ -69,6 +68,7 @@ public class UserService : IUserService
         user.Description = request.Description;
         user.ProfilePicture = request.ProfilePicture;
         user.UpdatedAt = DateTime.UtcNow;
+        user.Version = request.Version;
 
         var userDBResponce = await _userRepository.Update(user);
 

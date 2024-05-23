@@ -22,4 +22,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public required DbSet<Recipe> Recipes { get; set; }
 
     public required DbSet<User> Users { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<User>()
+            .Property(r => r.Version)
+            .IsRowVersion();
+    }
 }
