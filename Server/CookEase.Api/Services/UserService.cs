@@ -5,6 +5,7 @@ using CookEase.Api.Interfaces;
 using Infrastructure.Interfaces;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using System.Data;
 
 namespace CookEase.Api.Services;
 
@@ -68,11 +69,11 @@ public class UserService : IUserService
         user.Description = request.Description;
         user.ProfilePicture = request.ProfilePicture;
         user.UpdatedAt = DateTime.UtcNow;
-        user.Version = request.Version;
 
-        var userDBResponce = await _userRepository.Update(user);
+        var userDBResponce = await _userRepository.Update(user, request.Version);
 
         var mappedUser = _mapper.Map<UserResponse>(userDBResponce);
+        mappedUser.Version = userDBResponce.Version;
 
         return mappedUser;
     }

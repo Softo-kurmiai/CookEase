@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240523220341_optimistic-locking")]
-    partial class optimisticlocking
+    [Migration("20240524133023_OptimisticLockingFieldForUser")]
+    partial class OptimisticLockingFieldForUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -4,6 +4,7 @@ using CookEase.Api.Interfaces;
 using Application.DTOs.User;
 using AutoMapper;
 using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CookEase.Api.Controllers;
 
@@ -56,8 +57,8 @@ public class UserController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status409Conflict)]
     public async Task<ActionResult<UserResponse>> Update(
-        [Required][FromRoute] int id,
-        [Required][FromBody] UserUpdateRequest userRequest)
+        [Required][FromBody] UserUpdateRequest userRequest,
+        [Required][FromRoute] int id = 1)
     {
         try
         {
@@ -69,9 +70,12 @@ public class UserController : ControllerBase
 
             return Ok(updatedUser);
         }
-        catch(DBConcurrencyException ex)
+        catch(DbUpdateConcurrencyException ex)
         {
-            return Conflict();
+            return Conflict(new
+            {
+                Message = "The record you attempted to edit was modified by another user."
+            });
         }
         
     }

@@ -5,7 +5,7 @@
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class optimisticlocking : Migration
+    public partial class OptimisticLockingFieldForUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,6 +17,7 @@ namespace Infrastructure.Migrations
                 rowVersion: true,
                 nullable: false,
                 defaultValue: 0u);
+
         }
 
         /// <inheritdoc />

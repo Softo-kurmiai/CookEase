@@ -12,7 +12,7 @@ public interface IGenericRepository<T> where T : class
 
     Task AddRangeAsync(IEnumerable<T> entities);
 
-    Task<T> Update(T entity);
+    Task<T> Update(T entity, uint? originalVersion = null);
 
     Task<T?> Delete(int id);
 
