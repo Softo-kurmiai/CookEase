@@ -51,7 +51,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Collections");
+                    b.ToTable("Collections", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Models.CollectionRecipe", b =>
@@ -68,7 +68,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("CollectionId", "RecipeId");
 
-                    b.ToTable("CollectionRecipes");
+                    b.ToTable("CollectionRecipes", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Comment", b =>
@@ -87,8 +87,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("Rating")
-                        .HasColumnType("numeric");
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("integer");
 
                     b.Property<int>("RecipeId")
                         .HasColumnType("integer");
@@ -101,7 +101,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Models.FavoriteCreator", b =>
@@ -118,7 +118,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId", "CreatorId");
 
-                    b.ToTable("FavoriteCreators");
+                    b.ToTable("FavoriteCreators", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Models.FavoriteRecipe", b =>
@@ -135,7 +135,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId", "RecipeId");
 
-                    b.ToTable("FavoriteRecipes");
+                    b.ToTable("FavoriteRecipes", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Recipe", b =>
@@ -197,7 +197,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Models.RecipeCategory", b =>
@@ -210,7 +210,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("RecipeId", "Category");
 
-                    b.ToTable("RecipeCategories");
+                    b.ToTable("RecipeCategories", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Models.RecipeNutrition", b =>
@@ -244,7 +244,23 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RecipeNutrition");
+                    b.ToTable("RecipeNutrition", (string)null);
+                });
+
+            modelBuilder.Entity("Infrastructure.Models.RecipeRating", b =>
+                {
+                    b.Property<int>("RecipeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("RecipeId", "UserId");
+
+                    b.ToTable("RecipeRatings", (string)null);
                 });
 
             modelBuilder.Entity("Infrastructure.Models.User", b =>
@@ -279,15 +295,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<uint>("Version")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("xid")
-                        .HasColumnName("xmin");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 #pragma warning restore 612, 618
         }
