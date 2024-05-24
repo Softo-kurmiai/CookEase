@@ -72,9 +72,15 @@ public class UserController : ControllerBase
         }
         catch(DbUpdateConcurrencyException ex)
         {
+            if (ex.Data.Contains("ConflictData"))
+            {
+                var conflictData = ex.Data["ConflictData"];
+                return Conflict(conflictData);
+            }
+
             return Conflict(new
             {
-                Message = "The record you attempted to edit was modified by another user."
+                Message = "A concurrency conflict occurred."
             });
         }
         
