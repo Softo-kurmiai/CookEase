@@ -28,7 +28,7 @@ public class Recipe
 
     public required string Ingredients { get; set; }
 
-    public byte[]? Image { get; set; }
+    public string? Image { get; set; }
 
     public int ViewCount { get; set; } = 0;
 

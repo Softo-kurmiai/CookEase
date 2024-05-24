@@ -3,6 +3,7 @@ using System;
 using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240523171626_AddLogging")]
+    partial class AddLogging
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,7 +54,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Collections", (string)null);
+                    b.ToTable("Collections");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.CollectionRecipe", b =>
@@ -68,7 +71,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("CollectionId", "RecipeId");
 
-                    b.ToTable("CollectionRecipes", (string)null);
+                    b.ToTable("CollectionRecipes");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Comment", b =>
@@ -87,8 +90,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("LikeCount")
-                        .HasColumnType("integer");
+                    b.Property<decimal>("Rating")
+                        .HasColumnType("numeric");
 
                     b.Property<int>("RecipeId")
                         .HasColumnType("integer");
@@ -101,7 +104,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.FavoriteCreator", b =>
@@ -118,7 +121,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId", "CreatorId");
 
-                    b.ToTable("FavoriteCreators", (string)null);
+                    b.ToTable("FavoriteCreators");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.FavoriteRecipe", b =>
@@ -135,7 +138,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("UserId", "RecipeId");
 
-                    b.ToTable("FavoriteRecipes", (string)null);
+                    b.ToTable("FavoriteRecipes");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.Log", b =>
@@ -190,8 +193,8 @@ namespace Infrastructure.Migrations
                     b.Property<int>("FavoriteCount")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("text");
+                    b.Property<byte[]>("Image")
+                        .HasColumnType("bytea");
 
                     b.Property<string>("Ingredients")
                         .IsRequired()
@@ -219,7 +222,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Recipes", (string)null);
+                    b.ToTable("Recipes");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.RecipeCategory", b =>
@@ -232,7 +235,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("RecipeId", "Category");
 
-                    b.ToTable("RecipeCategories", (string)null);
+                    b.ToTable("RecipeCategories");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.RecipeNutrition", b =>
@@ -266,23 +269,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RecipeNutrition", (string)null);
-                });
-
-            modelBuilder.Entity("Infrastructure.Models.RecipeRating", b =>
-                {
-                    b.Property<int>("RecipeId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Rating")
-                        .HasColumnType("numeric");
-
-                    b.HasKey("RecipeId", "UserId");
-
-                    b.ToTable("RecipeRatings", (string)null);
+                    b.ToTable("RecipeNutrition");
                 });
 
             modelBuilder.Entity("Infrastructure.Models.User", b =>
@@ -319,7 +306,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

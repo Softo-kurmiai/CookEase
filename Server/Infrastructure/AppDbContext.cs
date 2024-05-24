@@ -23,5 +23,5 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public required DbSet<User> Users { get; set; }
 
-   
+    public required DbSet<Log> Logs { get; set; }
 }
