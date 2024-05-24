@@ -7,22 +7,28 @@ import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
 import DisclaimerText from "../../MainComponents/Miscellaneous/DisclaimerText";
+import axios from "axios";
 
 interface BasicInformationFormProps {
   onNext: (data: {
-    recipeName: string;
-    servings: string;
+    name: string;
+    description: string;
+    categories: string;
+    servings: number;
     ingredients: string;
-    directions: string;
+    instructions: string;
   }) => void;
   onBack: () => void;
   activeStep: number;
   initialValues?: {
-    recipeName: string;
-    servings: string;
+    name: string;
+    description: string;
+    categories: string;
+    servings: number;
     ingredients: string;
-    directions: string;
+    instructions: string;
   };
 }
 
@@ -32,22 +38,37 @@ export function BasicInformationForm({
   activeStep,
   initialValues,
 }: BasicInformationFormProps) {
-  const [recipeName, setRecipeName] = React.useState("");
-  const [servings, setServings] = React.useState("");
+  const [name, setRecipeName] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [categories, setCategories] = React.useState("");
+  const [categoriesFromAPI, setCategoriesFromAPI] = React.useState<string[]>([]);
+  const [servings, setServings] = React.useState(0);
   const [ingredients, setIngredients] = React.useState("");
-  const [directions, setDirections] = React.useState("");
+  const [instructions, setInstructions] = React.useState("");
   const [isIngredientsFocused, setIsIngredientsFocused] = React.useState(false);
   const [isDirectionsFocused, setIsDirectionsFocused] = React.useState(false);
 
   React.useEffect(() => {
     // Set initial values when initialValues change
     if (initialValues) {
-      setRecipeName(initialValues.recipeName || "");
-      setServings(initialValues.servings || "");
+      setRecipeName(initialValues.name || "");
+      setDescription(initialValues.description || "");
+      setCategories(initialValues.categories || "");
+      setServings(initialValues.servings || 0);
       setIngredients(initialValues.ingredients || "");
-      setDirections(initialValues.directions || "");
+      setInstructions(initialValues.instructions || "");
     }
+    fetchCategories();
   }, [initialValues]);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get<string[]>('/api/categories/getAll');
+      setCategoriesFromAPI(response.data);
+    } catch (error) {
+      console.error('Error fetching categories', error);
+    }
+  };
 
   const handleIngredientsFocus = () => {
     setIsIngredientsFocused(true);
@@ -67,12 +88,12 @@ export function BasicInformationForm({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!recipeName || !servings || !ingredients || !directions) {
+    if (!name || !description || !categories || !servings || !ingredients || !instructions) {
       alert("Please fill in all mandatory fields.");
       return;
     }
     // Send form data to parent component
-    onNext({ recipeName, servings, ingredients, directions });
+    onNext({ name, description, categories, servings, ingredients, instructions });
   };
 
   return (
@@ -97,7 +118,8 @@ export function BasicInformationForm({
             <Stack spacing={4} sx={{ mt: 2 }}>
               <TextField
                 label="Recipe Name"
-                value={recipeName}
+                placeholder={`Yummy apple pie`}
+                value={name}
                 onChange={(e) => setRecipeName(e.target.value)}
                 required
                 sx={{
@@ -105,10 +127,40 @@ export function BasicInformationForm({
                 }}
               />
               <TextField
+                  id="description"
+                  label="Description"
+                  placeholder={`What an awesome recipe`}
+                  multiline
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  required
+                  minRows={3}
+                  style={{
+                    width: "100%",
+                    borderColor: isIngredientsFocused ? "green" : "", // Change border color to green when focused
+                  }}
+                />
+              <FormControl fullWidth>
+                <FormLabel>Category*</FormLabel>
+                <TextField
+                  select
+                  value={categories}
+                  onChange={(e) => setCategories(e.target.value)}
+                  fullWidth
+                  sx={{
+                    width: "40%",
+                  }}
+                >
+                  {categoriesFromAPI.map((category) => (
+                    <MenuItem key={0} value={category}>{category}</MenuItem>
+                  ))}
+                </TextField>
+              </FormControl>
+              <TextField
                 label="Number of Servings"
                 type="number"
                 value={servings}
-                onChange={(e) => setServings(e.target.value)}
+                onChange={(e) => setServings(Number(e.target.value))}
                 sx={{
                   width: "30%",
                   textAlign: "left",
@@ -142,8 +194,8 @@ export function BasicInformationForm({
                   id="directions"
                   placeholder={`Mix sugar and flour\nMelt butter`} // Define placeholder using template literal
                   multiline
-                  value={directions}
-                  onChange={(e) => setDirections(e.target.value)}
+                  value={instructions}
+                  onChange={(e) => setInstructions(e.target.value)}
                   onFocus={handleDirectionsFocus}
                   onBlur={handleDirectionsBlur}
                   minRows={5}

@@ -9,13 +9,14 @@ import DisclaimerText from "../../MainComponents/Miscellaneous/DisclaimerText";
 import Input from "@mui/material/Input";
 import { handleFileChange } from "./UploadFileUtils";
 import { ToastContainer } from "react-toastify";
+import { base64ToImage } from "../../../utils/ImageUtils";
 
 interface UploadPhotoFormProps {
-  onNext: (data: { photo: string }) => void;
+  onNext: (data: { image: string }) => void;
   onBack: () => void;
   activeStep: number;
   initialValues?: {
-    photo: string;
+    image: string;
   };
 }
 
@@ -25,22 +26,30 @@ export function UploadPhotoForm({
   activeStep,
   initialValues,
 }: UploadPhotoFormProps) {
-  const [photo, setPhoto] = React.useState("");
+  const [image, setImage] = React.useState("");
 
   React.useEffect(() => {
     // Set initial values when initialValues change
     if (initialValues) {
-      setPhoto(initialValues.photo || "");
+      setImage(initialValues.image);
     }
   }, [initialValues]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onNext({ photo });
+    onNext({ image });
   };
 
-  const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
     handleFileChange(event);
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -96,6 +105,12 @@ export function UploadPhotoForm({
               </Button>
             </label>
           </div>
+
+          {image && (
+            <div style={{ marginTop: "1rem", textAlign: "center" }}>
+              {base64ToImage(image)}
+            </div>
+          )}
 
           <form id="upload-photo-form" onSubmit={handleSubmit}>
             <Stack spacing={2} sx={{ mt: 2 }}>
