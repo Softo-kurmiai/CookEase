@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240524174239_OptimisticLockingFieldForUser")]
-    partial class OptimisticLockingFieldForUser
+    [Migration("20240525120624_OptimisticLockingFieldAddAndProfilePictureChangeForUser")]
+    partial class OptimisticLockingFieldAddAndProfilePictureChangeForUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -298,8 +298,8 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("ProfilePicture")
-                        .HasColumnType("bytea");
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
