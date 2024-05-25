@@ -45,8 +45,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         await _context.SaveChangesAsync();
     }
 
-    public async Task<T> Update(T entity)
+    public async Task<T> Update(T entity, uint? originalVersion)
     {
+        if(originalVersion != null)
+        {
+            _context.Entry(entity).Property("Version").OriginalValue = originalVersion;
+        }
         _table.Update(entity);
         await _context.SaveChangesAsync();
         return entity;

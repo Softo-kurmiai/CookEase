@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models;
 
@@ -16,9 +16,12 @@ public class User
 
     public string? Description { get; set; }
 
-    public byte[]? ProfilePicture { get; set; }
+    public string? ProfilePicture { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    [Timestamp]
+    public uint Version { get; set; }
 }

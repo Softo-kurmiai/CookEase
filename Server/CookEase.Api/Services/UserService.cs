@@ -5,6 +5,8 @@ using CookEase.Api.Interfaces;
 using Infrastructure.Interfaces;
 using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace CookEase.Api.Services;
 
@@ -56,7 +58,6 @@ public class UserService : IUserService
 
     public async Task<UserResponse?> Update(int id, UserUpdateRequest request)
     {
-
         var user = await _userRepository.GetById(id);
         if (user is null)
         {
@@ -70,11 +71,62 @@ public class UserService : IUserService
         user.ProfilePicture = request.ProfilePicture;
         user.UpdatedAt = DateTime.UtcNow;
 
-        var userDBResponce = await _userRepository.Update(user);
+        try
+        {
+            var userDBResponse = await _userRepository.Update(user, request.Version);
+            var mappedUser = _mapper.Map<UserResponse>(userDBResponse);
+            return mappedUser;
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            var entry = ex.Entries.Single();
+            var clientValues = (User)entry.Entity;
+            clientValues.Version = request.Version;
 
-        var mappedUser = _mapper.Map<UserResponse>(userDBResponce);
+            var databaseEntry = entry.GetDatabaseValues();
+            if (databaseEntry == null)
+            {
+                throw new DbUpdateConcurrencyException("Unable to save changes. The object was deleted by another user.");
+            }
 
-        return mappedUser;
+            var dbValues = (User)databaseEntry.ToObject();
+
+            // Create a simplified version of the conflicting data
+            var conflictData = new
+            {
+                Message = "The record you attempted to edit was modified by another user.",
+                ClientValues = new
+                {
+                    clientValues.Id,
+                    clientValues.Name,
+                    clientValues.Email,
+                    clientValues.Password,
+                    clientValues.Description,
+                    clientValues.ProfilePicture,
+                    clientValues.UpdatedAt,
+                    clientValues.Version
+                },
+                DatabaseValues = new
+                {
+                    dbValues.Id,
+                    dbValues.Name,
+                    dbValues.Email,
+                    dbValues.Password,
+                    dbValues.Description,
+                    dbValues.ProfilePicture,
+                    dbValues.UpdatedAt,
+                    dbValues.Version
+                }
+            };
+
+            throw new DbUpdateConcurrencyException("Concurrency conflict", ex)
+            {
+                Data =
+                {
+                    { "ConflictData", conflictData }
+                }
+            };
+        }
     }
 
     public async Task<UserResponse?> Delete(int id)

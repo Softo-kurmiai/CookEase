@@ -11,9 +11,11 @@ public class UserResponse
 
     public string? Description { get; set; }
 
-    public byte[]? ProfilePicture { get; set; }
+    public string? ProfilePicture { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
+
+    public uint Version { get; set; }
 }

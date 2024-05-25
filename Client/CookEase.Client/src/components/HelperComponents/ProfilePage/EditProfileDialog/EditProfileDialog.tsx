@@ -28,7 +28,7 @@ export function EditProfileDialog() {
     console.log("Edit button clicked!");
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitButtonClicked = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     //TODO: add form handling code
     //const formData = new FormData(event.currentTarget);
@@ -46,7 +46,7 @@ export function EditProfileDialog() {
         onClose={handleClose}
         PaperProps={{
           component: "form",
-          onSubmit: handleSubmit,
+          onSubmit: handleSubmitButtonClicked,
         }}
       >
         <DialogTitle>
@@ -97,8 +97,10 @@ export function EditProfileDialog() {
           >
             Cancel
           </Button>
-          <Button type="submit" sx={{ fontWeight: 600 }}>
-            Confirm
+          <Button 
+            type="submit" 
+            sx={{ fontWeight: 600 }}>
+            Submit
           </Button>
         </DialogActions>
       </Dialog>
