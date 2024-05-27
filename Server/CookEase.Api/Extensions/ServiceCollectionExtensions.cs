@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRecipeService, RecipeService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<ITokenService, TokenService>();
 
         return services;
     }
@@ -31,6 +32,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<IRecipeCategoryRepository, RecipeCategoryRepository>();
         services.AddScoped<ILogRepository, LogRepository>();
+        services.AddScoped<ITokenRepository, TokenRepository>();
 
         return services;
     }

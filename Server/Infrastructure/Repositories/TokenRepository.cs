@@ -8,20 +8,19 @@ using System.Threading.Tasks;
 using Infrastructure.Interfaces;
 
 
-namespace Infrastructure.Repositories
+namespace Infrastructure.Repositories;
+
+public class TokenRepository : GenericRepository<Token>, ITokenRepository
 {
-    internal class TokenRepository : GenericRepository<Token>, ITokenRepository
+    private readonly DbSet<Token> _tokens;
+
+    public TokenRepository(AppDbContext context) : base(context) 
     {
-        private readonly DbSet<Token> _tokens;
+        _tokens = context.Set<Token>();
+    }
 
-        public TokenRepository(AppDbContext context) : base(context) 
-        {
-            _tokens = context.Set<Token>();
-        }
-
-        public async Task<Token?> GetTokenByValue(string tokenValue)
-        {
-            return await _tokens.Where(x => x.Value == tokenValue).SingleOrDefaultAsync();
-        }
+    public async Task<Token?> GetTokenByValue(string? tokenValue)
+    {
+        return await _tokens.Where(x => x.Value == tokenValue).SingleOrDefaultAsync();
     }
 }

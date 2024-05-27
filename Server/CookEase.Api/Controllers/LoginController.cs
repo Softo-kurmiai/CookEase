@@ -26,9 +26,21 @@ public class LoginController : ControllerBase
     {
         try
         {
-            var loginResponce = await _loginService.Authenticate(loginRequest);
+            var loginResponse = await _loginService.Authenticate(loginRequest);
 
-            return Ok(loginResponce);
+            if(loginResponse.Token != null)
+            {
+                // Set the session token as a cookie
+                Response.Cookies.Append("Token", loginResponse.Token.Value, new CookieOptions
+                {
+                    HttpOnly = true, // Prevents client-side JavaScript from accessing the cookie
+                    Secure = true, // Ensures the cookie is only sent over HTTPS
+                    SameSite = SameSiteMode.Strict, // Prevents the cookie from being sent with cross-site requests
+                    Expires = loginResponse.Token.ExpiryDate // Set the cookie to expire after 1 hour
+                });
+            }
+            
+            return Ok(loginResponse);
         } 
         catch (NullReferenceException) 
         {
