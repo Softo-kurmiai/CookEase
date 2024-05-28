@@ -14,13 +14,13 @@ import FancyTimeBlock from "../HelperComponents/RecipeCard/FancyTimeBlock"
 import React from "react";
 import axios from "axios";
 
-
 export interface RecipeCardProps {
   recipeData?:{
     id: number;
     creatorId: number;
     name: string;
     description: string;
+    rating: number;
     prepTime: number;
     cookTime: number;
     difficulty: string;
@@ -40,6 +40,7 @@ export function RecipeCard({
     creatorId: 69,
     name: "Salad",
     description: "A short description of the recipe. So delicous nium nium what an amazing description",
+    rating: 3.5,
     prepTime: 100,
     cookTime: 185,
     difficulty: "Easy",
@@ -102,7 +103,7 @@ export function RecipeCard({
       <CardContent sx={{ p: 3, position: "relative", zIndex: 2 }}>
         {" "}
         <Stack direction="row" spacing={2} justifyContent="space-between">
-          <CustomizedRating readOnly={true} value={3.5} precision={0.5} />
+          <CustomizedRating readOnly={true} value={recipeData.rating} precision={0.5} />
           {isEditable ? <EditDialog/> : null}
         </Stack>
         <InfoBar
