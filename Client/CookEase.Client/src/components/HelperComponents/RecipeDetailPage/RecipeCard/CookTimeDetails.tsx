@@ -10,7 +10,7 @@ export function CookTimeDetails({ Total = 0, Prep = 0, Cook = 0 , Difficulty = "
     ];
 
     return (
-        <Stack direction="row">
+        <Stack direction="row" sx={{ pt: "1rem", pb:"0.5rem"}}>
             {constLabelsAndValues.map((item, index) => (
                 <React.Fragment key={index}>
                     <Typography variant="body1">{item.label}</Typography>

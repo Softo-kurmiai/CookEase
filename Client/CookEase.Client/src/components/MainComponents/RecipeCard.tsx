@@ -86,7 +86,7 @@ export function RecipeCard({
   return (
     <Card
       sx={{
-        maxWidth: 280,
+        maxWidth: 300,
         minWidth: 280,
         margin: "auto",
         boxShadow: "0 0 20px 0 rgba(0,0,0,0.12)",
