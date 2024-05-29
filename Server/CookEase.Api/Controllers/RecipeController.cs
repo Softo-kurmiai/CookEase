@@ -21,8 +21,8 @@ public class RecipeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<RecipeCardResponse>>> GetPaginatedRecipeCards(
-        [Required][FromQuery] int recipesPerPage = 5,
-        [Required][FromQuery] int page = 1)
+        [Required] [FromQuery] int recipesPerPage = 5,
+        [Required] [FromQuery] int page = 1)
     {
         var (recipes, error) =
             await _recipeService.GetPaginatedRecipeCards(recipesPerPage, page);
@@ -37,7 +37,7 @@ public class RecipeController : ControllerBase
     [HttpGet("topLiked")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<RecipeCardResponse>>> GetTopLikedRecipeCards(
-        [Required][FromQuery] int maxNumberOfRecipes)
+        [Required] [FromQuery] int maxNumberOfRecipes)
     {
         var recipes = await _recipeService.GetNumberOfTopLikedRecipeCards(maxNumberOfRecipes);
         return Ok(recipes);
@@ -46,7 +46,7 @@ public class RecipeController : ControllerBase
     [HttpGet("random")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<RecipeCardResponse>>> GetRandomRecipeCards(
-        [Required][FromQuery] int maxNumberOfRecipes)
+        [Required] [FromQuery] int maxNumberOfRecipes)
     {
         var recipes = await _recipeService.GetNumberOfRandomRecipeCards(maxNumberOfRecipes);
         return Ok(recipes);
@@ -56,7 +56,7 @@ public class RecipeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<RecipeResponse>> GetRecipeById(
-        [Required][FromRoute] int id)
+        [Required] [FromRoute] int id)
     {
         var (recipe, error) = await _recipeService.GetRecipeById(id);
         if (error is not null)
@@ -71,9 +71,9 @@ public class RecipeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<RecipeCardResponse>>> GetRecipeCardsByCreatorId(
-        [Required][FromRoute] int id,
-        [Required][FromQuery] int recipesPerPage = 5,
-        [Required][FromQuery] int page = 1)
+        [Required] [FromRoute] int id,
+        [Required] [FromQuery] int recipesPerPage = 5,
+        [Required] [FromQuery] int page = 1)
     {
         var (recipes, error) =
             await _recipeService.GetRecipeCardsByCreatorId(id, recipesPerPage, page);
@@ -89,9 +89,9 @@ public class RecipeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<RecipeCardResponse>>> GetRecipeCardsByCategoryName(
-        [Required][FromRoute] Category categoryName,
-        [Required][FromQuery] int recipesPerPage = 5,
-        [Required][FromQuery] int page = 1)
+        [Required] [FromRoute] Category categoryName,
+        [Required] [FromQuery] int recipesPerPage = 5,
+        [Required] [FromQuery] int page = 1)
     {
         var (recipes, error) =
             await _recipeService.GetRecipeCardsByCategoryName(categoryName, recipesPerPage, page);
@@ -107,9 +107,9 @@ public class RecipeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<List<RecipeCardResponse>>> SearchRecipeCardsByName(
-        [Required][FromQuery] string searchTerm,
-        [Required][FromQuery] int recipesPerPage = 5,
-        [Required][FromQuery] int page = 1)
+        [Required] [FromQuery] string searchTerm,
+        [Required] [FromQuery] int recipesPerPage = 5,
+        [Required] [FromQuery] int page = 1)
     {
         var (recipes, error) =
             await _recipeService.SearchRecipeCardsByName(searchTerm, recipesPerPage, page);
@@ -125,7 +125,7 @@ public class RecipeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<RecipeResponse>> CreateRecipe(
-        [Required][FromBody] RecipeCreateRequest recipeRequest)
+        [Required] [FromBody] RecipeCreateRequest recipeRequest)
     {
         var (createdRecipe, error) = await _recipeService.CreateRecipe(recipeRequest);
         if (error is not null)
@@ -140,8 +140,8 @@ public class RecipeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<RecipeResponse>> UpdateRecipe(
-        [Required][FromRoute] int id,
-        [Required][FromBody] RecipeUpdateRequest request)
+        [Required] [FromRoute] int id,
+        [Required] [FromBody] RecipeUpdateRequest request)
     {
         var (updatedRecipe, error) = await _recipeService.UpdateRecipe(id, request);
         if (error is not null)
@@ -156,7 +156,7 @@ public class RecipeController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<RecipeResponse>> DeleteRecipe(
-        [Required][FromRoute] int id)
+        [Required] [FromRoute] int id)
     {
         var (deletedRecipe, error) = await _recipeService.DeleteRecipe(id);
         if (error is not null)
@@ -167,7 +167,14 @@ public class RecipeController : ControllerBase
         return Ok(deletedRecipe);
     }
 
-    //[HttpPut("{id}/updateMetric")]
+    [HttpGet("count")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<int> GetTotalRecipeCount()
+    {
+        return Ok(_recipeService.GetTotalNumberOfRecipes());
+    }
+
+//[HttpPut("{id}/updateMetric")]
     //[ProducesResponseType(StatusCodes.Status200OK)]
     //[ProducesResponseType(StatusCodes.Status404NotFound)]
     //public async Task<ActionResult> IncreaseRecipeMetric(

@@ -2,9 +2,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import Salad from "../../images/salad.jpg";
 import CustomizedRating from "../HelperComponents/RecipeCard/StyledRating";
 import InfoTypography from "../HelperComponents/RecipeCard/InfoTypography";
+import Salad from "../../images/salad.jpg";
 import Stack from "@mui/material/Stack";
 import { Schedule, ThumbUp, Group } from "@mui/icons-material";
 import FavoriteButton from "../HelperComponents/RecipeCard/FavoriteButton";
@@ -15,13 +15,13 @@ import React from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
-
 export interface RecipeCardProps {
   recipeData?:{
     id: number;
     creatorId: number;
     name: string;
     description: string;
+    rating: number;
     prepTime: number;
     cookTime: number;
     difficulty: string;
@@ -31,16 +31,17 @@ export interface RecipeCardProps {
     commentCount: number;
     favoriteCount: number;
   },
-  isFavorited: boolean;
-  isEditable: boolean;
+  isFavorited?: boolean;
+  isEditable?: boolean;
 }
 
 export function RecipeCard({
   recipeData = {
-    id: 2,
-    creatorId: 69,
+    id: 0,
+    creatorId: 0,
     name: "Salad",
     description: "A short description of the recipe. So delicous nium nium what an amazing description",
+    rating: 3.5,
     prepTime: 100,
     cookTime: 185,
     difficulty: "Easy",
@@ -53,20 +54,25 @@ export function RecipeCard({
   isFavorited = false,
   isEditable = false
 }: RecipeCardProps) {
-
-  const [authorName, setAuthorName] = React.useState("Gabubu");
+  const [authorName, setAuthorName] = React.useState("Placeholder");
 
   React.useEffect(() => {
-    getAuthor(recipeData.creatorId);
-  }, [recipeData.creatorId]);
+    async function getAuthor(creatorId: number) {
+      try {
+        const response = await axios.get(`/api/users/${creatorId}`);
+        setAuthorName(response.data.name);
+      } catch (error) {
+        console.error(error);
+        setAuthorName("Placeholder");
+      }
+    }
 
-  async function getAuthor(creatorId: number) {
-    axios.get(`/api/users/${creatorId}`)
-    .then(response => {
-      console.log(response.data);
-      setAuthorName(response.data.username);
-    })
-  }
+    if (recipeData.creatorId && recipeData.creatorId !== 0) {
+      getAuthor(recipeData.creatorId);
+    } else if (recipeData.creatorId === 0){
+      setAuthorName("Placeholder");
+    }
+  }, [recipeData.creatorId]);
 
   //Definition of the navigae method from React router
   const navigate = useNavigate();
@@ -81,7 +87,7 @@ export function RecipeCard({
     <Card
       sx={{
         maxWidth: 280,
-        // minWidth: 280,
+        minWidth: 280,
         margin: "auto",
         boxShadow: "0 0 20px 0 rgba(0,0,0,0.12)",
         position: "relative",
@@ -100,8 +106,7 @@ export function RecipeCard({
         isFavorited={isFavorited}
       />
       <CardMedia
-        // image={recipeData.image}
-        image={Salad}
+        image={recipeData.image}
         sx={{
           width: "100%",
           paddingBottom: "56.25%",
@@ -112,7 +117,7 @@ export function RecipeCard({
       <CardContent sx={{ p: 3, position: "relative", zIndex: 2 }}>
         {" "}
         <Stack direction="row" spacing={2} justifyContent="space-between">
-          <CustomizedRating readOnly={true} value={3.5} precision={0.5} />
+          <CustomizedRating readOnly={true} value={recipeData.rating} precision={0.5} />
           {isEditable ? <EditDialog/> : null}
         </Stack>
         <InfoBar

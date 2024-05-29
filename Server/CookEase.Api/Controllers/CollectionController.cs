@@ -1,5 +1,4 @@
 ﻿using Application.DTOs.Collection;
-using Infrastructure.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,6 +6,7 @@ namespace CookEase.Api.Controllers;
 
 [ApiController]
 [Route("api/collections")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class CollectionController : Controller
 {
     CollectionController() { }
