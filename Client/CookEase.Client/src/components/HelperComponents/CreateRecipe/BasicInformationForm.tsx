@@ -10,6 +10,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import DisclaimerText from "../../MainComponents/Miscellaneous/DisclaimerText";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
 interface BasicInformationFormProps {
   onNext: (data: {
@@ -88,16 +89,23 @@ export function BasicInformationForm({
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (!name || !description || !categories || !servings || !ingredients || !instructions) {
-      alert("Please fill in all mandatory fields.");
+      toast.error("Please fill in all mandatory fields.");
       return;
     }
+    if (servings < 1){
+      toast.error("Serving size should at least be 1.");
+      return;
+    }
+    
     // Send form data to parent component
     onNext({ name, description, categories, servings, ingredients, instructions });
   };
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
+      <ToastContainer/>
       <Card sx={{ width: "70%" }}>
         <CardContent
           sx={{

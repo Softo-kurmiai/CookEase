@@ -8,15 +8,64 @@ import Typography from '@mui/material/Typography';
 import background from '../images/AuthorizationPhoto.png'
 import logo from '../images/BlackLogo.png'
 import Link from '@mui/material/Link';
+import Input from "@mui/material/Input";
+import Stack from "@mui/material/Stack";
+import { ToastContainer, toast } from 'react-toastify';
+import { handleFileChange } from '../components/HelperComponents/CreateRecipe/UploadFileUtils';
+import DisclaimerText from '../components/MainComponents/Miscellaneous/DisclaimerText';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignUpSide() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [image, setImage] = React.useState("");
+
+  const navigate = useNavigate();
+
+  const handleNavigationToMainPage = () => {
+    navigate('/');
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const password = data.get('password');
+    const repeatPassword = data.get('repeatPassword');
+
+    if (password !== repeatPassword){
+      toast.error("Passwords do not match!");
+    }
+    else {
+      const combinedData = {
+        name: data.get('username'),
+        email: data.get('email'),
+        password: password,
+        profilePicture: image
+      };
+    
+      console.log(combinedData);
+    
+      try {
+        const response = await axios.post('/api/users', combinedData);
+        console.log('Response:', response.data);
+        navigate('/', { state: { toastMessage: "User created successfully" } });
+      } catch (error) {
+        toast.error("Something bad happened during the request!");
+        console.error('Error creating user:', error);
+      }
+    }
+  };
+
+  const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    handleFileChange(event);
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -35,11 +84,12 @@ export default function SignUpSide() {
               margin: 0
             }}
           >
-             <Paper elevation={0} sx={{ width: '30%'}}>
+             <Paper elevation={0} sx={{ width: '30%', cursor: 'pointer'}}>
                 <img
                 src={logo}
                 alt="CookEase Logo"
                 style={{ width: '100%', display: 'block', objectFit: 'contain', textAlign:'left'}}
+                onClick={handleNavigationToMainPage}
                 />
             </Paper>
             <Typography component="h1" variant="h4">
@@ -63,6 +113,14 @@ export default function SignUpSide() {
                 margin="normal"
                 required
                 fullWidth
+                id="email"
+                label="Email"
+                name="email"
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
                 name="password"
                 label="Password"
                 type="password"
@@ -77,6 +135,34 @@ export default function SignUpSide() {
                 type="password"
                 id="repeatPassword"
               />
+              <ToastContainer />
+              <Stack spacing={2} sx={{ mt: 2 }}>
+                <DisclaimerText>PNG or JPEG, max 10MB</DisclaimerText>
+              </Stack>
+              <Input
+                type="file"
+                onChange={handleFile}
+                style={{ display: "none" }}
+                inputProps={{ accept: "image/*" }}
+                id="upload-photo"
+              />
+              <label htmlFor="upload-photo">
+                <Button
+                  variant="outlined"
+                  component="span"
+                  sx={{
+                    color: "secondary.main",
+                    borderColor: "secondary.main",
+                  }}
+                >
+                  Upload profile picture
+                </Button>
+              </label>
+              {image &&
+                (<Typography component="h6" variant="caption">
+                  Profile picture uploaded.
+                </Typography>)
+              }
               <Button
                 type="submit"
                 fullWidth

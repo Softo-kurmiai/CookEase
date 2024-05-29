@@ -1,14 +1,17 @@
 import IconButton from '@mui/material/IconButton';
 import Add from '@mui/icons-material/Add';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
 interface AddRecipeButton{
   display: boolean;
 }
 
 function AddRecipeButton({display} : AddRecipeButton) {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    console.log('Icon button clicked!');
+    navigate('/CreateRecipe');
   };
 
   return (

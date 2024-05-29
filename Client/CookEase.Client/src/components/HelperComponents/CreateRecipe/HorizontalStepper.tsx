@@ -134,11 +134,8 @@ const navigate = useNavigate();
   
     try {
       const response = await axios.post('/api/recipes', combinedData);
-      toast.success("Recipe created successfully");
       console.log('Response:', response.data);
-      handleReset();
-      toast.success("Recipe successfully created!"); // TODO: Need to somehow transfer toast to another screen
-      navigate('/');
+      navigate('/', { state: { toastMessage: "Recipe successfully created!" } });
     } catch (error) {
       toast.error("Something bad happened during the request!");
       console.error('Error creating recipe:', error);
