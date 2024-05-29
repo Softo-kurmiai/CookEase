@@ -13,6 +13,8 @@ import RecipeDetails from './pages/RecipeDetails.tsx';
 import MyProfilePage from './pages/MyProfilePage.tsx';
 import CreateRecipePage from './pages/CreateRecipePage.tsx';
 import RecipePublisherPage from './pages/RecipePublisherPage.tsx';
+import RecipeCategoryPage from './pages/RecipeCategoryPage.tsx';
+import RecipeSearchPage from './pages/RecipeSearchPage.tsx';
 
 const theme = createTheme({
     palette: {
@@ -59,6 +61,14 @@ const theme = createTheme({
       path:"/RecipePublisherPage",
       element: <RecipePublisherPage/>
     },
+    {
+      path: "/Category/:categoryName",
+      element: <RecipeCategoryPage/>,
+    },
+    {
+      path:"/Search",
+      element: <RecipeSearchPage/>
+    }
   ]);
 
   function App() {
