@@ -13,6 +13,7 @@ import EditDialog from "../HelperComponents/MyRecipes/EditDialog"
 import FancyTimeBlock from "../HelperComponents/RecipeCard/FancyTimeBlock"
 import React from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 
 export interface RecipeCardProps {
@@ -36,7 +37,7 @@ export interface RecipeCardProps {
 
 export function RecipeCard({
   recipeData = {
-    id: 5,
+    id: 2,
     creatorId: 69,
     name: "Salad",
     description: "A short description of the recipe. So delicous nium nium what an amazing description",
@@ -57,7 +58,7 @@ export function RecipeCard({
 
   React.useEffect(() => {
     getAuthor(recipeData.creatorId);
-  }, []);
+  }, [recipeData.creatorId]);
 
   async function getAuthor(creatorId: number) {
     axios.get(`/api/users/${creatorId}`)
@@ -65,6 +66,14 @@ export function RecipeCard({
       console.log(response.data);
       setAuthorName(response.data.username);
     })
+  }
+
+  //Definition of the navigae method from React router
+  const navigate = useNavigate();
+
+  //Move to recipe detail page with the recipeId
+  const handleCardClick = () => {
+    navigate(`/RecipeDetails/${recipeData.id}`);
   };
 
   isEditable == null ? false : true;
@@ -78,6 +87,7 @@ export function RecipeCard({
         position: "relative",
         transition: "0.3s",
       }}
+      onClick={handleCardClick}
     >
       <FavoriteButton
         sx={{
