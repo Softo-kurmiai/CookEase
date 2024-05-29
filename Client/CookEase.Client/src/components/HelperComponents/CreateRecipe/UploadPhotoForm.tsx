@@ -71,40 +71,26 @@ export function UploadPhotoForm({
             Upload photo
           </Typography>
 
-          <div>
-            <ToastContainer
-              position="top-right"
-              autoClose={5000}
-              hideProgressBar={false}
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-            />
-            <ToastContainer />
-            <Input
-              type="file"
-              onChange={handleFile}
-              style={{ display: "none" }} // Hide the input visually
-              inputProps={{ accept: "image/*" }} // Specify accepted file types
-              id="upload-photo"
-            />
-            <label htmlFor="upload-photo">
-              <Button
-                variant="outlined"
-                component="span"
-                sx={{
-                  color: "secondary.main",
-                  borderColor: "secondary.main",
-                }}
-              >
-                Upload Photo
-              </Button>
-            </label>
-          </div>
+          <ToastContainer />
+          <Input
+            type="file"
+            onChange={handleFile}
+            style={{ display: "none" }} // Hide the input visually
+            inputProps={{ accept: "image/*" }} // Specify accepted file types
+            id="upload-photo"
+          />
+          <label htmlFor="upload-photo">
+            <Button
+              variant="outlined"
+              component="span"
+              sx={{
+                color: "secondary.main",
+                borderColor: "secondary.main",
+              }}
+            >
+              Upload Photo
+            </Button>
+          </label>
 
           {image && (
             <div style={{ marginTop: "1rem", textAlign: "center" }}>
