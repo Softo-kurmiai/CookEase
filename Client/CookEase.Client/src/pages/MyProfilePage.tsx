@@ -5,6 +5,7 @@ import ProfileTabPanel from "../components/HelperComponents/ProfilePage/ProfileT
 import ShareButton from "../components/MainComponents/Miscellaneous/ShareButton";
 import EditProfileDialog from "../components/HelperComponents/ProfilePage/EditProfileDialog/EditProfileDialog";
 import Stack from "@mui/material/Stack";
+import { useAuth } from "../utils/AuthContext";
 
 export function MyProfilePage() {
   const profileToDisplay = {
@@ -13,9 +14,12 @@ export function MyProfilePage() {
     Following: 52,
     Image: Gabubu,
   };
+
+  const { user, isAuthenticated } = useAuth();
+
   return (
     <>
-      <ResponsiveMenuBar isAuthenticated={true} />
+      <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
       <ProfileDisplay profileDisplayProps={profileToDisplay} />
       <Stack
         direction="row"

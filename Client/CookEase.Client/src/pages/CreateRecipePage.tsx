@@ -1,12 +1,15 @@
 import ResponsiveMenuBar from "../components/MainComponents/ResponsiveMenuBar";
 import HorizontalStepper from "../components/HelperComponents/CreateRecipe/HorizontalStepper";
 import Typography from '@mui/material/Typography';
+import { useAuth } from "../utils/AuthContext";
 
 
 export function CreateRecipePage() {
+  const { user, isAuthenticated } = useAuth();
+  
   return (
     <>
-      <ResponsiveMenuBar isAuthenticated={true}></ResponsiveMenuBar>
+      <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
       <Typography
         gutterBottom
         variant="h4"

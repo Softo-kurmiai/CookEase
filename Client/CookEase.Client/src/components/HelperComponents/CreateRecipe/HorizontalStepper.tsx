@@ -11,6 +11,7 @@ import { AdditionalInformationForm } from "./AdditionalInformationForm";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../utils/AuthContext";
 
 const steps = ["Basic information", "Add a photo", "Additional information"];
 
@@ -28,6 +29,7 @@ export function HorizontalStepper() {
   const [photoData, setPhotoData] = React.useState({
     image: "",
   });
+  const { user } = useAuth();
 
   type AdditionalFormData = {
     difficulty: string;
@@ -127,7 +129,7 @@ const navigate = useNavigate();
       name: formData.name,
       description: formData.description,
       image: photoData.image,
-      creatorId: 0 // TO-DO implement with user login session
+      creatorId: user?.id
     };
   
     console.log(combinedData);

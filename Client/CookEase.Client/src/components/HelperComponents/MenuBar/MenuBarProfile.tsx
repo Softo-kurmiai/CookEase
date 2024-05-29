@@ -6,15 +6,19 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import { useAuth } from '../../../utils/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface MenuBarProfileProps {
     source?: string;
     display: boolean;
-  }
+}
 
 export default function MenuBarProfile({ source, display }: MenuBarProfileProps){
-    const settings = ['Profile', 'Logout'];
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const { handleLogout } = useAuth(); // Use the handleLogout function from AuthContext
+
+    const navigate = useNavigate();
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -47,11 +51,16 @@ export default function MenuBarProfile({ source, display }: MenuBarProfileProps)
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          {settings.map((setting) => (
-            <MenuItem key={setting} onClick={handleCloseUserMenu}>
-              <Typography textAlign="center">{setting}</Typography>
-            </MenuItem>
-          ))}
+          <MenuItem onClick={handleCloseUserMenu}>
+            <Typography textAlign="center">Profile</Typography>
+          </MenuItem>
+          <MenuItem onClick={() => {
+              handleCloseUserMenu();
+              handleLogout();
+              navigate('/', { state: { toastMessage: "Successfully logged out" } });
+            }}>
+            <Typography textAlign="center">Logout</Typography>
+          </MenuItem>
         </Menu>
       </Box>
     );

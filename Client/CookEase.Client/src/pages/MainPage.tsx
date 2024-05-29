@@ -11,9 +11,11 @@ import FollowedCreators from "../components/HelperComponents/MainPage/FollowedCr
 import { ToastContainer, toast } from "react-toastify";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { useAuth } from "../utils/AuthContext";
 
 export default function MainPage(){
     const isSmallScreen = useMediaQuery((theme : Theme) => theme.breakpoints.down('sm'));
+    const { user, isAuthenticated } = useAuth();
 
     const location = useLocation();
 
@@ -28,7 +30,7 @@ export default function MainPage(){
     return (
         <>
         <ToastContainer/>
-        <ResponsiveMenuBar isAuthenticated={false}></ResponsiveMenuBar>
+        <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
         <MainSearch></MainSearch>
         <FindByCategorySection/>
         <Grid container spacing={2} paddingTop={5} paddingBottom={5}>

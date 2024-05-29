@@ -5,19 +5,20 @@ import Container from "@mui/material/Container";
 import BlackLogo from "../../images/BlackLogo.png";
 import SearchBar from "../HelperComponents/MenuBar/SearchBar";
 import MenuBarProfile from "../HelperComponents/MenuBar/MenuBarProfile";
-import ProfilePicutre from "../../images/Gabubu.jpg";
 import AddRecipeButton from "../HelperComponents/MenuBar/AddRecipeButton";
 import SignUpButton from "../HelperComponents/MenuBar/SignUpButton";
 import LogInButton from "../HelperComponents/MenuBar/LogInButton";
 import MenuBarCategories from "../HelperComponents/MenuBar/MenuBarCategories";
 import Stack from "@mui/material/Stack";
 import { Link } from "react-router-dom";
+import { User } from "../../interfaces/Interfaces";
 
 interface MenuBarProps {
+  user: User | null;
   isAuthenticated: boolean;
 }
 
-function ResponsiveMenuBar({ isAuthenticated = false }: MenuBarProps) {
+function ResponsiveMenuBar(menuProps: MenuBarProps) {
   return (
     <AppBar
       position="static"
@@ -35,10 +36,10 @@ function ResponsiveMenuBar({ isAuthenticated = false }: MenuBarProps) {
           <MenuBarCategories />
           <SearchBar />
           <Stack direction="row" spacing={1}>
-            <AddRecipeButton display={isAuthenticated} />
-            <SignUpButton display={!isAuthenticated} />
-            <LogInButton display={!isAuthenticated} />
-            <MenuBarProfile source={ProfilePicutre} display={isAuthenticated} />
+            <AddRecipeButton display={menuProps.isAuthenticated} />
+            <SignUpButton display={!menuProps.isAuthenticated} />
+            <LogInButton display={!menuProps.isAuthenticated} />
+            <MenuBarProfile source={menuProps.user?.profilePicture ?? ""} display={menuProps.isAuthenticated} />
           </Stack>
         </Toolbar>
       </Container>
