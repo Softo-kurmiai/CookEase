@@ -53,7 +53,9 @@ export default function MainPageSuggestions() {
             ))
           }
         </Stack>
-        <Pagination count={pageCount} page={page} onChange={handleChange} color="primary" />
+        {
+          recipeCount < 4 ? <></> : <Pagination count={pageCount} page={page} onChange={handleChange} color="primary" />
+        }
       </Stack>
     </div>
   );

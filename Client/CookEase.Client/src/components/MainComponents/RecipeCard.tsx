@@ -13,6 +13,7 @@ import EditDialog from "../HelperComponents/MyRecipes/EditDialog"
 import FancyTimeBlock from "../HelperComponents/RecipeCard/FancyTimeBlock"
 import React from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 export interface RecipeCardProps {
   recipeData?:{
@@ -73,6 +74,14 @@ export function RecipeCard({
     }
   }, [recipeData.creatorId]);
 
+  //Definition of the navigae method from React router
+  const navigate = useNavigate();
+
+  //Move to recipe detail page with the recipeId
+  const handleCardClick = () => {
+    navigate(`/RecipeDetails/${recipeData.id}`);
+  };
+
   isEditable == null ? false : true;
   return (
     <Card
@@ -84,6 +93,7 @@ export function RecipeCard({
         position: "relative",
         transition: "0.3s",
       }}
+      onClick={handleCardClick}
     >
       <FavoriteButton
         sx={{

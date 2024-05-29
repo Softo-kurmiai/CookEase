@@ -44,8 +44,8 @@ const theme = createTheme({
       element: <SignInSide/>
     },
     {
-      path:"/RecipeDetails",
-      element: <RecipeDetails/>
+      path: "/RecipeDetails/:id",
+      element: <RecipeDetails />,
     },
     {
       path:"/MyProfilePage",
