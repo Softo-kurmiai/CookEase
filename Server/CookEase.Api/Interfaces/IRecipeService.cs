@@ -46,4 +46,6 @@ public interface IRecipeService
     Task<Error?> IncreaseRecipeMetric(
         int recipeId,
         RecipeMetricsUpdateRequest recipeMetricToIncrease);
+
+    int GetTotalNumberOfRecipes();
 }

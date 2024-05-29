@@ -6,6 +6,7 @@ namespace CookEase.Api.Controllers;
 
 [ApiController]
 [Route("api/favoriteRecipes")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class FavoriteRecipeController : Controller
 {
     public FavoriteRecipeController() { }
