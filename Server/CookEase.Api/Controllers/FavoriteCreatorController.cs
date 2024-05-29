@@ -6,6 +6,7 @@ namespace CookEase.Api.Controllers;
 
 [ApiController]
 [Route("api/favoriteCreators")]
+[ApiExplorerSettings(IgnoreApi = true)]
 public class FavoriteCreatorController : Controller
 {
     public FavoriteCreatorController(){}

@@ -372,6 +372,11 @@ public class RecipeService : IRecipeService
         return null;
     }
 
+    public int GetTotalNumberOfRecipes()
+    {
+        return _recipeRepository.GetNumberOfRecipesInDatabase();
+    }
+
     private async Task<RecipeResponse?> GetRecipeByIdFromDatabase(
         int recipeId)
     {

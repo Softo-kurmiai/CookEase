@@ -3,18 +3,62 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import CustomizedRating from "../HelperComponents/RecipeCard/StyledRating";
-import SaladPicture from "../../images/salad.jpg"
 import InfoBar from "../HelperComponents/RecipeCard/InfoBar";
+import React from "react";
+import axios from "axios";
 
-export function SmallRecipeCard() {
+interface SmallRecipeCardProps {
+  recipeData?:{
+    id: number;
+    creatorId: number;
+    name: string;
+    rating: number;
+    image: string;
+    viewCount: number;
+    commentCount: number;
+    favoriteCount: number;
+  }
+}
+
+export function SmallRecipeCard({
+  recipeData = {
+    id: 0,
+    creatorId: 0,
+    name: "Placeholder recipe",
+    rating: 4.5,
+    image: "",
+    viewCount: 5121,
+    commentCount: 10,
+    favoriteCount: 121
+  }
+}: SmallRecipeCardProps) {
+
+  const [authorName, setAuthorName] = React.useState("Placeholder");
+
+  React.useEffect(() => {
+    async function getAuthor(creatorId: number) {
+      try {
+        const response = await axios.get(`/api/users/${creatorId}`);
+        setAuthorName(response.data.name);
+      } catch (error) {
+        console.error(error);
+        setAuthorName("Placeholder");
+      }
+    }
+
+    if (recipeData.creatorId && recipeData.creatorId !== 0) {
+      getAuthor(recipeData.creatorId);
+    } else if (recipeData.creatorId === 0){
+      setAuthorName("Placeholder");
+    }
+  }, [recipeData.creatorId]);
+
   return (
     <Card
       sx={{ display: "flex", padding: 2, borderRadius: "16px", width:"100%", maxHeight:'130px' }}
     >
         <CardMedia
-        image={
-          SaladPicture
-        }
+        image={recipeData.image}
         sx={{
           minWidth: "25%",
           maxWidth: "25%",
@@ -37,11 +81,11 @@ export function SmallRecipeCard() {
               display: "inline-block",
             }}
           >
-            Neapolitan Style Pizza{" "}
+            {recipeData.name}{" "}
           </Box>
           <CustomizedRating
           readOnly={true}
-          value={3.5}
+          value={recipeData.rating}
           precision={0.5} />
           
         </Box>
@@ -49,7 +93,7 @@ export function SmallRecipeCard() {
           component="p"
           sx={{ fontSize: 14, color: "grey.500", mb: "1.275rem" }}
         >
-          <InfoBar author="By Gabubu" viewCount={1328} likeCount={120} commentCount={15} />
+          <InfoBar author={authorName} viewCount={recipeData.viewCount} likeCount={recipeData.favoriteCount} commentCount={recipeData.commentCount} />
         </Box>
       </CardContent>
     </Card>
