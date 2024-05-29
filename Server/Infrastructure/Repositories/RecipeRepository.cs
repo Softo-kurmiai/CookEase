@@ -80,10 +80,11 @@ public class RecipeRepository : GenericRepository<Recipe>, IRecipeRepository
         return recipe;
     }
 
+    // Current implementation will return top viewed recipes
     public async Task<List<Recipe>> GetNumberOfTopLikedRecipes(int maxNumberOfRecipes)
     {
         return await _recipes
-            .OrderByDescending(x => x.FavoriteCount)
+            .OrderByDescending(x => x.ViewCount)
             .ThenByDescending(x => x.CreatedDate)
             .Take(maxNumberOfRecipes)
             .ToListAsync() ?? [];
@@ -95,5 +96,10 @@ public class RecipeRepository : GenericRepository<Recipe>, IRecipeRepository
             .OrderBy(x => Guid.NewGuid())
             .Take(maxNumberOfRecipes)
             .ToListAsync() ?? [];
+    }
+
+    public int GetNumberOfRecipesInDatabase()
+    {
+        return _recipes.Count();
     }
 }

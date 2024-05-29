@@ -2,9 +2,9 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import Salad from "../../images/salad.jpg";
 import CustomizedRating from "../HelperComponents/RecipeCard/StyledRating";
 import InfoTypography from "../HelperComponents/RecipeCard/InfoTypography";
+import Salad from "../../images/salad.jpg";
 import Stack from "@mui/material/Stack";
 import { Schedule, ThumbUp, Group } from "@mui/icons-material";
 import FavoriteButton from "../HelperComponents/RecipeCard/FavoriteButton";
@@ -30,14 +30,14 @@ export interface RecipeCardProps {
     commentCount: number;
     favoriteCount: number;
   },
-  isFavorited: boolean;
-  isEditable: boolean;
+  isFavorited?: boolean;
+  isEditable?: boolean;
 }
 
 export function RecipeCard({
   recipeData = {
-    id: 5,
-    creatorId: 69,
+    id: 0,
+    creatorId: 0,
     name: "Salad",
     description: "A short description of the recipe. So delicous nium nium what an amazing description",
     rating: 3.5,
@@ -53,27 +53,32 @@ export function RecipeCard({
   isFavorited = false,
   isEditable = false
 }: RecipeCardProps) {
-
-  const [authorName, setAuthorName] = React.useState("Gabubu");
+  const [authorName, setAuthorName] = React.useState("Placeholder");
 
   React.useEffect(() => {
-    getAuthor(recipeData.creatorId);
-  }, []);
+    async function getAuthor(creatorId: number) {
+      try {
+        const response = await axios.get(`/api/users/${creatorId}`);
+        setAuthorName(response.data.name);
+      } catch (error) {
+        console.error(error);
+        setAuthorName("Placeholder");
+      }
+    }
 
-  async function getAuthor(creatorId: number) {
-    axios.get(`/api/users/${creatorId}`)
-    .then(response => {
-      console.log(response.data);
-      setAuthorName(response.data.username);
-    })
-  };
+    if (recipeData.creatorId && recipeData.creatorId !== 0) {
+      getAuthor(recipeData.creatorId);
+    } else if (recipeData.creatorId === 0){
+      setAuthorName("Placeholder");
+    }
+  }, [recipeData.creatorId]);
 
   isEditable == null ? false : true;
   return (
     <Card
       sx={{
         maxWidth: 280,
-        // minWidth: 280,
+        minWidth: 280,
         margin: "auto",
         boxShadow: "0 0 20px 0 rgba(0,0,0,0.12)",
         position: "relative",
@@ -91,8 +96,7 @@ export function RecipeCard({
         isFavorited={isFavorited}
       />
       <CardMedia
-        // image={recipeData.image}
-        image={Salad}
+        image={recipeData.image}
         sx={{
           width: "100%",
           paddingBottom: "56.25%",

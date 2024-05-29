@@ -6,21 +6,34 @@ import axios from 'axios';
 
 export default function MainPageSuggestions() {
   const [page, setPage] = React.useState(1);
-  const [cardsPerPage, setCardsPerPage] = React.useState(3);
+  const [cardsPerPage] = React.useState(3);
   const [recipes, setRecipes] = React.useState([]);
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const [recipeCount, setRecipeCount] = React.useState(1);
+  const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
-  //call axios each time page changes
+
   React.useEffect(() => {
     getRandomRecipes();
-  }, [page, cardsPerPage]);
+    getRecipeCount();
+  }, [page]);
 
   async function getRandomRecipes(){
-    axios.get(`/api/recipes?recipesPerPage=${cardsPerPage}&page=${page}`)
+    axios.get(`/api/recipes/random?maxNumberOfRecipes=${cardsPerPage}`)
     .then(response => {
       console.log(response.data);
       setRecipes(response.data);
+    })
+    .catch(_ => {
+      console.log("Something bad happened during the request!");
+    });
+  }
+
+  async function getRecipeCount(){
+    axios.get(`/api/recipes/count`)
+    .then(response => {
+      console.log(response.data);
+      setRecipeCount(response.data);
     })
     .catch(_ => {
       console.log("Something bad happened during the request!");
@@ -35,7 +48,7 @@ export default function MainPageSuggestions() {
             <RecipeCard recipeData={recipes[1]}></RecipeCard>
             <RecipeCard recipeData={recipes[2]}></RecipeCard>
           </Stack>
-          <Pagination count={10} page={page} onChange={handleChange} color="primary"/>
+          <Pagination count={Math.ceil(recipeCount/cardsPerPage)} page={page} onChange={handleChange} color="primary"/>
         </Stack>
       </div>
   );
