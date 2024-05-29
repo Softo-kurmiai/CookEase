@@ -1,13 +1,16 @@
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
 interface LogInButtonProps {
     display: boolean;
 }
 
 function LogInButton({display} : LogInButtonProps) {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    console.log('Icon button clicked!');
+    navigate('/SignIn');
   };
 
   return (
@@ -27,7 +30,7 @@ function LogInButton({display} : LogInButtonProps) {
       }}
     >
       <Typography variant="body2"
-        sx={{ color: '#FFFFFF', marginLeft: '8px', pr: '7px', fontWeight: 700}}>Log in</Typography>
+        sx={{ color: '#FFFFFF', marginLeft: '8px', pr: '7px', fontWeight: 700}}>Login</Typography>
     </Button>
   );
 }

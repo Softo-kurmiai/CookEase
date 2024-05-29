@@ -10,11 +10,13 @@ import SimilarRecipes from '../components/HelperComponents/RecipeDetailPage/Revi
 import RecommendedRecipes from '../components/HelperComponents/RecipeDetailPage/Reviews/RecommendedRecipes';
 import CommentSection from '../components/HelperComponents/RecipeDetailPage/Reviews/CommentSection';
 import { RecipeData } from '../interfaces/RecipeDetailsInterfaces';
+import { useAuth } from '../utils/AuthContext';
 
 export default function RecipeDetails() {
   const { id } = useParams();
   const [recipeData, setRecipeData] = useState<RecipeData | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     axios.get(`/api/recipes/${id}/full`)
@@ -35,7 +37,7 @@ export default function RecipeDetails() {
 
   return (
     <>
-      <ResponsiveMenuBar isAuthenticated />
+      <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
       <Stack sx={{ padding: '2rem' }}>
         <Grid container spacing={2} columns={16}>
           <Grid xs={11}>

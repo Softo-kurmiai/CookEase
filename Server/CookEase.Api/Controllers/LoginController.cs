@@ -26,9 +26,9 @@ public class LoginController : ControllerBase
     {
         try
         {
-            var loginResponce = await _loginService.Authenticate(loginRequest);
+            var loginResponse = await _loginService.Authenticate(loginRequest);
 
-            return Ok(loginResponce);
+            return Ok(loginResponse);
         } 
         catch (NullReferenceException) 
         {

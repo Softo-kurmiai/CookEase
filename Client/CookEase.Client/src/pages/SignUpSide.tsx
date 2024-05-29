@@ -43,8 +43,6 @@ export default function SignUpSide() {
         profilePicture: image
       };
     
-      console.log(combinedData);
-    
       try {
         const response = await axios.post('/api/users', combinedData);
         console.log('Response:', response.data);
@@ -171,7 +169,7 @@ export default function SignUpSide() {
               >
                 Sign up
               </Button>
-
+              
               <Typography component="h6" variant="caption">
                   Already have an account?{' '}
                   <Link href="/SignIn" variant="body2" sx={{ marginRigt: '20px' }}>
