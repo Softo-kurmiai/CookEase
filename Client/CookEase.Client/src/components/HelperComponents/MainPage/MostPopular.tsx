@@ -8,15 +8,14 @@ export function MostPopular(){
 
     React.useEffect(() => {
         async function getTopLikedRecipes(){
-            axios.get(`/api/recipes/topLiked?maxNumberOfRecipes=3`)
-            .then(response => {
-              console.log(response.data);
-              setRecipes(response.data);
-            })
-            .catch(_ => {
-              console.log("Something bad happened during the request!");
-            });
-          }
+            try {
+                const response = await axios.get(`/api/recipes/topLiked?maxNumberOfRecipes=3`);
+                console.log(response.data);
+                setRecipes(response.data);
+            } catch (error) {
+                console.log("Something bad happened during the request!", error);
+            }
+        }
 
         getTopLikedRecipes();
     }, []);
