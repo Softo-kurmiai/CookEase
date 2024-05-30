@@ -9,6 +9,8 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Rating from '@mui/material/Rating';
 import Gabubu from "../../../../images/Gabubu.jpg";
+import { useAuth } from '../../../../utils/AuthContext';
+
 
 const ReviewForm = styled('form')({
   width: '100%',
@@ -28,12 +30,12 @@ const SendButton = styled(Button)({
 });
 
 interface ReviewCardProps {
-  isAuthenticated: boolean;
 }
 
-const ReviewCard: React.FC<ReviewCardProps> = ({ isAuthenticated }) => {
-  const [value, setValue] = useState<number>(0); // For storing rating value
-  const [reviewText, setReviewText] = useState<string>(''); // For storing review text
+const ReviewCard: React.FC<ReviewCardProps> = () => {
+  const [value, setValue] = useState<number>(0);
+  const [reviewText, setReviewText] = useState<string>('');
+  const { user, isAuthenticated } = useAuth();
 
   // Function to handle form submission
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

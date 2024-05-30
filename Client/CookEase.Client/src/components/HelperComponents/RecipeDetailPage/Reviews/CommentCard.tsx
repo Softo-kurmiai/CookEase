@@ -4,12 +4,13 @@ import CustomizedRating from "../../../HelperComponents/RecipeCard/StyledRating"
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
-import { ThumbUp } from "@mui/icons-material";
 import Grid from "@mui/material/Unstable_Grid2";
 import axios from "axios";
 import React, { useState } from "react";
 import CustomToastContainer from "../../../../utils/Notifications/CustomToastContainer.tsx"
 import { showToastError } from "../../../../utils/Notifications/toastUtils.ts";
+import ThumbsUpComponent from "./CommentThumbsUp.tsx";
+import { useAuth } from "../../../../utils/AuthContext.tsx";
 
 interface Comment {
   id: number;
@@ -39,7 +40,7 @@ interface Author {
 export function CommentCard({ comment }: CommentCardProps) {
 
   const [author, setAuthor] = useState<Author | null>(null);
-  const [commentLike, setCommentLike] = useState<number | null>(null);
+  const { user, isAuthenticated } = useAuth();
 
   React.useEffect(() => {
     async function getAuthor(creatorId: number) {
@@ -59,25 +60,6 @@ export function CommentCard({ comment }: CommentCardProps) {
       setAuthor(null);
     }
   }, [comment.userId, comment.id]);
-
-  React.useEffect(() => {
-    async function getCommentLike(commentId: number) {
-      try {
-        const response = await axios.get(`/api/comments/comment/${commentId}/totalLikeCount`);
-        setCommentLike(response.data);
-      } catch (error) {
-        console.error(error);
-        setCommentLike(0);
-      }
-    }
-
-    if (comment.id && comment.id != 0) {
-      getCommentLike(comment.id);
-    } else if (comment.id === 0) {
-      setCommentLike(0);
-    }
-  }, [comment.id]);
-
 
   return (
     <Card
@@ -145,16 +127,7 @@ export function CommentCard({ comment }: CommentCardProps) {
               pt: "0.5rem",
             }}
           >
-            <ThumbUp sx={{ color: "info.main" }} />
-            <Typography
-              variant="body2"
-              sx={{
-                textDecoration: "underline",
-                color: "info.main",
-              }}
-            >
-              {commentLike} people found this helpful
-            </Typography>
+             <ThumbsUpComponent commentId={comment.id} userId={user == null ? null : user.id} isAuthenticated={isAuthenticated}></ThumbsUpComponent>
           </Stack>
         </Stack>
       </CardContent>

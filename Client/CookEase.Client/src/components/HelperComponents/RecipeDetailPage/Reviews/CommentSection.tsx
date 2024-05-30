@@ -14,12 +14,12 @@ interface CommentSectionProps {
   isAuthenticated: boolean;
 }
 
-export function CommentSection({ recipeId, user, isAuthenticated }: CommentSectionProps) {
+export function CommentSection({ recipeId}: CommentSectionProps) {
   const [comments, setComments] = useState([]);
   const [commentCount, setCommentCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
 
-  const commentsPerPage = 8;
+  const commentsPerPage = 2;
 
   useEffect(() => {
     async function getComments(recipeId: string) {
