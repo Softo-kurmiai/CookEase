@@ -27,18 +27,22 @@ const SendButton = styled(Button)({
   width: '100%',
 });
 
-const ReviewCard = () => {
+interface ReviewCardProps {
+  isAuthenticated: boolean;
+}
+
+const ReviewCard: React.FC<ReviewCardProps> = ({ isAuthenticated }) => {
   const [value, setValue] = useState<number>(0); // For storing rating value
   const [reviewText, setReviewText] = useState<string>(''); // For storing review text
 
   // Function to handle form submission
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submission behavior
     // Process review submission here
     console.log('Review submitted:', { rating: value, reviewText });
     // Reset form fields after submission
     setValue(0);
     setReviewText('');
-    e.preventDefault(); // Prevent default form submission behavior
   };
 
   // Function to handle changes in the review text field
@@ -46,10 +50,14 @@ const ReviewCard = () => {
     setReviewText(e.target.value);
   };
 
+  // Function to handle rating change
   const handleRatingChange = (newValue: number | null) => {
-
     setValue(newValue ?? 0);
   };
+
+  if (!isAuthenticated) return <Typography variant="h5" sx={{ fontWeight: 600, mt: "0.7rem" }}>
+    You can only leave review when logged in.
+    </Typography>;
 
   return (
     <Card

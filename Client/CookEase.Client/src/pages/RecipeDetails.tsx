@@ -7,7 +7,6 @@ import ResponsiveMenuBar from '../components/MainComponents/ResponsiveMenuBar';
 import RecipeDetailCard from '../components/HelperComponents/RecipeDetailPage/RecipeCard/RecipeDetailCard';
 import LeaveReviewCard from '../components/HelperComponents/RecipeDetailPage/Reviews/LeaveReviewCard';
 import SimilarRecipes from '../components/HelperComponents/RecipeDetailPage/Reviews/SimilarRecipes';
-import RecommendedRecipes from '../components/HelperComponents/RecipeDetailPage/Reviews/RecommendedRecipes';
 import CommentSection from '../components/HelperComponents/RecipeDetailPage/Reviews/CommentSection';
 import { RecipeData } from '../interfaces/RecipeDetailsInterfaces';
 import { useAuth } from '../utils/AuthContext';
@@ -45,11 +44,10 @@ export default function RecipeDetails() {
           </Grid>
           <Grid xs={5}>
             <SimilarRecipes />
-            <RecommendedRecipes />
           </Grid>
         </Grid>
-        <LeaveReviewCard />
-        <CommentSection />
+        <LeaveReviewCard show={isAuthenticated}/>
+        {id == undefined ? <></> : <CommentSection recipeId={id} user={user} isAuthenticated={isAuthenticated}/>}
       </Stack>
     </>
   );
