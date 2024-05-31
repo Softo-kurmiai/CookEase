@@ -98,4 +98,18 @@ public class UserController : ControllerBase
 
         return Ok(user);
     }
+
+    [HttpPut("{id}/change-password")]
+    public async Task<ActionResult<UserResponse>> ChangePassword(
+        [Required] [FromRoute] int id,
+        [Required] [FromQuery] string newPassword)
+    {
+        var user = await _userService.ChangeUserPassword(id, newPassword);
+        if (user is null)
+        {
+            return NotFound("User not found");
+        }
+
+        return Ok(user);
+    }
 }

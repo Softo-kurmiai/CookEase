@@ -28,6 +28,10 @@ export default function MenuBarProfile({ source, display }: MenuBarProfileProps)
         setAnchorElUser(null);
     };
 
+    const handleViewProfile = () => {
+        navigate('/MyProfilePage');
+    }
+
     return (
         <Box sx={{ flexGrow: 0, display: display ? 'block' : 'none' }}>
         <Tooltip title="Open settings">
@@ -51,7 +55,10 @@ export default function MenuBarProfile({ source, display }: MenuBarProfileProps)
           open={Boolean(anchorElUser)}
           onClose={handleCloseUserMenu}
         >
-          <MenuItem onClick={handleCloseUserMenu}>
+          <MenuItem onClick={() => {
+            handleCloseUserMenu();
+            handleViewProfile();
+          }}>
             <Typography textAlign="center">Profile</Typography>
           </MenuItem>
           <MenuItem onClick={() => {

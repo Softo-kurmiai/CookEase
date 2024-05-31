@@ -4,5 +4,7 @@ namespace Infrastructure.Interfaces;
 
 public interface IUserRepository : IGenericRepository<User>
 {
-    public Task<User?> GetUserByUsername(string username);
+    Task<User?> GetUserByUsername(string username);
+
+    Task<User?> ChangeUserPassword(int userId, string password);
 }

@@ -54,7 +54,7 @@ export default function SignUpSide() {
     }
   };
 
-  const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleFileChange(event);
     const file = event.target.files?.[0];
     if (file) {

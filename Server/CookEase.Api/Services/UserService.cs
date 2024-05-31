@@ -1,12 +1,9 @@
-﻿using Application.DTOs.Recipe;
-using Application.DTOs.User;
+﻿using Application.DTOs.User;
 using AutoMapper;
 using CookEase.Api.Interfaces;
 using Infrastructure.Interfaces;
 using Infrastructure.Models;
-using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace CookEase.Api.Services;
 
@@ -66,15 +63,15 @@ public class UserService : IUserService
 
         user.Name = request.Name;
         user.Email = request.Email;
-        user.Password = request.Password;
+        user.Password = request.Password ?? user.Password;
         user.Description = request.Description;
         user.ProfilePicture = request.ProfilePicture;
         user.UpdatedAt = DateTime.UtcNow;
 
         try
         {
-            var userDBResponse = await _userRepository.Update(user, request.Version);
-            var mappedUser = _mapper.Map<UserResponse>(userDBResponse);
+            var userDbResponse = await _userRepository.Update(user, request.Version);
+            var mappedUser = _mapper.Map<UserResponse>(userDbResponse);
             return mappedUser;
         }
         catch (DbUpdateConcurrencyException ex)
@@ -131,13 +128,26 @@ public class UserService : IUserService
 
     public async Task<UserResponse?> Delete(int id)
     {
-        var userDbResponce = await _userRepository.Delete(id);
-        if (userDbResponce is null)
+        var userDbResponse = await _userRepository.Delete(id);
+        if (userDbResponse is null)
         {
             return null;
         }
 
-        var mappedUser = _mapper.Map<UserResponse>(userDbResponce);
+        var mappedUser = _mapper.Map<UserResponse>(userDbResponse);
+
+        return mappedUser;
+    }
+
+    public async Task<UserResponse?> ChangeUserPassword(int userId, string password)
+    {
+        var user = await _userRepository.ChangeUserPassword(userId, password);
+        if (user is null)
+        {
+            return null;
+        }
+
+        var mappedUser = _mapper.Map<UserResponse>(user);
 
         return mappedUser;
     }

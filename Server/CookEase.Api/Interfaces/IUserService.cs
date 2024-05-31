@@ -13,4 +13,6 @@ public interface IUserService
     Task<UserResponse?> Update(int id, UserUpdateRequest request);
 
     Task<UserResponse?> Delete(int id);
+
+    Task<UserResponse?> ChangeUserPassword(int userId, string password);
 }

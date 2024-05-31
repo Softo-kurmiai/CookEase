@@ -6,6 +6,7 @@ import ShareButton from "../components/MainComponents/Miscellaneous/ShareButton"
 import FollowButton from "../components/MainComponents/Miscellaneous/FollowButton";
 import Typography from "@mui/material/Typography";
 import RecipesDisplay from "../components/HelperComponents/MyRecipes/RecipesDisplay";
+import { useAuth } from "../utils/AuthContext";
 
 export function RecipePublisherPage() {
   const profileToDisplay = {
@@ -15,9 +16,11 @@ export function RecipePublisherPage() {
     Image: Bubu,
   };
 
+  const { user, isAuthenticated } = useAuth();
+
   return (
     <>
-      <ResponsiveMenuBar isAuthenticated={true}></ResponsiveMenuBar>
+      <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
       <ProfileDisplay profileDisplayProps={profileToDisplay}></ProfileDisplay>
       <Stack
         direction="row"
