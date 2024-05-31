@@ -138,17 +138,4 @@ public class UserService : IUserService
 
         return mappedUser;
     }
-
-    public async Task<UserResponse?> ChangeUserPassword(int userId, string password)
-    {
-        var user = await _userRepository.ChangeUserPassword(userId, password);
-        if (user is null)
-        {
-            return null;
-        }
-
-        var mappedUser = _mapper.Map<UserResponse>(user);
-
-        return mappedUser;
-    }
 }

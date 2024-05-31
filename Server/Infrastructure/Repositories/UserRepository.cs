@@ -19,18 +19,4 @@ public class UserRepository : GenericRepository<User>, IUserRepository
     {
         return await _users.Where(x => x.Name == username).SingleOrDefaultAsync();
     }
-
-    public async Task<User?> ChangeUserPassword(int userId, string password)
-    {
-        var user = await _users.FindAsync(userId);
-        if (user is null)
-        {
-            return null;
-        }
-
-        user.Password = password;
-        _users.Update(user);
-        await _context.SaveChangesAsync();
-        return user;
-    }
 }
