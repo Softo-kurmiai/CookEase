@@ -93,7 +93,12 @@ export function SmallRecipeCard({
           component="p"
           sx={{ fontSize: 14, color: "grey.500", mb: "1.275rem" }}
         >
-          <InfoBar author={authorName} viewCount={recipeData.viewCount} likeCount={recipeData.favoriteCount} commentCount={recipeData.commentCount} />
+          <InfoBar
+            author={authorName}
+            viewCount={recipeData.viewCount}
+            likeCount={recipeData.favoriteCount}
+            commentCount={recipeData.commentCount}
+            creatorId={recipeData.creatorId}/>
         </Box>
       </CardContent>
     </Card>

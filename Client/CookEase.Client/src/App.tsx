@@ -58,7 +58,7 @@ const theme = createTheme({
       element: <CreateRecipePage/>
     },
     {
-      path:"/RecipePublisherPage",
+      path:"/RecipePublisherPage/:id",
       element: <RecipePublisherPage/>
     },
     {

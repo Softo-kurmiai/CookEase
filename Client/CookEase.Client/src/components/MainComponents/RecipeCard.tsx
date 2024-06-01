@@ -93,7 +93,6 @@ export function RecipeCard({
         position: "relative",
         transition: "0.3s",
       }}
-      onClick={handleCardClick}
     >
       <FavoriteButton
         sx={{
@@ -113,6 +112,7 @@ export function RecipeCard({
           backgroundColor: "rgba(0, 0, 0, 0.08)",
           position: "relative",
         }}
+        onClick={handleCardClick}
       />
       <CardContent sx={{ p: 3, position: "relative", zIndex: 2 }}>
         {" "}
@@ -125,6 +125,7 @@ export function RecipeCard({
           viewCount={recipeData.viewCount}
           likeCount={recipeData.favoriteCount}
           commentCount={recipeData.commentCount}
+          creatorId={recipeData.creatorId}
         />
         <Stack
           spacing={2}

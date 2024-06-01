@@ -10,7 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 export function MyProfilePage() {
   const { user, isAuthenticated } = useAuth();
   const profileToDisplay = {
-    Name: user?.name!,
+    Name: user?.name ?? "",
     Followers: 0,
     Following: 0,
     Image: user?.profilePicture ?? "",
