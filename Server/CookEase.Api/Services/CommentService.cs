@@ -11,13 +11,16 @@ namespace CookEase.Api.Services;
 public class CommentService : ICommentService
 {
     private readonly ICommentRepository _commentRepository;
+    private readonly ICommentLikeRepository _commentLikeRepository;
     private readonly IMapper _mapper;
 
     public CommentService(
         ICommentRepository commentRepository,
+        ICommentLikeRepository commentLikeRepository,
         IMapper mapper)
     {
         _commentRepository = commentRepository;
+        _commentLikeRepository = commentLikeRepository;
         _mapper = mapper;
     }
 
@@ -77,28 +80,43 @@ public class CommentService : ICommentService
         return await _commentRepository.GetRecipeRating(recipeId);
     }
 
-    public int GetRecipeCommentsCount(int recipeId)
+    public (int? count, Error? error) GetRecipeCommentsCount(int recipeId)
     {
-        return _commentRepository.GetCommentCountForRecipe(recipeId);
+        int count;
+        try
+        {
+            count = _commentRepository.GetCommentCountForRecipe(recipeId);
+        }
+        catch (Exception e)
+        {
+            return (null, new Error
+            {
+                ErrorMessage = "An error has occured:" + e.Message
+            });
+        }
+
+        return (count, null);
     }
 
-    // Implementation should be changed
-    public async Task<Error?> UpdateLikeCount(
+    public async Task UpdateLikeCount(
         int commentId,
+        int userId,
         CommentLikeUpdateRequest request)
     {
-        var dbResponse = request.Action switch
+        Task dbResponse = request.Action switch
         {
-            CommentLikeAction.Increase => await _commentRepository.IncreaseCommentLikeCount(commentId),
-            CommentLikeAction.Decrease => await _commentRepository.DecreaseCommentLikeCount(commentId),
+            CommentLikeAction.Increase => _commentLikeRepository.CreateCommentLike(commentId, userId),
+            CommentLikeAction.Decrease => _commentLikeRepository.DeleteCommentLike(commentId, userId),
             _ => throw new ArgumentOutOfRangeException(
                 $"The specified CommentLikeAction {request.Action} is not supported.")
         };
-        if (dbResponse is null)
-        {
-            return new Error { ErrorMessage = $"Comment with id {commentId} was not found" };
-        }
 
-        return null;
+        await dbResponse;
+    }
+
+    public async Task<int> GetCommentLikes(int commentId)
+    {
+        var result = await _commentLikeRepository.GetCommentLikes(commentId);
+        return result;
     }
 }

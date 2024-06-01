@@ -101,7 +101,16 @@ public class RecipeService : IRecipeService
         }
 
         mappedRecipeResponse.RecipeNutrition = mappedRecipeNutritionResponse;
-        mappedRecipeResponse.CommentCount = _commentService.GetRecipeCommentsCount(recipeId);
+        (mappedRecipeResponse.CommentCount, var error) = _commentService.GetRecipeCommentsCount(recipeId);
+
+        if (error is not null)
+        {
+            return (null,
+                new Error
+                {
+                    ErrorMessage = $"Could not retrieve recipe {recipeId} comments"
+                });
+        }
 
         await _recipeRepository.IncreaseRecipeViewCount(recipeId);
 
@@ -126,13 +135,9 @@ public class RecipeService : IRecipeService
                 });
         }
 
-        foreach (var recipe in mappedRecipes)
-        {
-            recipe.Rating = await _commentService.GetRecipeRating(recipe.Id);
-            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
-        }
+        (mappedRecipes, var error) = await FillMappedRecipes(mappedRecipes);
 
-        return (mappedRecipes, null);
+        return (mappedRecipes, error);
     }
 
     public async Task<List<RecipeCardResponse>> GetNumberOfTopLikedRecipeCards(
@@ -140,11 +145,8 @@ public class RecipeService : IRecipeService
     {
         var recipes = await _recipeRepository.GetNumberOfTopLikedRecipes(maxNumberOfRecipes);
         var mappedRecipes = _mapper.Map<List<RecipeCardResponse>>(recipes);
-        foreach (var recipe in mappedRecipes)
-        {
-            recipe.Rating = await _commentService.GetRecipeRating(recipe.Id);
-            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
-        }
+
+        (mappedRecipes, _) = await FillMappedRecipes(mappedRecipes);
 
         return mappedRecipes ?? [];
     }
@@ -154,11 +156,8 @@ public class RecipeService : IRecipeService
     {
         var recipes = await _recipeRepository.GetNumberOfRandomRecipes(maxNumberOfRecipes);
         var mappedRecipes = _mapper.Map<List<RecipeCardResponse>>(recipes);
-        foreach (var recipe in mappedRecipes)
-        {
-            recipe.Rating = await _commentService.GetRecipeRating(recipe.Id);
-            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
-        }
+
+        (mappedRecipes, _) = await FillMappedRecipes(mappedRecipes);
 
         return mappedRecipes ?? [];
     }
@@ -280,13 +279,9 @@ public class RecipeService : IRecipeService
                 });
         }
 
-        foreach (var recipe in mappedRecipes)
-        {
-            recipe.Rating = await _commentService.GetRecipeRating(recipe.Id);
-            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
-        }
+        (mappedRecipes, var error) = await FillMappedRecipes(mappedRecipes);
 
-        return (mappedRecipes, null);
+        return (mappedRecipes, error);
     }
 
     public async Task<(List<RecipeCardResponse>? creatorRecipes, Error? error)> GetRecipeCardsByCategoryName(
@@ -316,13 +311,9 @@ public class RecipeService : IRecipeService
                 });
         }
 
-        foreach (var recipe in mappedRecipes)
-        {
-            recipe.Rating = await _commentService.GetRecipeRating(recipe.Id);
-            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
-        }
+        (mappedRecipes, var error) = await FillMappedRecipes(mappedRecipes);
 
-        return (mappedRecipes, null);
+        return (mappedRecipes, error);
     }
 
     public async Task<(List<RecipeCardResponse>? recipesFound, Error? error)> SearchRecipeCardsByName(
@@ -344,13 +335,9 @@ public class RecipeService : IRecipeService
                 });
         }
 
-        foreach (var recipe in mappedRecipes)
-        {
-            recipe.Rating = await _commentService.GetRecipeRating(recipe.Id);
-            recipe.CommentCount = _commentService.GetRecipeCommentsCount(recipe.Id);
-        }
+        (mappedRecipes, var error) = await FillMappedRecipes(mappedRecipes);
 
-        return (mappedRecipes, null);
+        return (mappedRecipes, error);
     }
 
     public async Task<Error?> IncreaseRecipeMetric(
@@ -406,5 +393,20 @@ public class RecipeService : IRecipeService
         var mappedRecipeNutritionResponse = _mapper.Map<RecipeNutritionResponse>(recipeNutrition);
 
         return mappedRecipeNutritionResponse;
+    }
+
+    private async Task<(List<RecipeCardResponse>?, Error? error)> FillMappedRecipes(List<RecipeCardResponse>? mappedRecipes)
+    {
+        if (mappedRecipes == null)
+        {
+            return (mappedRecipes, null);
+        }
+
+        foreach (var recipe in mappedRecipes)
+        {
+            recipe.Rating = await _commentService.GetRecipeRating(recipe.Id);
+            (recipe.CommentCount, _ ) = _commentService.GetRecipeCommentsCount(recipe.Id);
+        }
+        return (mappedRecipes, null);
     }
 }

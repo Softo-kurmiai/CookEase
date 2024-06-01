@@ -14,6 +14,7 @@ import Vegan from "../images/CategoryImages/vegan.jpg";
 import { useParams, Navigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 
+
 export function RecipeCategoryPage() {
   const { categoryName } = useParams();
   const { user, isAuthenticated } = useAuth();
@@ -92,7 +93,7 @@ export function RecipeCategoryPage() {
   };
 
   if (!categoryName || !(categoryName in categoryDetails)) {
-    return <Navigate to="/404" />;
+      return <Navigate to="/404">Go to 404 page</Navigate>;
   }
 
   const validCategoryName = categoryName as keyof typeof categoryDetails;

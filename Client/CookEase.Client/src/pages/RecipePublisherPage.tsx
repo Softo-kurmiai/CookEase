@@ -49,7 +49,7 @@ export function RecipePublisherPage() {
 
   return (
     <>
-      <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
+      <ResponsiveMenuBar isAuthenticated={isAuthenticated} user={user} ></ResponsiveMenuBar>
       <ProfileDisplay profileDisplayProps={profileToDisplay}></ProfileDisplay>
       <Stack
         direction="row"
