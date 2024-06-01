@@ -20,3 +20,12 @@ export interface Recipe {
     commentCount: number,
     favoriteCount: number
 }
+
+export interface UserResponse {
+    id: number;
+    name: string;
+    email: string;
+    profilePicture: string | null;
+    password: string | null;
+    version: number;
+}

@@ -15,7 +15,6 @@ export function PasswordField({placeholder, label, sx} : PasswordFieldProps) {
       label={label}
       type="password"
       autoComplete="current-password"
-      autoFocus
       margin="dense"
       fullWidth
       placeholder={placeholder}

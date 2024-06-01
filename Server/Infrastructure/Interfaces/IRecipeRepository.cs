@@ -21,4 +21,6 @@ public interface IRecipeRepository : IGenericRepository<Recipe>
     Task<List<Recipe>> GetNumberOfRandomRecipes(int maxNumberOfRecipes);
 
     int GetNumberOfRecipesInDatabase();
+
+    int GetNumberOfCreatorRecipesInDatabase(int creatorId);
 }
