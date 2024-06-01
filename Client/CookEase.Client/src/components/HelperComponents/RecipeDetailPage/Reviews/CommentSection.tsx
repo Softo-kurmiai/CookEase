@@ -9,7 +9,7 @@ import { showToastError } from "../../../../utils/Notifications/toastUtils.ts";
 import { User } from "../../../../interfaces/Interfaces.ts";
 
 interface CommentSectionProps {
-  recipeId: string;
+  recipeId: number;
   user: User | null;
   isAuthenticated: boolean;
 }
@@ -33,7 +33,7 @@ export function CommentSection({ recipeId }: CommentSectionProps) {
   const commentsPerPage = 2;
 
   useEffect(() => {
-    async function getComments(recipeId: string, pageNumber: number) {
+    async function getComments(recipeId: number, pageNumber: number) {
       try {
         const response = await axios.get<Comment[]>(
           `/api/comments/recipe/${recipeId}?commentsPerPage=${commentsPerPage}&page=${pageNumber}`
@@ -51,7 +51,7 @@ export function CommentSection({ recipeId }: CommentSectionProps) {
   }, [recipeId, pageNumber]);
 
   useEffect(() => {
-    async function getCommentCount(recipeId: string) {
+    async function getCommentCount(recipeId: number) {
       try {
         const response = await axios.get(
           `/api/comments/recipe/${recipeId}/totalCount`
