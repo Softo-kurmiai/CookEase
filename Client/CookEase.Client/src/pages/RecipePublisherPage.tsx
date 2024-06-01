@@ -16,8 +16,7 @@ export function RecipePublisherPage() {
 
   const [authorName, setAuthorName] = React.useState("Placeholder");
   const [profilePicture, setProfilePicture] = React.useState("");
-  const [creatorId, setCreatorId] = React.useState(0);
-
+  
   React.useEffect(() => {
     async function getAuthor(creatorId: number) {
       try {
@@ -30,9 +29,9 @@ export function RecipePublisherPage() {
         setProfilePicture("");
       }
     }
-
-    setCreatorId(Number(id));
     
+    const creatorId = Number(id);
+
     if (creatorId && creatorId !== 0) {
       getAuthor(creatorId);
     } else if (creatorId === 0){
@@ -68,7 +67,7 @@ export function RecipePublisherPage() {
         <Typography variant="h6" align="center" sx={{ fontWeight: 600}}>
           {profileToDisplay.Name} created recipes
         </Typography>
-        <RecipesDisplay isEditable={false} creatorId={creatorId}/>
+        <RecipesDisplay isEditable={false} creatorId={Number(id)}/>
       </Stack>
     </>
   );
