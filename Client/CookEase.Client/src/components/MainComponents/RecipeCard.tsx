@@ -9,14 +9,14 @@ import Stack from "@mui/material/Stack";
 import { Schedule, ThumbUp, Group } from "@mui/icons-material";
 import FavoriteButton from "../HelperComponents/RecipeCard/FavoriteButton";
 import InfoBar from "../HelperComponents/RecipeCard/InfoBar";
-import EditDialog from "../HelperComponents/MyRecipes/EditDialog"
-import FancyTimeBlock from "../HelperComponents/RecipeCard/FancyTimeBlock"
+import EditDialog from "../HelperComponents/MyRecipes/EditDialog";
+import FancyTimeBlock from "../HelperComponents/RecipeCard/FancyTimeBlock";
 import React from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
 
 export interface RecipeCardProps {
-  recipeData?:{
+  recipeData?: {
     id: number;
     creatorId: number;
     name: string;
@@ -35,12 +35,24 @@ export interface RecipeCardProps {
   isEditable?: boolean;
 }
 
+function truncateDescription(description: string, maxLength: number): string {
+  if (description.length <= maxLength) {
+    return description;
+  }
+  let truncated = description.substring(0, maxLength).trim();
+  const lastSpaceIndex = truncated.lastIndexOf(' ');
+  if (lastSpaceIndex > -1) {
+    truncated = truncated.substring(0, lastSpaceIndex);
+  }
+  return `${truncated}...`;
+}
+
 export function RecipeCard({
   recipeData = {
     id: 0,
     creatorId: 0,
     name: "Salad",
-    description: "A short description of the recipe. So delicous nium nium what an amazing description",
+    description: "A short description of the recipe. So delicious nium nium what an amazing description",
     rating: 3.5,
     prepTime: 100,
     cookTime: 185,
@@ -69,25 +81,24 @@ export function RecipeCard({
 
     if (recipeData.creatorId && recipeData.creatorId !== 0) {
       getAuthor(recipeData.creatorId);
-    } else if (recipeData.creatorId === 0){
+    } else if (recipeData.creatorId === 0) {
       setAuthorName("Placeholder");
     }
   }, [recipeData.creatorId]);
 
-  //Definition of the navigae method from React router
   const navigate = useNavigate();
 
-  //Move to recipe detail page with the recipeId
   const handleCardClick = () => {
     navigate(`/RecipeDetails/${recipeData.id}`);
   };
 
-  isEditable == null ? false : true;
+  isEditable = isEditable != null ? isEditable : false;
+
   return (
     <Card
       sx={{
-        maxWidth: 300,
-        minWidth: 280,
+        width: 300,
+        height: 500,
         margin: "auto",
         boxShadow: "0 0 20px 0 rgba(0,0,0,0.12)",
         position: "relative",
@@ -115,10 +126,9 @@ export function RecipeCard({
         }}
       />
       <CardContent sx={{ p: 3, position: "relative", zIndex: 2 }}>
-        {" "}
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <CustomizedRating readOnly={true} value={recipeData.rating} precision={0.5} />
-          {isEditable ? <EditDialog/> : null}
+          {isEditable ? <EditDialog /> : null}
         </Stack>
         <InfoBar
           author={authorName}
@@ -136,7 +146,7 @@ export function RecipeCard({
             {recipeData.name}
           </Typography>
           <Typography gutterBottom variant="body2" component="div">
-            {recipeData.description}
+            {truncateDescription(recipeData.description, 70)}
           </Typography>
         </Stack>
       </CardContent>
@@ -150,12 +160,12 @@ export function RecipeCard({
         <Stack>
           <Schedule sx={{ color: "info.main", ml: 1 }} />
           <InfoTypography>
-            <FancyTimeBlock minutes={recipeData.cookTime + recipeData.prepTime}/>
+            <FancyTimeBlock minutes={recipeData.cookTime + recipeData.prepTime} />
           </InfoTypography>
         </Stack>
         <Stack>
           <ThumbUp sx={{ color: "info.main", ml: 0.5 }} />
-          <InfoTypography><>{recipeData.difficulty}</></InfoTypography>
+          <InfoTypography>{recipeData.difficulty}</InfoTypography>
         </Stack>
         <Stack>
           <Group sx={{ color: "info.main" }}></Group>
