@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Recipe } from "../../interfaces/Interfaces"
 
-
-
 export function SmallRecipeCard({ recipe }: { recipe : Recipe }) {
   const [authorName, setAuthorName] = useState("Placeholder");
 
