@@ -48,4 +48,6 @@ public interface IRecipeService
         RecipeMetricsUpdateRequest recipeMetricToIncrease);
 
     int GetTotalNumberOfRecipes();
+
+    int GetTotalNumberOfCreatorRecipes(int creatorId);
 }

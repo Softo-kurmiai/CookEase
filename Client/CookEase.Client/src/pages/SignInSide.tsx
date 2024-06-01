@@ -36,7 +36,7 @@ export default function SignInSide() {
         id: userData.id,
         name: userData.name,
         email: userData.email,
-        profilePicture: userData.profilePicture,
+        profilePicture: userData.profilePicture
       });
       setIsAuthenticated(true);
   
