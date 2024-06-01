@@ -46,7 +46,7 @@ export default function RecipeDetails() {
             <SimilarRecipes />
           </Grid>
         </Grid>
-        <LeaveReviewCard/>
+        <LeaveReviewCard recipeId={id}/>
         {id == undefined ? <></> : <CommentSection recipeId={id} user={user} isAuthenticated={isAuthenticated}/>}
       </Stack>
     </>

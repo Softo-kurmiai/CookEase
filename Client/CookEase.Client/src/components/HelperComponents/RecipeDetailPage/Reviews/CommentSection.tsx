@@ -14,27 +14,39 @@ interface CommentSectionProps {
   isAuthenticated: boolean;
 }
 
-export function CommentSection({ recipeId}: CommentSectionProps) {
-  const [comments, setComments] = useState([]);
+interface Comment {
+  id: number;
+  userId: number;
+  date: string;
+  rating: number;
+  content: string;
+  likes: number;
+  likeCount?: number | null;
+}
+
+
+export function CommentSection({ recipeId }: CommentSectionProps) {
+  const [comments, setComments] = useState<Comment[]>([]);
   const [commentCount, setCommentCount] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
 
   const commentsPerPage = 2;
 
   useEffect(() => {
-    async function getComments(recipeId: string) {
+    async function getComments(recipeId: string, pageNumber: number) {
       try {
-        const response = await axios.get(
+        const response = await axios.get<Comment[]>(
           `/api/comments/recipe/${recipeId}?commentsPerPage=${commentsPerPage}&page=${pageNumber}`
         );
-        setComments(response.data);
+        // Append new comments to the existing ones
+        setComments(prevComments => [...prevComments, ...response.data]);
       } catch (error) {
         showToastError("Could not retrieve comments for this recipe");
       }
     }
 
-    if (recipeId != null || recipeId != undefined) {
-      getComments(recipeId);
+    if (recipeId) {
+      getComments(recipeId, pageNumber);
     }
   }, [recipeId, pageNumber]);
 
@@ -50,13 +62,13 @@ export function CommentSection({ recipeId}: CommentSectionProps) {
       }
     }
 
-    if (recipeId != null || recipeId != undefined) {
+    if (recipeId) {
       getCommentCount(recipeId);
     }
-  }, [recipeId]);
+  }, [recipeId, commentCount]);
 
   const handleLoadMore = () => {
-    setPageNumber(pageNumber + 1);
+    setPageNumber(prevPageNumber => prevPageNumber + 1);
   };
 
   return (
