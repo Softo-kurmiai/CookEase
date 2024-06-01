@@ -11,11 +11,14 @@ public interface ICommentService
     Task<(List<CommentResponse>? comments, Error? error)> GetPaginatedCommentsByRecipeId(
         int recipeId, int commentsPerPage, int page);
 
-    int GetRecipeCommentsCount(int recipeId);
+    (int? count, Error? error) GetRecipeCommentsCount(int recipeId);
 
     Task<decimal> GetRecipeRating(int recipeId);
 
-    Task<Error?> UpdateLikeCount(
+    Task UpdateLikeCount(
         int commentId,
+        int userId,
         CommentLikeUpdateRequest request);
+
+    Task<int> GetCommentLikes(int commentId);
 }

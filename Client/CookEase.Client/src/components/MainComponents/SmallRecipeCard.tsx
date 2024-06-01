@@ -4,38 +4,16 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import CustomizedRating from "../HelperComponents/RecipeCard/StyledRating";
 import InfoBar from "../HelperComponents/RecipeCard/InfoBar";
-import React from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { Recipe } from "../../interfaces/Interfaces"
 
-interface SmallRecipeCardProps {
-  recipeData?:{
-    id: number;
-    creatorId: number;
-    name: string;
-    rating: number;
-    image: string;
-    viewCount: number;
-    commentCount: number;
-    favoriteCount: number;
-  }
-}
 
-export function SmallRecipeCard({
-  recipeData = {
-    id: 0,
-    creatorId: 0,
-    name: "Placeholder recipe",
-    rating: 4.5,
-    image: "",
-    viewCount: 5121,
-    commentCount: 10,
-    favoriteCount: 121
-  }
-}: SmallRecipeCardProps) {
 
-  const [authorName, setAuthorName] = React.useState("Placeholder");
+export function SmallRecipeCard({ recipe }: { recipe : Recipe }) {
+  const [authorName, setAuthorName] = useState("Placeholder");
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function getAuthor(creatorId: number) {
       try {
         const response = await axios.get(`/api/users/${creatorId}`);
@@ -46,19 +24,19 @@ export function SmallRecipeCard({
       }
     }
 
-    if (recipeData.creatorId && recipeData.creatorId !== 0) {
-      getAuthor(recipeData.creatorId);
-    } else if (recipeData.creatorId === 0){
+    if (recipe.creatorId && recipe.creatorId !== 0) {
+      getAuthor(recipe.creatorId);
+    } else if (recipe.creatorId === 0) {
       setAuthorName("Placeholder");
     }
-  }, [recipeData.creatorId]);
+  }, [recipe.creatorId]);
 
   return (
     <Card
-      sx={{ display: "flex", padding: 2, borderRadius: "16px", width:"100%", maxHeight:'130px' }}
+      sx={{ display: "flex", padding: 2, borderRadius: "16px", width: "100%", maxHeight: "130px" }}
     >
-        <CardMedia
-        image={recipeData.image}
+      <CardMedia
+        image={recipe.image}
         sx={{
           minWidth: "25%",
           maxWidth: "25%",
@@ -68,7 +46,7 @@ export function SmallRecipeCard({
           boxShadow: "0 2px 8px 0 #c1c9d7, 0 -2px 8px 0 #cce1e9",
         }}
       />
-      <CardContent sx={{ pr: 2}}>
+      <CardContent sx={{ pr: 2 }}>
         <Box mb={1}>
           <Box
             component="h3"
@@ -81,19 +59,17 @@ export function SmallRecipeCard({
               display: "inline-block",
             }}
           >
-            {recipeData.name}{" "}
+            {recipe.name}{" "}
           </Box>
-          <CustomizedRating
-          readOnly={true}
-          value={recipeData.rating}
-          precision={0.5} />
-          
+          <CustomizedRating readOnly={true} value={recipe.rating} precision={0.5} />
         </Box>
-        <Box
-          component="p"
-          sx={{ fontSize: 14, color: "grey.500", mb: "1.275rem" }}
-        >
-          <InfoBar author={authorName} viewCount={recipeData.viewCount} likeCount={recipeData.favoriteCount} commentCount={recipeData.commentCount} />
+        <Box component="p" sx={{ fontSize: 14, color: "grey.500", mb: "1.275rem" }}>
+          <InfoBar
+            author={authorName}
+            viewCount={recipe.viewCount}
+            likeCount={recipe.favoriteCount}
+            commentCount={recipe.commentCount}
+          />
         </Box>
       </CardContent>
     </Card>

@@ -27,36 +27,6 @@ public class CommentRepository : GenericRepository<Comment>, ICommentRepository
             .ToListAsync();
     }
 
-    // Implementation should be changed
-    public async Task<Comment?> IncreaseCommentLikeCount(int commentId)
-    {
-        var comment = await _comments.FindAsync(commentId);
-        if (comment is null)
-        {
-            return null;
-        }
-
-        //comment.LikeCount++;
-        _comments.Update(comment);
-        await _context.SaveChangesAsync();
-        return comment;
-    }
-
-    // Implementation should be changed
-    public async Task<Comment?> DecreaseCommentLikeCount(int commentId)
-    {
-        var comment = await _comments.FindAsync(commentId);
-        if (comment is null)
-        {
-            return null;
-        }
-
-        //comment.LikeCount--;
-        _comments.Update(comment);
-        await _context.SaveChangesAsync();
-        return comment;
-    }
-
     public int GetCommentCountForRecipe(int recipeId)
     {
         return _comments.Count(x => x.RecipeId == recipeId);

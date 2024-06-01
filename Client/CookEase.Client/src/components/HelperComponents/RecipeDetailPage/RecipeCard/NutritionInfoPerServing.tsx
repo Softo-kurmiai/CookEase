@@ -30,7 +30,7 @@ export function NutritionInfoPerServing({ nutritionData }: { nutritionData: Nutr
                         backgroundColor: '#9BCD6D',
                         padding: "10px",
                         borderRadius:"5px",
-                        boxShadow: "box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;" }}>
+                        boxShadow: "box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px" }}>
                             <Typography variant="body1" color="white" sx={{ fontWeight:"600"}}>
                                 {item.value}{item.label !== 'Cal' ? 'g' : ''}
                             </Typography>

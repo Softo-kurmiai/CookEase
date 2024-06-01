@@ -11,10 +11,13 @@ import Salad from "../images/CategoryImages/salad.jpg";
 import SeaFood from "../images/CategoryImages/sea_food.jpg";
 import Soup from "../images/CategoryImages/soup.jpg";
 import Vegan from "../images/CategoryImages/vegan.jpg";
-import { useParams, Redirect } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import { useAuth } from "../utils/AuthContext";
+
 
 export function RecipeCategoryPage() {
   const { categoryName } = useParams();
+  const { user, isAuthenticated } = useAuth();
 
   const categoryDetails = {
     Pasta: {
@@ -90,7 +93,7 @@ export function RecipeCategoryPage() {
   };
 
   if (!categoryName || !(categoryName in categoryDetails)) {
-    return <Redirect to="/404" />;
+    return <Link to="/404">Go to 404 page</Link>;
   }
 
   const validCategoryName = categoryName as keyof typeof categoryDetails;
@@ -99,7 +102,7 @@ export function RecipeCategoryPage() {
 
   return (
     <>
-      <ResponsiveMenuBar isAuthenticated={false}></ResponsiveMenuBar>
+      <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
       <RecipeCategoryHeader
         name={name}
         description={description}

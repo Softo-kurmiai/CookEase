@@ -49,20 +49,42 @@ public class CommentController : ControllerBase
         return Ok(comments);
     }
 
-    // The implementation of this endpoint should be changed to track who liked the comment
-    [HttpPut("{id}/updateLikeCount")]
+    [HttpGet("recipe/{recipeId}/totalCount")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CommentResponse>> UpdateLikeCount(
-        [Required][FromRoute] int id,
-        [Required][FromBody] CommentLikeUpdateRequest request)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public ActionResult<List<CommentResponse>> GetCommentsTotalCountByRecipeId(
+        [Required][FromRoute] int recipeId)
     {
-        var error = await _commentService.UpdateLikeCount(id, request);
+        var (count, error) = _commentService.GetRecipeCommentsCount(recipeId);
+
         if (error is not null)
         {
-            return NotFound(error.ErrorMessage);
+            return BadRequest(error.ErrorMessage);
         }
 
+        return Ok(count);
+    }
+    
+    [HttpPut("{commentId}/updateLikeCount")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> UpdateLikeCount(
+        [Required][FromRoute] int commentId,
+        [Required][FromQuery] int userId,
+        [Required][FromBody] CommentLikeUpdateRequest request)
+    {
+        await _commentService.UpdateLikeCount(commentId, userId, request);
         return Ok();
     }
+
+    [HttpGet("comment/{commentId}/totalLikeCount")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<int>> GetCommentTotalLikeCount(
+        [Required][FromRoute] int commentId)
+    {
+        var count = await _commentService.GetCommentLikes(commentId);
+        return Ok(count);
+    }
+
 }

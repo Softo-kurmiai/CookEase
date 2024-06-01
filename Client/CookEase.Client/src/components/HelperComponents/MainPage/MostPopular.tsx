@@ -1,13 +1,13 @@
 import React from "react";
 import { SmallRecipeCard } from "../../MainComponents/SmallRecipeCard";
-import {Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import axios from "axios";
 
-export function MostPopular(){
+export function MostPopular() {
     const [recipes, setRecipes] = React.useState([]);
 
     React.useEffect(() => {
-        async function getTopLikedRecipes(){
+        async function getTopLikedRecipes() {
             try {
                 const response = await axios.get(`/api/recipes/topLiked?maxNumberOfRecipes=3`);
                 console.log(response.data);
@@ -21,13 +21,13 @@ export function MostPopular(){
     }, []);
     
     return (
-        <div style={{ display: 'flex', paddingRight:'4rem'}}>
-        <Stack spacing={2} sx={{ width: '100%' }}>
-            <SmallRecipeCard recipeData={recipes[0]}></SmallRecipeCard>
-            <SmallRecipeCard recipeData={recipes[1]}></SmallRecipeCard>
-            <SmallRecipeCard recipeData={recipes[2]}></SmallRecipeCard>
-        </Stack>
-      </div>
+        <div style={{ display: 'flex', paddingRight: '4rem' }}>
+            <Stack spacing={2} sx={{ width: '100%' }}>
+                {recipes.length > 0 && recipes.map((recipe, index) => (
+                    <SmallRecipeCard key={index} recipe={recipe} />
+                ))}
+            </Stack>
+        </div>
     );
 }
 

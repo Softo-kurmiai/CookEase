@@ -9,6 +9,7 @@ import NutritionInfoPerServing from './NutritionInfoPerServing';
 import { RecipeData } from '../../../../interfaces/RecipeDetailsInterfaces';
 import axios from 'axios';
 import React from 'react';
+import RecipeCategoryChips from './RecipeCategoryChips';
 
 
 interface RecipeDetailCardProps {
@@ -58,15 +59,15 @@ export function RecipeDetailCardHeader({recipeData} : RecipeDetailCardProps){
     return (
         <>
         <Grid container spacing={5}>
-            <Grid xs={3}>
+            <Grid xs={5}>
             <Typography variant={isSmallScreen ? "h6" : "h4"} align="left" sx={{ fontWeight: 600 }}>
                 {recipeData?.name == undefined ? "No name found" : recipeData?.name}
             </Typography>
             </Grid>
-            <Grid xs={4}>
+            <Grid xs={2}>
                 <CustomizedRating
                     readOnly={true}
-                    value={recipeData?.favoriteCount || recipeData == undefined ? 0 : recipeData.favoriteCount}
+                    value={recipeData?.rating == null || recipeData == undefined ? 0 : recipeData.rating}
                     precision={0.5}/>
             </Grid>
             <Grid xs={5}>
@@ -80,6 +81,9 @@ export function RecipeDetailCardHeader({recipeData} : RecipeDetailCardProps){
                 </Stack>
             </Grid>
         </Grid>
+        {
+            recipeData == null ? <></> : <RecipeCategoryChips categories={recipeData?.categories}/>
+        }
         <CookTimeDetails
          Total={recipeData == undefined ? 0 : recipeData.prepTime + recipeData.cookTime}
          Prep={recipeData == undefined? 0 : recipeData.prepTime} 
