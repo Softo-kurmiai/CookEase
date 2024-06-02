@@ -8,8 +8,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Recipe } from "../../interfaces/Interfaces"
 
-
-
 export function SmallRecipeCard({ recipe }: { recipe : Recipe }) {
   const [authorName, setAuthorName] = useState("Placeholder");
 
@@ -69,6 +67,7 @@ export function SmallRecipeCard({ recipe }: { recipe : Recipe }) {
             viewCount={recipe.viewCount}
             likeCount={recipe.favoriteCount}
             commentCount={recipe.commentCount}
+            creatorId={recipe.creatorId}
           />
         </Box>
       </CardContent>

@@ -3,13 +3,13 @@ import Pagination from '@mui/material/Pagination';
 import { RecipeCard } from '../../MainComponents/RecipeCard';
 import {Stack } from "@mui/material";
 import axios from 'axios';
-import { useAuth } from '../../../utils/AuthContext';
 
 interface RecipesToDisplayProps {
-    isEditable : boolean
+    isEditable: boolean;
+    creatorId: number;
 }
 
-export function RecipesDisplay({ isEditable } : RecipesToDisplayProps){
+export function RecipesDisplay({ isEditable, creatorId } : RecipesToDisplayProps){
     const [page, setPage] = React.useState(1);
     const [cardsPerPage] = React.useState(4);
     const [recipes, setRecipes] = React.useState([]);
@@ -19,8 +19,6 @@ export function RecipesDisplay({ isEditable } : RecipesToDisplayProps){
         setPage(value);
     };
 
-    const { user } = useAuth();
-
     React.useEffect(() => {
         getPaginatedAuthorRecipes();
         getAuthorRecipeCount();
@@ -28,7 +26,7 @@ export function RecipesDisplay({ isEditable } : RecipesToDisplayProps){
     
     async function getPaginatedAuthorRecipes() {
         try {
-            const response = await axios.get(`/api/recipes/creator/${user?.id}?recipesPerPage=${cardsPerPage}&page=${page}`);
+            const response = await axios.get(`/api/recipes/creator/${creatorId}?recipesPerPage=${cardsPerPage}&page=${page}`);
             setRecipes(response.data);
         } catch (error) {
             console.log("Something bad happened during the request!", error);
@@ -37,7 +35,7 @@ export function RecipesDisplay({ isEditable } : RecipesToDisplayProps){
 
     async function getAuthorRecipeCount() {
         try {
-            const response = await axios.get(`/api/recipes/creator/${user?.id}/count`);
+            const response = await axios.get(`/api/recipes/creator/${creatorId}/count`);
             setRecipeCount(response.data);
         } catch (error) {
             console.log("Something bad happened during the request!", error);

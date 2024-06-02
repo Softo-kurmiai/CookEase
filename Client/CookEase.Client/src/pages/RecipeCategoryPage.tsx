@@ -11,7 +11,7 @@ import Salad from "../images/CategoryImages/salad.jpg";
 import SeaFood from "../images/CategoryImages/sea_food.jpg";
 import Soup from "../images/CategoryImages/soup.jpg";
 import Vegan from "../images/CategoryImages/vegan.jpg";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 
 
@@ -93,7 +93,7 @@ export function RecipeCategoryPage() {
   };
 
   if (!categoryName || !(categoryName in categoryDetails)) {
-    return <Link to="/404">Go to 404 page</Link>;
+      return <Navigate to="/404">Go to 404 page</Navigate>;
   }
 
   const validCategoryName = categoryName as keyof typeof categoryDetails;
@@ -102,7 +102,7 @@ export function RecipeCategoryPage() {
 
   return (
     <>
-      <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
+      <ResponsiveMenuBar isAuthenticated={isAuthenticated} user={user}></ResponsiveMenuBar>
       <RecipeCategoryHeader
         name={name}
         description={description}
