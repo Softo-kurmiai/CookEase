@@ -2,8 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using CookEase.Api.Interfaces;
 using Application.DTOs.User;
-using AutoMapper;
-using System.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace CookEase.Api.Controllers;

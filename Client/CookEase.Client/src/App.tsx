@@ -15,6 +15,7 @@ import CreateRecipePage from './pages/CreateRecipePage.tsx';
 import RecipePublisherPage from './pages/RecipePublisherPage.tsx';
 import RecipeCategoryPage from './pages/RecipeCategoryPage.tsx';
 import RecipeSearchPage from './pages/RecipeSearchPage.tsx';
+import EditRecipePage from './pages/EditRecipePage.tsx';
 
 const theme = createTheme({
     palette: {
@@ -56,6 +57,10 @@ const theme = createTheme({
     {
       path:"/CreateRecipe",
       element: <CreateRecipePage/>
+    },
+    {
+      path:"/EditRecipe/:id",
+      element: <EditRecipePage/>
     },
     {
       path:"/RecipePublisherPage/:id",
