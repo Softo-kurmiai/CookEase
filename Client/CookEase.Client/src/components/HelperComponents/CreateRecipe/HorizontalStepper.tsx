@@ -12,24 +12,55 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../utils/AuthContext";
+import { RecipeData } from "../../../interfaces/RecipeDetailsInterfaces";
 
 const steps = ["Basic information", "Add a photo", "Additional information"];
 
-export function HorizontalStepper() {
+export function HorizontalStepper({ recipeId }: { recipeId?: number }) {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
-  const [formData, setFormData] = React.useState({
-    name: "",
-    description: "",
-    categories: "",
-    servings: 0,
-    ingredients: "",
-    instructions: "",
-  });
-  const [photoData, setPhotoData] = React.useState({
-    image: "",
-  });
+  const [recipeData, setRecipeData] = React.useState<RecipeData | undefined>(undefined);
   const { user } = useAuth();
+
+  React.useEffect(() => {
+    if (recipeId && recipeId !== 0) {
+      axios.get(`/api/recipes/${recipeId}/full`)
+      .then(response => {
+        console.log(response);
+        setRecipeData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching recipe data:', error);
+      });
+    }
+  }, [recipeId]);
+
+  React.useEffect(() => {
+    if (recipeData) {
+      setFormData({
+        name: recipeData.name,
+        description: recipeData.description,
+        categories: recipeData.categories.toString(),
+        servings: recipeData.servings,
+        ingredients: recipeData.ingredients,
+        instructions: recipeData.instructions,
+      });
+      setAdditionalFormData({
+        difficulty: recipeData.difficulty,
+        prepTime: recipeData.prepTime,
+        cookTime: recipeData.cookTime,
+        calories: recipeData.recipeNutrition.calories,
+        carbs: recipeData.recipeNutrition.carbs,
+        protein: recipeData.recipeNutrition.protein,
+        fat: recipeData.recipeNutrition.fat,
+        fiber: recipeData.recipeNutrition.fiber,
+        sugar: recipeData.recipeNutrition.sugar
+      });
+      setPhotoData({
+        image: recipeData.image
+      });
+    }
+  }, [recipeData]);
 
   type AdditionalFormData = {
     difficulty: string;
@@ -43,19 +74,30 @@ export function HorizontalStepper() {
     sugar: number;
 };
 
-const [additionalFormData, setAdditionalFormData] = React.useState<AdditionalFormData>({
-  difficulty: "",
-  prepTime: 0,
-  cookTime: 0,
-  calories: 0,
-  carbs: 0,
-  protein: 0,
-  fat: 0,
-  fiber: 0,
-  sugar: 0
-});
+  const [additionalFormData, setAdditionalFormData] = React.useState<AdditionalFormData>({
+    difficulty: "",
+    prepTime: 0,
+    cookTime: 0,
+    calories: 0,
+    carbs: 0,
+    protein: 0,
+    fat: 0,
+    fiber: 0,
+    sugar: 0
+  });
+  const [formData, setFormData] = React.useState({
+    name: "",
+    description: "",
+    categories: "",
+    servings: 0,
+    ingredients: "",
+    instructions: "",
+  });
+  const [photoData, setPhotoData] = React.useState({
+    image: "",
+  });
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const isStepOptional = (step: number) => {
     return step === 1;
@@ -134,6 +176,20 @@ const navigate = useNavigate();
   
     console.log(combinedData);
   
+    // Updating recipe
+    if (recipeId && recipeId !== 0){
+      try {
+        const response = await axios.put('/api/recipes/' + recipeId, combinedData);
+        console.log('Response:', response.data);
+        navigate('/RecipeDetails/' + recipeId, { state: { toastMessage: "Recipe information successfully updated!" } });
+      } catch (error) {
+        toast.error("Something bad happened during the request!");
+        console.error('Error updating recipe:', error);
+      }
+      return;
+    }
+
+    // Creating a new recipe
     try {
       const response = await axios.post('/api/recipes', combinedData);
       console.log('Response:', response.data);

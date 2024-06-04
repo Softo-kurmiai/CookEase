@@ -59,7 +59,7 @@ export function RecipesDisplay({ isEditable, creatorId } : RecipesToDisplayProps
                 ))}
             </Stack>
             {
-                recipeCount < 4 ? <></> : <Pagination count={pageCount} page={page} onChange={handleChange} color="primary" />
+                recipeCount < 4 ? <></> : <Pagination sx={{mt: 1.5}} count={pageCount} page={page} onChange={handleChange} color="primary" />
             }
         </Stack>
     )
