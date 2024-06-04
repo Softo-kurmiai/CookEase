@@ -15,7 +15,6 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { useParams, Link } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 
-
 export function RecipeCategoryPage() {
   const { categoryName } = useParams();
   const { user, isAuthenticated } = useAuth();
@@ -94,7 +93,7 @@ export function RecipeCategoryPage() {
   };
 
   if (!categoryName || !(categoryName in categoryDetails)) {
-    return <Link to="/404">Go to 404 page</Link>;
+      return <Navigate to="/404"/>;
   }
 
   const validCategoryName = categoryName as keyof typeof categoryDetails;

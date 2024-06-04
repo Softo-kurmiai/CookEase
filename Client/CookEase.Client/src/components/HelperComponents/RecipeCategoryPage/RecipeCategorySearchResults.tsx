@@ -82,14 +82,16 @@ export function RecipeCategorySearchResults({
           </Grid>
         </>
       )}
-      <Pagination
-        count={10}
-        page={1}
-        color="primary"
-        sx={{
-          padding: "0.5rem",
-        }}
-      />
+      {categoryRecipes.length > 4 && ( // Will need to change later with proper pagination implementation
+        <Pagination
+          count={10}
+          page={1}
+          color="primary"
+          sx={{
+            padding: "0.5rem",
+          }}
+        />
+      )}
     </Stack>
   );
 }

@@ -1,9 +1,8 @@
 import React from 'react';
-import { useRouteError, isRouteErrorResponse } from 'react-router-dom';
+import { useRouteError, isRouteErrorResponse, Link } from 'react-router-dom';
+
 
 const ErrorPage: React.FC = () => {
-
-  
   const error = useRouteError();
   let errorMessage: string;
 
@@ -28,6 +27,9 @@ const ErrorPage: React.FC = () => {
       <p className="text-slate-400">
         <i>{errorMessage}</i>
       </p>
+      <Link to="/">
+        <a>Go back to the main page.</a>
+      </Link>
     </div>
   );
 };
