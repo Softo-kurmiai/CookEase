@@ -7,7 +7,6 @@ import CookTimeDetails from './CookTimeDetails';
 import InfoBar from '../../RecipeCard/InfoBar';
 import NutritionInfoPerServing from './NutritionInfoPerServing';
 import { RecipeData } from '../../../../interfaces/RecipeDetailsInterfaces';
-import axios from 'axios';
 import React from 'react';
 import RecipeCategoryChips from './RecipeCategoryChips';
 
@@ -19,24 +18,7 @@ interface RecipeDetailCardProps {
 export function RecipeDetailCardHeader({recipeData} : RecipeDetailCardProps){
     const isSmallScreen = useMediaQuery((theme : Theme) => theme.breakpoints.down('sm'));
 
-    const [authorName, setAuthorName] = React.useState("Gabubu");
-
-    React.useEffect(() => {
-        getAuthor(recipeData?.creatorId);
-    }, [recipeData?.creatorId]);
-
-    async function getAuthor(creatorId: number | undefined) {
-        if(creatorId == undefined) {
-            setAuthorName("");
-            console.log("Could not get author name");
-        } 
-        else {
-            axios.get(`/api/users/${creatorId}`)
-        .then(response => {
-        console.log(response.data);
-        setAuthorName(response.data.username);
-        })
-        }}
+    
 
     const onHeartButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         console.log('Heart button clicked ' + e);
@@ -90,7 +72,7 @@ export function RecipeDetailCardHeader({recipeData} : RecipeDetailCardProps){
          Cook={recipeData == undefined? 0 : recipeData.cookTime} 
          Difficulty={recipeData?.difficulty} />
         <InfoBar 
-         author={ authorName == "" ? "Undefined" : authorName}
+         authorId={recipeData?.creatorId}
          viewCount={recipeData == undefined? 0 : recipeData.viewCount} 
          likeCount={recipeData == undefined? 0 : recipeData.favoriteCount} 
          commentCount={recipeData == undefined? 0 : recipeData.commentCount} />
