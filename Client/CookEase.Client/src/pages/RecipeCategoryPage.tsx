@@ -12,7 +12,7 @@ import SeaFood from "../images/CategoryImages/sea_food.jpg";
 import Soup from "../images/CategoryImages/soup.jpg";
 import Vegan from "../images/CategoryImages/vegan.jpg";
 import Grid from "@mui/material/Unstable_Grid2";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Navigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 
 export function RecipeCategoryPage() {

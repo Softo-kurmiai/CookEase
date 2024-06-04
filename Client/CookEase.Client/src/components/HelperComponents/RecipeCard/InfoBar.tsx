@@ -1,40 +1,46 @@
-import InfoTypography from "./InfoTypography";
-import axios from 'axios';
-import React from 'react';
 import Stack from '@mui/material/Stack';
-import { Visibility, Favorite, Comment } from "@mui/icons-material";
-
+import InfoTypography from "./InfoTypography";
+import { Visibility, Comment, Favorite} from "@mui/icons-material";
+import Typography, { TypographyProps } from "@mui/material/Typography";
+import { styled } from "@mui/material/styles";
+import { useNavigate } from 'react-router-dom';
 
 interface InfoBarProps {
-    authorId: number | undefined;
+    author: string;
     viewCount: number;
     likeCount: number;
     commentCount: number;
+    creatorId: number;
   }
 
-  export function InfoBar({ authorId, viewCount, likeCount, commentCount}: InfoBarProps) {
+  export function InfoBar({ author, viewCount, likeCount, commentCount, creatorId }: InfoBarProps) {
 
-    const [authorName, setAuthorName] = React.useState("Gabubu");
+    const StyledInfoTypography = styled(Typography)<TypographyProps>(
+      ({ theme }) => ({
+        color: theme.palette.info.main,
+        marginTop: "0.1rem",
+      })
+    );
 
-    React.useEffect(() => {
-        getAuthor(authorId);
-    }, [authorId]);
+    const navigate = useNavigate();
 
-    async function getAuthor(creatorId: number | undefined) {
-        if(creatorId == undefined) {
-            setAuthorName("");
-            console.log("Could not get author name");
-        } 
-        else {
-            axios.get(`/api/users/${creatorId}`)
-        .then(response => {
-        setAuthorName(response.data.username);
-        })
-        }}
-    
+    const handleAuthorClick = () => {
+      navigate(`/RecipePublisherPage/${creatorId}`);
+    };
+
     return (
       <Stack direction="row" spacing={0.7} sx={{ pt: 1 }}>
-        <InfoTypography>{authorName}</InfoTypography>
+        <StyledInfoTypography
+          sx={{
+            cursor: "pointer",
+          }}
+          gutterBottom
+          variant="body2"
+          component="div"
+          onClick={handleAuthorClick}
+        >
+          {author}
+        </StyledInfoTypography>
         <Visibility sx={{ color: 'info.main' }} />
         <InfoTypography>{viewCount}</InfoTypography>
         <Comment sx={{ color: 'info.main' }} />

@@ -9,6 +9,7 @@ import NutritionInfoPerServing from './NutritionInfoPerServing';
 import { RecipeData } from '../../../../interfaces/RecipeDetailsInterfaces';
 import React from 'react';
 import RecipeCategoryChips from './RecipeCategoryChips';
+import axios from "axios";
 
 interface RecipeDetailCardProps {
     recipeData?: RecipeData;
