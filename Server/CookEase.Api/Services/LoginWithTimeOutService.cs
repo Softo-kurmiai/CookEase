@@ -4,6 +4,8 @@ using Application.Helpers;
 using AutoMapper;
 using CookEase.Api.Interfaces;
 using Infrastructure.Interfaces;
+using Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CookEase.Api.Services;
 
@@ -11,6 +13,7 @@ public class LoginWithTimeOutService : ILoginService
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IPasswordHasher<User> _passwordHasher;
 
     private static Dictionary<string, FailedLoginAttempt> _failedLoginAttempts = new Dictionary<string, FailedLoginAttempt>();
     private static readonly object _lock = new object();
@@ -19,10 +22,11 @@ public class LoginWithTimeOutService : ILoginService
 
     private static Timer _cleanupTimer = new Timer(CleanupOldAttempts, null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
 
-    public LoginWithTimeOutService(IUserRepository userRepository, IMapper mapper)
+    public LoginWithTimeOutService(IUserRepository userRepository, IMapper mapper, IPasswordHasher<User> passwordHasher)
     {
         _userRepository = userRepository;
         _mapper = mapper;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<LoginResponse> Authenticate(LoginRequest loginRequest)
@@ -44,7 +48,7 @@ public class LoginWithTimeOutService : ILoginService
             }
         }
 
-        if (user.Password != loginRequest.Password)
+        if (_passwordHasher.VerifyHashedPassword(user, user.Password, loginRequest.Password) == PasswordVerificationResult.Failed)
         {
             lock (_lock)
             {
