@@ -22,13 +22,13 @@ public class LoginController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<LoginResponse>> Post(
-    [Required][FromBody] LoginRequest loginRequest)
+        [Required][FromBody] LoginRequest loginRequest)
     {
         try
         {
             var loginResponse = await _loginService.Authenticate(loginRequest);
 
-            if(loginResponse.Token != null)
+            if (loginResponse.Token != null)
             {
                 // Set the session token as a cookie
                 Response.Cookies.Append("Token", loginResponse.Token.Value, new CookieOptions
