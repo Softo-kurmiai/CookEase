@@ -1,6 +1,11 @@
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
-import { IconButton, Typography } from '@mui/material';
+import { IconButton } from '@mui/material';
+import { useState } from 'react';
+import { showToastError } from '../../../utils/Notifications/toastUtils';
+import { useNavigate } from 'react-router-dom';
+import CustomToastContainer from '../../../utils/Notifications/CustomToastContainer';
+import SearchIcon from '@mui/icons-material/Search';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -36,24 +41,41 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-// Function to handle the click event
-const handleClick = () => {
-  console.log('Icon button clicked');
-};
-
 export default function MainSearchBar() {
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = async () => {
+    try {
+      navigate(`/Search?searchTerm=${searchTerm}`);
+    } catch (error) {
+      showToastError("Could not navigate to search page");
+    }
+  };
+
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <Search>
+      <CustomToastContainer/>
       <StyledInputBase
         placeholder="Search..."
         inputProps={{ 'aria-label': 'search for recipes' }}
+        value={searchTerm}
+        onChange={(event) => setSearchTerm(event.target.value)}
+        onKeyPress={handleKeyPress}
       />
       <IconButton
-        onClick={handleClick}
-        aria-label="add recipe"
+        onClick={handleSearch}
+        aria-label="search"
         sx={{
           backgroundColor: 'primary.main',
-          borderRadius: '8px',
+          borderRadius: '25px',
           margin: '20px',
           boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.7)',
           '&:hover': {
@@ -61,8 +83,7 @@ export default function MainSearchBar() {
           },
         }}
       >
-        <Typography variant="body2"
-          sx={{ color: '#FFFFFF', marginLeft: '8px', pr: '7px', fontWeight: 700 }}>Search</Typography>
+        <SearchIcon sx={{ color: "white"}}></SearchIcon>
       </IconButton>
     </Search>
   );

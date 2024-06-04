@@ -4,14 +4,30 @@ import { RecipeCard } from '../../MainComponents/RecipeCard';
 import {Stack } from "@mui/material";
 import { Typography, useMediaQuery } from "@mui/material";
 import { Theme } from "@mui/material/styles";
+import axios from 'axios';
+import { RecipeData } from '../../../interfaces/RecipeDetailsInterfaces';
 
 export function FollowedCreators(){
     const isSmallScreen = useMediaQuery((theme : Theme) => theme.breakpoints.down('sm'));
     const [page, setPage] = React.useState(1);
+    const [recipes, setRecipes] = React.useState([]);
 
-    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
       };
+
+      React.useEffect(() => {
+        async function getRandomRecipes() {
+            try {
+                const response = await axios.get(`/api/recipes/random?maxNumberOfRecipes=5`);
+                console.log(response.data);
+                setRecipes(response.data);
+            } catch (error) {
+                console.log("Something bad happened during the request!", error);
+            }
+        }
+        getRandomRecipes()
+    }, []);
 
     return (
         <Stack alignItems="center" sx={{
@@ -20,11 +36,9 @@ export function FollowedCreators(){
         }}>
             <Typography variant={isSmallScreen ? "h6" : "h5"} align="left" sx={{ fontWeight: 600, pb:"0.8rem" }}>From creators you follow:</Typography>
             <Stack spacing={2} direction="row" alignItems="center" justifyContent="center">
-                <RecipeCard isFavorited={true}></RecipeCard>
-                <RecipeCard isFavorited={false}></RecipeCard>
-                <RecipeCard isFavorited={true}></RecipeCard>
-                <RecipeCard isFavorited={false}></RecipeCard>
-                <RecipeCard isFavorited={false}></RecipeCard>
+                {recipes.map((recipe : RecipeData, index: number) => (
+                    <RecipeCard key={index} recipeData={recipe} isFavorited={true} />
+                ))}
             </Stack>
             <Pagination count={10} page={page} onChange={handleChange} color="primary" sx={{
                 padding:"0.5rem"

@@ -5,10 +5,9 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
 import Grid from "@mui/material/Unstable_Grid2";
-import axios from "axios";
+import { getAuthor, Author } from "../../../../utils/GetAuthorUtils.ts";
 import React, { useState } from "react";
 import CustomToastContainer from "../../../../utils/Notifications/CustomToastContainer.tsx"
-import { showToastError } from "../../../../utils/Notifications/toastUtils.ts";
 import ThumbsUpComponent from "./CommentThumbsUp.tsx";
 import { useAuth } from "../../../../utils/AuthContext.tsx";
 
@@ -26,36 +25,19 @@ interface CommentCardProps {
   comment: Comment;
 }
 
-interface Author {
-  id: number;
-  name: string;
-  email: string;
-  description: string;
-  profilePicture: string;
-  createdAt: string;
-  updatedAt: string | null;
-  version: number;
-}
-
 export function CommentCard({ comment }: CommentCardProps) {
 
   const [author, setAuthor] = useState<Author | null>(null);
   const { user, isAuthenticated } = useAuth();
 
   React.useEffect(() => {
-    async function getAuthor(creatorId: number) {
-      try {
-        const response = await axios.get(`/api/users/${creatorId}`);
-        setAuthor(response.data);
-      } catch (error) {
-        console.error(error);
-        showToastError(`Could not retrieve comment ${comment.id} author`);
-        setAuthor(null);
-      }
+    async function fetchAuthor() {
+      const fetchedAuthor = await getAuthor(comment.userId);
+      setAuthor(fetchedAuthor);
     }
 
-    if (comment.userId && comment.userId != 0) {
-      getAuthor(comment.userId);
+    if (comment.userId && comment.userId !== 0) {
+      fetchAuthor();
     } else if (comment.userId === 0) {
       setAuthor(null);
     }

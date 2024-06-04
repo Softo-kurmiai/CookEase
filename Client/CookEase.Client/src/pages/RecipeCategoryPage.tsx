@@ -11,10 +11,9 @@ import Salad from "../images/CategoryImages/salad.jpg";
 import SeaFood from "../images/CategoryImages/sea_food.jpg";
 import Soup from "../images/CategoryImages/soup.jpg";
 import Vegan from "../images/CategoryImages/vegan.jpg";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from "@mui/material/Unstable_Grid2";
 import { useParams, Navigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
-
 
 export function RecipeCategoryPage() {
   const { categoryName } = useParams();
@@ -94,7 +93,7 @@ export function RecipeCategoryPage() {
   };
 
   if (!categoryName || !(categoryName in categoryDetails)) {
-      return <Navigate to="/404">Go to 404 page</Navigate>;
+      return <Navigate to="/404"/>;
   }
 
   const validCategoryName = categoryName as keyof typeof categoryDetails;

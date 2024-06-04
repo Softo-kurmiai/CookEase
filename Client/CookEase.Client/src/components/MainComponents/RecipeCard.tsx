@@ -11,9 +11,9 @@ import FavoriteButton from "../HelperComponents/RecipeCard/FavoriteButton";
 import InfoBar from "../HelperComponents/RecipeCard/InfoBar";
 import EditDialog from "../HelperComponents/MyRecipes/EditDialog";
 import FancyTimeBlock from "../HelperComponents/RecipeCard/FancyTimeBlock";
+import { useNavigate } from 'react-router-dom';
 import React from "react";
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
 
 export interface RecipeCardProps {
   recipeData?: {
@@ -66,6 +66,7 @@ export function RecipeCard({
   isFavorited = false,
   isEditable = false
 }: RecipeCardProps) {
+
   const [authorName, setAuthorName] = React.useState("Placeholder");
 
   React.useEffect(() => {

@@ -7,10 +7,9 @@ import CookTimeDetails from './CookTimeDetails';
 import InfoBar from '../../RecipeCard/InfoBar';
 import NutritionInfoPerServing from './NutritionInfoPerServing';
 import { RecipeData } from '../../../../interfaces/RecipeDetailsInterfaces';
-import axios from 'axios';
 import React from 'react';
 import RecipeCategoryChips from './RecipeCategoryChips';
-
+import axios from "axios";
 
 interface RecipeDetailCardProps {
     recipeData?: RecipeData;
@@ -32,11 +31,12 @@ export function RecipeDetailCardHeader({recipeData} : RecipeDetailCardProps){
         } 
         else {
             axios.get(`/api/users/${creatorId}`)
-        .then(response => {
-        console.log(response.data);
-        setAuthorName(response.data.username);
-        })
-        }}
+                .then(response => {
+                    console.log(response.data);
+                    setAuthorName(response.data.name);
+                })
+        }
+    }
 
     const onHeartButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         console.log('Heart button clicked ' + e);
@@ -85,15 +85,18 @@ export function RecipeDetailCardHeader({recipeData} : RecipeDetailCardProps){
             recipeData == null ? <></> : <RecipeCategoryChips categories={recipeData?.categories}/>
         }
         <CookTimeDetails
-         Total={recipeData == undefined ? 0 : recipeData.prepTime + recipeData.cookTime}
-         Prep={recipeData == undefined? 0 : recipeData.prepTime} 
-         Cook={recipeData == undefined? 0 : recipeData.cookTime} 
-         Difficulty={recipeData?.difficulty} />
+            Total={recipeData == undefined ? 0 : recipeData.prepTime + recipeData.cookTime}
+            Prep={recipeData == undefined? 0 : recipeData.prepTime} 
+            Cook={recipeData == undefined? 0 : recipeData.cookTime} 
+            Difficulty={recipeData?.difficulty}
+        />
         <InfoBar 
-         author={ authorName == "" ? "Undefined" : authorName}
-         viewCount={recipeData == undefined? 0 : recipeData.viewCount} 
-         likeCount={recipeData == undefined? 0 : recipeData.favoriteCount} 
-         commentCount={recipeData == undefined? 0 : recipeData.commentCount} />
+            author={ authorName == "" ? "Undefined" : authorName}
+            viewCount={recipeData == undefined? 0 : recipeData.viewCount} 
+            likeCount={recipeData == undefined? 0 : recipeData.favoriteCount} 
+            commentCount={recipeData == undefined? 0 : recipeData.commentCount}
+            creatorId={recipeData?.creatorId ?? 0}
+        />
         <NutritionInfoPerServing nutritionData={nutritionData}/>
         </>
     );
