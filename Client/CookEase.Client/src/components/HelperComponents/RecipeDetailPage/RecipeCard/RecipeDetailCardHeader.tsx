@@ -1,4 +1,3 @@
-import React from 'react';
 import { Theme } from "@mui/material/styles";
 import { Typography,Stack, useMediaQuery } from "@mui/material";
 import CustomizedRating from "../../RecipeCard/StyledRating";
@@ -7,9 +6,37 @@ import { Favorite, Share} from "@mui/icons-material";
 import CookTimeDetails from './CookTimeDetails';
 import InfoBar from '../../RecipeCard/InfoBar';
 import NutritionInfoPerServing from './NutritionInfoPerServing';
+import { RecipeData } from '../../../../interfaces/RecipeDetailsInterfaces';
+import axios from 'axios';
+import React from 'react';
+import RecipeCategoryChips from './RecipeCategoryChips';
 
-export function RecipeDetailCardHeader(){
+
+interface RecipeDetailCardProps {
+    recipeData?: RecipeData;
+}
+
+export function RecipeDetailCardHeader({recipeData} : RecipeDetailCardProps){
     const isSmallScreen = useMediaQuery((theme : Theme) => theme.breakpoints.down('sm'));
+
+    const [authorName, setAuthorName] = React.useState("Gabubu");
+
+    React.useEffect(() => {
+        getAuthor(recipeData?.creatorId);
+    }, [recipeData?.creatorId]);
+
+    async function getAuthor(creatorId: number | undefined) {
+        if(creatorId == undefined) {
+            setAuthorName("");
+            console.log("Could not get author name");
+        } 
+        else {
+            axios.get(`/api/users/${creatorId}`)
+        .then(response => {
+        console.log(response.data);
+        setAuthorName(response.data.username);
+        })
+        }}
 
     const onHeartButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
         console.log('Heart button clicked ' + e);
@@ -21,24 +48,26 @@ export function RecipeDetailCardHeader(){
     };
 
     const nutritionData = {
-        Cal: 100,
-        Fat: 10,
-        Carbs: 20,
-        Fiber: 5,
-        Sugar: 8,
-        Protein: 15
+        Cal: recipeData?.recipeNutrition.calories,
+        Fat: recipeData?.recipeNutrition.fat,
+        Carbs: recipeData?.recipeNutrition.carbs,
+        Fiber: recipeData?.recipeNutrition.fiber,
+        Sugar: recipeData?.recipeNutrition.sugar,
+        Protein: recipeData?.recipeNutrition.protein,
     };
 
     return (
         <>
         <Grid container spacing={5}>
-            <Grid xs={3}>
-            <Typography variant={isSmallScreen ? "h6" : "h4"} align="left" sx={{ fontWeight: 600 }}>Ratatouille</Typography>
+            <Grid xs={5}>
+            <Typography variant={isSmallScreen ? "h6" : "h4"} align="left" sx={{ fontWeight: 600 }}>
+                {recipeData?.name == undefined ? "No name found" : recipeData?.name}
+            </Typography>
             </Grid>
-            <Grid xs={4}>
+            <Grid xs={2}>
                 <CustomizedRating
                     readOnly={true}
-                    value={3.5}
+                    value={recipeData?.rating == null || recipeData == undefined ? 0 : recipeData.rating}
                     precision={0.5}/>
             </Grid>
             <Grid xs={5}>
@@ -52,8 +81,19 @@ export function RecipeDetailCardHeader(){
                 </Stack>
             </Grid>
         </Grid>
-        <CookTimeDetails Total={30} Prep={20} Cook={10} Difficulty='Easy' />
-        <InfoBar author="Gabubu" viewCount={1328} likeCount={120} commentCount={15} />
+        {
+            recipeData == null ? <></> : <RecipeCategoryChips categories={recipeData?.categories}/>
+        }
+        <CookTimeDetails
+         Total={recipeData == undefined ? 0 : recipeData.prepTime + recipeData.cookTime}
+         Prep={recipeData == undefined? 0 : recipeData.prepTime} 
+         Cook={recipeData == undefined? 0 : recipeData.cookTime} 
+         Difficulty={recipeData?.difficulty} />
+        <InfoBar 
+         author={ authorName == "" ? "Undefined" : authorName}
+         viewCount={recipeData == undefined? 0 : recipeData.viewCount} 
+         likeCount={recipeData == undefined? 0 : recipeData.favoriteCount} 
+         commentCount={recipeData == undefined? 0 : recipeData.commentCount} />
         <NutritionInfoPerServing nutritionData={nutritionData}/>
         </>
     );

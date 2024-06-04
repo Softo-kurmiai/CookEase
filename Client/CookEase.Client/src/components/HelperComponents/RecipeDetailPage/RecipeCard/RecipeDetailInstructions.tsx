@@ -7,7 +7,7 @@ export function RecipeDetailInstructions({ instructions = "none" }) {
         <li key={index}>
             <Grid container spacing={4}>
                 <Grid xs={1} alignItems="center" justifyContent="center">
-                    <InstructionIndex index={index}></InstructionIndex>
+                    <InstructionIndex index={index + 1}></InstructionIndex>
                 </Grid>
                 <Grid xs={10} alignItems="center" justifyContent="center">
                     <Typography variant="body1" sx={{ pt:"0.6rem"}}>{instruction}</Typography>

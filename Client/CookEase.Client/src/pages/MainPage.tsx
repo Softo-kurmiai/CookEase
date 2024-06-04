@@ -8,12 +8,29 @@ import { Typography, useMediaQuery } from "@mui/material";
 import { Theme } from "@mui/material/styles";
 import FavoriteRecipes from "../components/HelperComponents/MainPage/FavoriteRecipes";
 import FollowedCreators from "../components/HelperComponents/MainPage/FollowedCreators";
+import { ToastContainer, toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuth } from "../utils/AuthContext";
 
 export default function MainPage(){
     const isSmallScreen = useMediaQuery((theme : Theme) => theme.breakpoints.down('sm'));
+    const { user, isAuthenticated } = useAuth();
+
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state?.toastMessage) {
+            toast.success(location.state.toastMessage);
+            // Clear the state after displaying the message
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
     return (
         <>
-        <ResponsiveMenuBar isAuthenticated={false}></ResponsiveMenuBar>
+        <ToastContainer/>
+        <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
         <MainSearch></MainSearch>
         <FindByCategorySection/>
         <Grid container spacing={2} paddingTop={5} paddingBottom={5}>

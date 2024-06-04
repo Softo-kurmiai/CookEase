@@ -25,5 +25,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
     public required DbSet<Log> Logs { get; set; }
 
+    public required DbSet<CommentLike> CommentLikes {get; set; }
+
     public required DbSet<Token> Tokens { get; set; }
 }

@@ -2,18 +2,47 @@ import * as React from 'react';
 import Pagination from '@mui/material/Pagination';
 import { RecipeCard } from '../../MainComponents/RecipeCard';
 import {Stack } from "@mui/material";
+import axios from 'axios';
 
-interface RecipesToDisplayProps
-{
-    isEditable : boolean
+interface RecipesToDisplayProps {
+    isEditable: boolean;
+    creatorId: number;
 }
 
-export function RecipesDisplay({isEditable} : RecipesToDisplayProps){
+export function RecipesDisplay({ isEditable, creatorId } : RecipesToDisplayProps){
     const [page, setPage] = React.useState(1);
+    const [cardsPerPage] = React.useState(4);
+    const [recipes, setRecipes] = React.useState([]);
+    const [recipeCount, setRecipeCount] = React.useState(0); // Start with 0 recipes
 
-    const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    const handleChange = (_: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
-      };
+    };
+
+    React.useEffect(() => {
+        getPaginatedAuthorRecipes();
+        getAuthorRecipeCount();
+      }, [page]);
+    
+    async function getPaginatedAuthorRecipes() {
+        try {
+            const response = await axios.get(`/api/recipes/creator/${creatorId}?recipesPerPage=${cardsPerPage}&page=${page}`);
+            setRecipes(response.data);
+        } catch (error) {
+            console.log("Something bad happened during the request!", error);
+        }
+    }
+
+    async function getAuthorRecipeCount() {
+        try {
+            const response = await axios.get(`/api/recipes/creator/${creatorId}/count`);
+            setRecipeCount(response.data);
+        } catch (error) {
+            console.log("Something bad happened during the request!", error);
+        }
+    }
+
+    const pageCount = Math.ceil(recipeCount / cardsPerPage);
 
     return (
         <Stack alignItems="center" sx={{
@@ -21,14 +50,17 @@ export function RecipesDisplay({isEditable} : RecipesToDisplayProps){
             paddingBottom: "0.5rem"
         }}>
             <Stack spacing={2} direction="row" alignItems="center" justifyContent="center">
-                <RecipeCard isFavorited={true} isEditable={isEditable}></RecipeCard>
-                <RecipeCard isFavorited={false} isEditable={isEditable}></RecipeCard>
-                <RecipeCard isFavorited={true} isEditable={isEditable}></RecipeCard>
-                <RecipeCard isFavorited={false} isEditable={isEditable}></RecipeCard>
+                {recipes.map(recipe => (
+                    <RecipeCard recipeData={recipe} isEditable={isEditable} />
+                ))}
+                {recipes.length < cardsPerPage && // Add empty cards if fewer recipes than cardsPerPage
+                    Array.from({ length: cardsPerPage - recipes.length }).map((_, index) => (
+                    <div key={`empty-${index}`} style={{ width: '280px', height: '280px', border: '1px solid transparent' }} />
+                ))}
             </Stack>
-            <Pagination count={10} page={page} onChange={handleChange} color="primary" sx={{
-                padding:"0.5rem"
-            }}/>
+            {
+                recipeCount < 4 ? <></> : <Pagination count={pageCount} page={page} onChange={handleChange} color="primary" />
+            }
         </Stack>
     )
 }

@@ -33,6 +33,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRecipeCategoryRepository, RecipeCategoryRepository>();
         services.AddScoped<ILogRepository, LogRepository>();
         services.AddScoped<ITokenRepository, TokenRepository>();
+        services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
 
         return services;
     }

@@ -6,7 +6,7 @@ interface ProfileDisplayProps {
     Name: string;
     Followers: number;
     Following: number;
-    Image: string;
+    Image: string | undefined;
 }
 
 export function ProfileDisplay({ profileDisplayProps }: { profileDisplayProps: ProfileDisplayProps }) {
