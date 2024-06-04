@@ -12,6 +12,8 @@ import InfoBar from "../HelperComponents/RecipeCard/InfoBar";
 import EditDialog from "../HelperComponents/MyRecipes/EditDialog";
 import FancyTimeBlock from "../HelperComponents/RecipeCard/FancyTimeBlock";
 import { useNavigate } from 'react-router-dom';
+import React from "react";
+import axios from "axios";
 
 export interface RecipeCardProps {
   recipeData?: {
@@ -65,6 +67,26 @@ export function RecipeCard({
   isEditable = false
 }: RecipeCardProps) {
 
+  const [authorName, setAuthorName] = React.useState("Placeholder");
+
+  React.useEffect(() => {
+    async function getAuthor(creatorId: number) {
+      try {
+        const response = await axios.get(`/api/users/${creatorId}`);
+        setAuthorName(response.data.name);
+      } catch (error) {
+        console.error(error);
+        setAuthorName("Placeholder");
+      }
+    }
+
+    if (recipeData.creatorId && recipeData.creatorId !== 0) {
+      getAuthor(recipeData.creatorId);
+    } else if (recipeData.creatorId === 0) {
+      setAuthorName("Placeholder");
+    }
+  }, [recipeData.creatorId]);
+
   const navigate = useNavigate();
 
   const handleCardClick = () => {
@@ -111,7 +133,7 @@ export function RecipeCard({
           {isEditable ? <EditDialog recipeId={recipeData.id}/> : null}
         </Stack>
         <InfoBar
-          authorId={recipeData.creatorId}
+          author={authorName}
           viewCount={recipeData.viewCount}
           likeCount={recipeData.favoriteCount}
           commentCount={recipeData.commentCount}
