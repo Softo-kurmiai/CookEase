@@ -32,7 +32,6 @@ interface InfoBarProps {
       <Stack direction="row" spacing={0.7} sx={{ pt: 1 }}>
         <StyledInfoTypography
           sx={{
-            pt: 1,
             cursor: "pointer",
           }}
           gutterBottom

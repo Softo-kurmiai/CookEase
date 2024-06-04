@@ -73,13 +73,17 @@ export function RecipeCategorySearchResults({
             {/*Todo: change with axios call to return the whole total recipe count*/}
             Total recipes found: {categoryRecipes.length}
           </Typography>
-          <Grid container spacing={2} sx={{ p: "2rem" }}>
-            {categoryRecipes.map((recipeData, index) => (
-              <Grid key={index} xs={3}>
-                <RecipeCard recipeData={recipeData}></RecipeCard>
-              </Grid>
-            ))}
-          </Grid>
+          <div style={{ display: 'flex' }}>
+            <Stack spacing={2} sx={{ width: '100%' }} alignItems="center">
+              <Stack direction="row" spacing={2}>
+                {categoryRecipes.map((recipeData, index) => (
+                  <Grid key={index} xs={3}>
+                    <RecipeCard recipeData={recipeData}></RecipeCard>
+                  </Grid>
+                ))}
+              </Stack>
+            </Stack>
+          </div>
         </>
       )}
       <Pagination

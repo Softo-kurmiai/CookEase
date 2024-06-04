@@ -11,6 +11,7 @@ import Salad from "../images/CategoryImages/salad.jpg";
 import SeaFood from "../images/CategoryImages/sea_food.jpg";
 import Soup from "../images/CategoryImages/soup.jpg";
 import Vegan from "../images/CategoryImages/vegan.jpg";
+import Grid from '@mui/material/Unstable_Grid2';
 import { useParams, Navigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthContext";
 
@@ -109,7 +110,9 @@ export function RecipeCategoryPage() {
         imageSrc={imageSrc}
         imageAlt={imageAlt}
       ></RecipeCategoryHeader>
-      <RecipeCategorySearchResults categoryName={categoryName}></RecipeCategorySearchResults>
+      <Grid xs={8}>
+        <RecipeCategorySearchResults categoryName={categoryName}></RecipeCategorySearchResults>
+      </Grid>
     </>
   );
 }

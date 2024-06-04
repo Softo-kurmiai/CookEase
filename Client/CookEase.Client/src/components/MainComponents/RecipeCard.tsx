@@ -129,7 +129,7 @@ export function RecipeCard({
       <CardContent sx={{ p: 3, position: "relative", zIndex: 2 }}>
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <CustomizedRating readOnly={true} value={recipeData.rating} precision={0.5} />
-          {isEditable ? <EditDialog /> : null}
+          {isEditable ? <EditDialog recipeId={recipeData.id}/> : null}
         </Stack>
         <InfoBar
           author={authorName}
@@ -179,7 +179,7 @@ export function RecipeCard({
         </Stack>
         <Stack>
           <Group sx={{ color: "info.main" }}></Group>
-          <InfoTypography>{recipeData.servings}</InfoTypography>
+          <InfoTypography sx={{ml: 0.8}}>{recipeData.servings}</InfoTypography>
         </Stack>
       </Stack>
     </Card>

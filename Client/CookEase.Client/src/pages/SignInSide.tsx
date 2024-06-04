@@ -69,7 +69,7 @@ export default function SignInSide() {
               <img
                 src={logo}
                 alt="CookEase Logo"
-                style={{ width: '100%', display: 'block', objectFit: 'contain', textAlign: 'left' }}
+                style={{ width: '100%', display: 'block', objectFit: 'contain', textAlign: 'left', cursor: "pointer" }}
                 onClick={() => navigate('/')}
               />
             </Paper>
