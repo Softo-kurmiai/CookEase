@@ -3,6 +3,8 @@ using Application.DTOs.User;
 using AutoMapper;
 using CookEase.Api.Interfaces;
 using Infrastructure.Interfaces;
+using Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CookEase.Api.Services;
 
@@ -11,11 +13,13 @@ public class LoginService : ILoginService
 
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IPasswordHasher<User> _passwordHasher;
 
-    public LoginService(IUserRepository userRepository, IMapper mapper)
+    public LoginService(IUserRepository userRepository, IMapper mapper, IPasswordHasher<User> passwordHasher)
     {
         _userRepository = userRepository;
         _mapper = mapper;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<LoginResponse> Authenticate(LoginRequest loginRequest)
@@ -26,8 +30,7 @@ public class LoginService : ILoginService
             throw new NullReferenceException();
         }
 
-        if(user.Password != loginRequest.Password)
-        {
+        if(_passwordHasher.VerifyHashedPassword(user, user.Password, loginRequest.Password) == PasswordVerificationResult.Failed) {
             throw new ArgumentException();
         }
 
