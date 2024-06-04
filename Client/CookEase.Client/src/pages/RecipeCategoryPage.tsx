@@ -102,7 +102,7 @@ export function RecipeCategoryPage() {
 
   return (
     <>
-      <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
+      <ResponsiveMenuBar isAuthenticated={isAuthenticated} user={user}></ResponsiveMenuBar>
       <RecipeCategoryHeader
         name={name}
         description={description}

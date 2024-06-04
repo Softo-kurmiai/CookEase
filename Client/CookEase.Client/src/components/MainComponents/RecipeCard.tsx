@@ -83,7 +83,6 @@ export function RecipeCard({
         position: "relative",
         transition: "0.3s",
       }}
-      onClick={handleCardClick}
     >
       <FavoriteButton
         sx={{
@@ -102,24 +101,31 @@ export function RecipeCard({
           paddingBottom: "56.25%",
           backgroundColor: "rgba(0, 0, 0, 0.08)",
           position: "relative",
+          cursor: "pointer",
         }}
+        onClick={handleCardClick}
       />
       <CardContent sx={{ p: 3, position: "relative", zIndex: 2 }}>
         <Stack direction="row" spacing={2} justifyContent="space-between">
           <CustomizedRating readOnly={true} value={recipeData.rating} precision={0.5} />
-          {isEditable ? <EditDialog /> : null}
+          {isEditable ? <EditDialog recipeId={recipeData.id}/> : null}
         </Stack>
         <InfoBar
           authorId={recipeData.creatorId}
           viewCount={recipeData.viewCount}
           likeCount={recipeData.favoriteCount}
           commentCount={recipeData.commentCount}
+          creatorId={recipeData.creatorId}
         />
         <Stack
           spacing={2}
           justifyContent="center"
           alignItems="center"
-          sx={{ pt: 3 }}
+          sx={{
+            pt: 3,
+            cursor: "pointer",
+          }}
+          onClick={handleCardClick}
         >
           <Typography gutterBottom variant="h6" component="div">
             {recipeData.name}
@@ -134,7 +140,11 @@ export function RecipeCard({
         spacing={6}
         justifyContent="center"
         alignItems="center"
-        sx={{ pb: 5 }}
+        sx={{
+          pb: 5,
+          cursor: "pointer",
+        }}
+        onClick={handleCardClick}
       >
         <Stack>
           <Schedule sx={{ color: "info.main", ml: 1 }} />
@@ -148,7 +158,7 @@ export function RecipeCard({
         </Stack>
         <Stack>
           <Group sx={{ color: "info.main" }}></Group>
-          <InfoTypography>{recipeData.servings}</InfoTypography>
+          <InfoTypography sx={{ml: 0.8}}>{recipeData.servings}</InfoTypography>
         </Stack>
       </Stack>
     </Card>

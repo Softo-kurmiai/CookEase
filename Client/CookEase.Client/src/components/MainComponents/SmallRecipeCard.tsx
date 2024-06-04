@@ -7,8 +7,7 @@ import InfoBar from "../HelperComponents/RecipeCard/InfoBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Recipe } from "../../interfaces/Interfaces"
-
-
+import { useNavigate } from "react-router-dom";
 
 export function SmallRecipeCard({ recipe }: { recipe : Recipe }) {
   const [authorName, setAuthorName] = useState("Placeholder");
@@ -31,6 +30,12 @@ export function SmallRecipeCard({ recipe }: { recipe : Recipe }) {
     }
   }, [recipe.creatorId]);
 
+  const navigate = useNavigate();
+
+  const handleCardClick = () => {
+    navigate(`/RecipeDetails/${recipe.id}`);
+  };
+
   return (
     <Card
       sx={{ display: "flex", padding: 2, borderRadius: "16px", width: "100%", maxHeight: "130px" }}
@@ -44,7 +49,9 @@ export function SmallRecipeCard({ recipe }: { recipe : Recipe }) {
           backgroundColor: "grey.200",
           borderRadius: "12px",
           boxShadow: "0 2px 8px 0 #c1c9d7, 0 -2px 8px 0 #cce1e9",
+          cursor: "pointer",
         }}
+        onClick={handleCardClick}
       />
       <CardContent sx={{ pr: 2 }}>
         <Box mb={1}>
@@ -57,7 +64,9 @@ export function SmallRecipeCard({ recipe }: { recipe : Recipe }) {
               marginBottom: 0,
               marginRight: 1.5,
               display: "inline-block",
+              cursor: "pointer",
             }}
+            onClick={handleCardClick}
           >
             {recipe.name}{" "}
           </Box>
@@ -69,6 +78,7 @@ export function SmallRecipeCard({ recipe }: { recipe : Recipe }) {
             viewCount={recipe.viewCount}
             likeCount={recipe.favoriteCount}
             commentCount={recipe.commentCount}
+            creatorId={recipe.creatorId}
           />
         </Box>
       </CardContent>

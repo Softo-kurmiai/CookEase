@@ -2,7 +2,9 @@
 using CookEase.Api.Interfaces;
 using CookEase.Api.Services;
 using Infrastructure.Interfaces;
+using Infrastructure.Models;
 using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 namespace CookEase.Api.Extensions;
 
@@ -19,6 +21,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRecipeService, RecipeService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<ITokenService, TokenService>();
+
+        services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
         return services;
     }
@@ -31,6 +36,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ICommentRepository, CommentRepository>();
         services.AddScoped<IRecipeCategoryRepository, RecipeCategoryRepository>();
         services.AddScoped<ILogRepository, LogRepository>();
+        services.AddScoped<ITokenRepository, TokenRepository>();
         services.AddScoped<ICommentLikeRepository, CommentLikeRepository>();
 
         return services;

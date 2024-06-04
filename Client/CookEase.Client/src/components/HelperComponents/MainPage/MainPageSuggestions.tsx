@@ -14,11 +14,11 @@ export default function MainPageSuggestions() {
   };
 
   React.useEffect(() => {
-    getRandomRecipes();
+    getPaginatedRecipes();
     getRecipeCount();
   }, [page]);
 
-  async function getRandomRecipes() {
+  async function getPaginatedRecipes() {
     try {
       const response = await axios.get(`/api/recipes?recipesPerPage=${cardsPerPage}&page=${page}`);
       console.log(response.data);

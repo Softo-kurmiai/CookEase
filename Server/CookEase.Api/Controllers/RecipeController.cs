@@ -174,7 +174,15 @@ public class RecipeController : ControllerBase
         return Ok(_recipeService.GetTotalNumberOfRecipes());
     }
 
-//[HttpPut("{id}/updateMetric")]
+    [HttpGet("creator/{id}/count")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult<int> GetTotalCreatorRecipeCount(
+        [Required] [FromRoute] int id)
+    {
+        return Ok(_recipeService.GetTotalNumberOfCreatorRecipes(id));
+    }
+
+    //[HttpPut("{id}/updateMetric")]
     //[ProducesResponseType(StatusCodes.Status200OK)]
     //[ProducesResponseType(StatusCodes.Status404NotFound)]
     //public async Task<ActionResult> IncreaseRecipeMetric(

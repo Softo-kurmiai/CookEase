@@ -54,7 +54,7 @@ export default function SignUpSide() {
     }
   };
 
-  const handleFile = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     handleFileChange(event);
     const file = event.target.files?.[0];
     if (file) {
@@ -86,7 +86,7 @@ export default function SignUpSide() {
                 <img
                 src={logo}
                 alt="CookEase Logo"
-                style={{ width: '100%', display: 'block', objectFit: 'contain', textAlign:'left'}}
+                style={{ width: '100%', display: 'block', objectFit: 'contain', textAlign:'left', cursor: "pointer" }}
                 onClick={handleNavigationToMainPage}
                 />
             </Paper>

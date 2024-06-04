@@ -1,12 +1,10 @@
-﻿using Application.DTOs.Recipe;
-using Application.DTOs.User;
+﻿using Application.DTOs.User;
 using AutoMapper;
 using CookEase.Api.Interfaces;
 using Infrastructure.Interfaces;
 using Infrastructure.Models;
-using Infrastructure.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Data;
 
 namespace CookEase.Api.Services;
 
@@ -14,11 +12,13 @@ public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IPasswordHasher<User> _passwordHasher;
 
-    public UserService(IUserRepository userRepository, IMapper mapper)
+    public UserService(IUserRepository userRepository, IMapper mapper, IPasswordHasher<User> passwordHasher)
     {
         _userRepository = userRepository;
         _mapper = mapper;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<List<UserResponse>> GetAll(int countPerPage = 20, int page = 1)
@@ -49,6 +49,8 @@ public class UserService : IUserService
         user.CreatedAt = DateTime.UtcNow;
         user.UpdatedAt = null;
 
+        user.Password = _passwordHasher.HashPassword(user, user.Password);
+
         var userDbResponse = await _userRepository.Add(user);
 
         var mappedUser = _mapper.Map<UserResponse>(userDbResponse);
@@ -66,15 +68,16 @@ public class UserService : IUserService
 
         user.Name = request.Name;
         user.Email = request.Email;
-        user.Password = request.Password;
+        //user.Password = request.Password ?? user.Password;
+        user.Password = request.Password != null ? _passwordHasher.HashPassword(user, request.Password) : user.Password;
         user.Description = request.Description;
         user.ProfilePicture = request.ProfilePicture;
         user.UpdatedAt = DateTime.UtcNow;
 
         try
         {
-            var userDBResponse = await _userRepository.Update(user, request.Version);
-            var mappedUser = _mapper.Map<UserResponse>(userDBResponse);
+            var userDbResponse = await _userRepository.Update(user, request.Version);
+            var mappedUser = _mapper.Map<UserResponse>(userDbResponse);
             return mappedUser;
         }
         catch (DbUpdateConcurrencyException ex)
@@ -131,13 +134,13 @@ public class UserService : IUserService
 
     public async Task<UserResponse?> Delete(int id)
     {
-        var userDbResponce = await _userRepository.Delete(id);
-        if (userDbResponce is null)
+        var userDbResponse = await _userRepository.Delete(id);
+        if (userDbResponse is null)
         {
             return null;
         }
 
-        var mappedUser = _mapper.Map<UserResponse>(userDbResponce);
+        var mappedUser = _mapper.Map<UserResponse>(userDbResponse);
 
         return mappedUser;
     }

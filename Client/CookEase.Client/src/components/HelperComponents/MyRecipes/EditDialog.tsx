@@ -10,12 +10,16 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Unstable_Grid2";
 import RedButton from "../../MainComponents/Miscellaneous/RedButton";
+import { useNavigate } from "react-router-dom";
 
-export default function EditRecipeFormDialog() {
+export default function EditRecipeFormDialog({ recipeId } : { recipeId: number }) {
   const [open, setOpen] = React.useState(false);
 
+  const navigate = useNavigate();
+
   const handleClickOpen = () => {
-    setOpen(true);
+    navigate(`/EditRecipe/${recipeId}`);
+    //setOpen(true); // Not the right implementation
   };
 
   const handleClose = () => {

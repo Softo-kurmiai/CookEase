@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Application.DTOs.User;
+﻿namespace Application.DTOs.User;
 
 public class UserUpdateRequest
 {
@@ -8,7 +6,7 @@ public class UserUpdateRequest
 
     public required string Email { get; set; }
 
-    public required string Password { get; set; }
+    public string? Password { get; set; }
 
     public string? Description { get; set; }
 

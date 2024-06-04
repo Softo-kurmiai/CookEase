@@ -102,4 +102,9 @@ public class RecipeRepository : GenericRepository<Recipe>, IRecipeRepository
     {
         return _recipes.Count();
     }
+
+    public int GetNumberOfCreatorRecipesInDatabase(int creatorId)
+    {
+        return _recipes.Count(x => x.CreatorId == creatorId);
+    }
 }
