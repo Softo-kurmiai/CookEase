@@ -30,9 +30,6 @@ export function RecipeSearchPage (){
         handleSearch();
       }, [searchTerm]);
 
-
-    
-
     const { user, isAuthenticated } = useAuth();
     return (
         <>
