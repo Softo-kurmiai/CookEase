@@ -36,7 +36,7 @@ export default function SignInSide() {
         id: userData.id,
         name: userData.name,
         email: userData.email,
-        profilePicture: userData.profilePicture,
+        profilePicture: userData.profilePicture
       });
       setIsAuthenticated(true);
   
@@ -69,7 +69,7 @@ export default function SignInSide() {
               <img
                 src={logo}
                 alt="CookEase Logo"
-                style={{ width: '100%', display: 'block', objectFit: 'contain', textAlign: 'left' }}
+                style={{ width: '100%', display: 'block', objectFit: 'contain', textAlign: 'left', cursor: "pointer" }}
                 onClick={() => navigate('/')}
               />
             </Paper>

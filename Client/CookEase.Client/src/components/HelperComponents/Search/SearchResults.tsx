@@ -44,14 +44,16 @@ export function SearchResults({searchResults} : SearchResultsProps) {
           </Grid>
         </>
       )}
-      <Pagination
-        count={10}
-        page={1}
-        color="primary"
-        sx={{
-          padding: "0.5rem",
-        }}
-      />
+      {searchResults.length > 20 && ( // Will need to change later with proper pagination implementation
+        <Pagination
+          count={10}
+          page={1}
+          color="primary"
+          sx={{
+            padding: "0.5rem",
+          }}
+        />
+      )}
     </Stack>
   );
 }

@@ -7,11 +7,13 @@ import TabPanel from "@mui/lab/TabPanel";
 import MyCollectionPage from "./MyCollectionPage";
 import FavoriteDisplay from "../MyFavorites/FavoriteDisplay";
 import MyRecipesDisplay from "../MyRecipes/RecipesDisplay";
+import { useAuth } from "../../../utils/AuthContext";
 
 export default function ProfileTabPanel() {
   const [value, setValue] = React.useState("1");
+  const { user } = useAuth();
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+  const handleChange = (_: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
 
@@ -49,10 +51,8 @@ export default function ProfileTabPanel() {
               }}
             />
           </TabList>
-        <TabPanel value="1"><MyRecipesDisplay isEditable={true}/></TabPanel>
-        <TabPanel value="2">
-          <MyCollectionPage />
-        </TabPanel>
+        <TabPanel value="1"><MyRecipesDisplay isEditable={true} creatorId={user?.id ?? 0}/></TabPanel>
+        <TabPanel value="2"><MyCollectionPage/></TabPanel>
         <TabPanel value="3"><FavoriteDisplay/></TabPanel>
       </TabContext>
     </Box>

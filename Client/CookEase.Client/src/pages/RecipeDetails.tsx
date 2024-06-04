@@ -10,6 +10,7 @@ import SimilarRecipes from '../components/HelperComponents/RecipeDetailPage/Revi
 import CommentSection from '../components/HelperComponents/RecipeDetailPage/Reviews/CommentSection';
 import { RecipeData } from '../interfaces/RecipeDetailsInterfaces';
 import { useAuth } from '../utils/AuthContext';
+import { ToastContainer } from 'react-toastify';
 
 export default function RecipeDetails() {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +33,18 @@ export default function RecipeDetails() {
     }
   }, [id]);
 
+
+  // Throws an error in UI so needs to be fixed (toast transfer from other component)
+  // const location = useLocation();
+
+  // useEffect(() => {
+  //     if (location.state?.toastMessage) {
+  //         toast.success(location.state.toastMessage);
+  //         // Clear the state after displaying the message
+  //         window.history.replaceState({}, document.title);
+  //     }
+  // }, [location.state]);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -40,6 +53,7 @@ export default function RecipeDetails() {
 
   return (
     <>
+      <ToastContainer/>
       <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated} />
       <Stack sx={{ padding: '2rem' }}>
         <Grid container spacing={2} columns={16}>
