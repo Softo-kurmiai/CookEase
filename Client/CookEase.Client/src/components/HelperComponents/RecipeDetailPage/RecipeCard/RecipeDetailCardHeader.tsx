@@ -44,7 +44,7 @@ export function RecipeDetailCardHeader({recipeData} : RecipeDetailCardProps){
       };
 
     const onShareButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    console.log('Share button clicked ' + e);
+        console.log('Share button clicked ' + e);
     };
 
     const nutritionData = {

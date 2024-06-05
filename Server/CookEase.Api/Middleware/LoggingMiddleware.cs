@@ -29,6 +29,7 @@ public class LoggingMiddleware
             {
                 Timestamp = DateTime.UtcNow,
                 Message = $"Request: {context.Request.Method} {context.Request.Path}",
+                UserId = 3,
             };
 
             await logRepository.Add(logEntry);
@@ -41,6 +42,7 @@ public class LoggingMiddleware
             {
                 Timestamp = DateTime.UtcNow,
                 Message = ex.Message,
+                UserId = 3,
             };
 
             await logRepository.Add(logEntry);

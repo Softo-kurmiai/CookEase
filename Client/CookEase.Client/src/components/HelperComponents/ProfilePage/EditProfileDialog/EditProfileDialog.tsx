@@ -111,7 +111,7 @@ export function EditProfileDialog({ editProfileProps }: { editProfileProps: Edit
 
       // editProfileProps.showSuccessToast('Successfully updated user profile information'); // For some reason it errors
     } catch (error) {
-      toast.error("User update failed!");
+      toast.error("User update failed! You are trying to update an outdated version of the user.");
       console.error('Error while trying to update user in profile edit:', error);
       return;
     }

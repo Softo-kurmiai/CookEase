@@ -2,9 +2,7 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { IconButton } from '@mui/material';
 import { useState } from 'react';
-import { showToastError } from '../../../utils/Notifications/toastUtils';
 import { useNavigate } from 'react-router-dom';
-import CustomToastContainer from '../../../utils/Notifications/CustomToastContainer';
 import SearchIcon from '@mui/icons-material/Search';
 
 const Search = styled('div')(({ theme }) => ({
@@ -50,7 +48,7 @@ export default function MainSearchBar() {
     try {
       navigate(`/Search?searchTerm=${searchTerm}`);
     } catch (error) {
-      showToastError("Could not navigate to search page");
+      //showToastError("Could not navigate to search page");
     }
   };
 
@@ -62,7 +60,6 @@ export default function MainSearchBar() {
 
   return (
     <Search>
-      <CustomToastContainer/>
       <StyledInputBase
         placeholder="Search..."
         inputProps={{ 'aria-label': 'search for recipes' }}

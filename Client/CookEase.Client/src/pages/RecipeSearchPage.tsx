@@ -4,8 +4,8 @@ import { SearchResults } from "../components/HelperComponents/Search/SearchResul
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import { showToastError} from "../utils/Notifications/toastUtils";
-import CustomToastContainer from "../utils/Notifications/CustomToastContainer";
 import axios from 'axios';
+import { ToastContainer } from "react-toastify";
 
 export function RecipeSearchPage (){
 
@@ -33,7 +33,7 @@ export function RecipeSearchPage (){
     const { user, isAuthenticated } = useAuth();
     return (
         <>
-            <CustomToastContainer/>
+            <ToastContainer/>
             <ResponsiveMenuBar user={user} isAuthenticated={isAuthenticated}></ResponsiveMenuBar>
             <SearchResults searchResults={searchResults}></SearchResults>
         </>
