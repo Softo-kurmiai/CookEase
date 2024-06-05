@@ -2,8 +2,6 @@ import { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
-import CustomToastContainer from '../../../utils/Notifications/CustomToastContainer';
-import { showToastError } from '../../../utils/Notifications/toastUtils';
 import { useNavigate } from 'react-router-dom';
 
 const Search = styled('div')(({ theme }) => ({
@@ -54,7 +52,7 @@ export default function SearchBar() {
     try {
       navigate(`/Search?searchTerm=${searchTerm}`);
     } catch (error) {
-      showToastError("Could not navigate to search page");
+      //showToastError("Could not navigate to search page");
     }
   };
 
@@ -66,7 +64,6 @@ export default function SearchBar() {
 
   return (
     <Search>
-      <CustomToastContainer/>
       <SearchIconWrapper>
         <SearchIcon
           sx={{ color: '#FFFFFF', backgroundColor: 'primary.main', borderRadius: '25px', padding: '5px' }}

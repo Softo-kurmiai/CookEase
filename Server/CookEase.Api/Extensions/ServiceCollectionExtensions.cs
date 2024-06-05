@@ -15,9 +15,11 @@ public static class ServiceCollectionExtensions
         var mapper = MapperConfigurationSetup.Default.CreateMapper();
         services.AddSingleton(mapper);
 
-        services.AddScoped<IUserService, UserService>();
+        // Extensibility
         services.AddScoped<ILoginService, LoginService>();
         //services.AddScoped<ILoginService, LoginWithTimeOutService>();
+
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IRecipeService, RecipeService>();
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<ICategoryService, CategoryService>();
